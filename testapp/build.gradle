@@ -60,7 +60,7 @@ dependencies {
     implementation project(path: ':wblibrary')
     implementation project(path: ':qqlibrary')
     implementation project(path: ':alilibrary')
-    implementation project(path: ':alishare')
+//    implementation project(path: ':alishare')
 //    implementation 'com.mhy.social:ali:1.2'
 //    implementation 'com.mhy.social:qq:1.2'
 //    implementation 'com.mhy.social:wb:1.2'

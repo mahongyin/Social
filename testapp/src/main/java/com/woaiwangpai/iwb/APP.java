@@ -2,7 +2,6 @@ package com.woaiwangpai.iwb;
 
 import android.app.Application;
 
-import com.mhy.alishare.AliShare;
 import com.mhy.qqlibrary.QqSocial;
 import com.mhy.wblibrary.WbSocial;
 import com.mhy.wxlibrary.WxSocial;
@@ -20,7 +19,7 @@ public class APP extends Application {
     }
 
     private void initSocial() {
-        AliShare.setAppId("2018111362152255");///2015060900117932//2018111362152255
+//        AliShare.setAppId("2018111362152255");///2015060900117932//2018111362152255
         WxSocial.setWeixinId("wxbddb62b534debb5f");
         QqSocial.setAppId("101807669");
         WbSocial.setWbApp("2045436852",

@@ -19,8 +19,6 @@ import androidx.core.content.ContextCompat;
 
 import com.mhy.alilibrary.auth.AliAuth;
 import com.mhy.alilibrary.bean.AuthResult;
-import com.mhy.alishare.AliShare;
-import com.mhy.alishare.AliShareEntity;
 import com.mhy.qqlibrary.auth.QqAuth;
 import com.mhy.qqlibrary.bean.QQShareEntity;
 import com.mhy.qqlibrary.share.QqShare;
@@ -54,28 +52,51 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ShareEntity createWXShareEntity(boolean pyq) {
-        ShareEntity shareEntity = null;
-
-        shareEntity = WxShareEntity.createImageInfo(pyq, getExternalFilesDir(null) + "/fff.jpg");
-
-        //微信图文是分开的，但是在分享到朋友圈的web中是可以有混合的
-//        shareEntity = WxShareEntity.createTextInfo(pyq, "R.mipmap.ic_launcher");
-
-//        shareEntity = WxShareEntity.createWebPageInfo(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, "title", "summary");
-
-        return shareEntity;
-    }
-
    private AuthApi api;
    private ShareApi spi;
-
    private Animation shake;
+    private void copy() {
+        copyFile("eeee.mp4");
+        copyFile("aaa.png");
+        copyFile("bbb.jpg");
+        copyFile("ccc.JPG");
+        copyFile("eee.jpg");
+        copyFile("ddd.jpg");
+        copyFile("fff.jpg");
+        copyFile("ggg.JPG");
+        copyFile("hhhh.jpg");
+        copyFile("kkk.JPG");
+    }
 
+    private void copyFile(final String fileName) {
+        final File file = new File(getExternalFilesDir(null).getPath() + "/" + fileName);
+        if (!file.exists()) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream inputStream = getAssets().open(fileName);
+                        OutputStream outputStream = new FileOutputStream(file);
+                        byte[] buffer = new byte[1444];
+                        int readSize;
+                        while ((readSize = inputStream.read(buffer)) != 0) {
+                            outputStream.write(buffer, 0, readSize);
+                        }
+                        inputStream.close();
+                        outputStream.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            thread.start();
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkPermission();
         copy();//准备资源
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 
@@ -240,9 +261,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_share_weibo).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                AliShare aliShare = new AliShare(MainActivity.this, onShareListener);
-                aliShare.doShare(AliShareEntity.createTextInfo("/aaa.png"));
-                spi = aliShare;
+//                AliShare aliShare = new AliShare(MainActivity.this, onShareListener);
+//                aliShare.doShare(AliShareEntity.createTextInfo("/aaa.png"));
+//                spi = aliShare;
+                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"hhhh.jpg");
                 v.startAnimation(shake);
                 return true;
             }
@@ -288,6 +310,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    private ShareEntity createWXShareEntity(boolean pyq) {
+        ShareEntity shareEntity = null;
+
+        shareEntity = WxShareEntity.createImageInfo(pyq, getExternalFilesDir(null) + "/fff.jpg");
+
+        //微信图文是分开的，但是在分享到朋友圈的web中是可以有混合的
+//        shareEntity = WxShareEntity.createTextInfo(pyq, "R.mipmap.ic_launcher");
+
+//        shareEntity = WxShareEntity.createWebPageInfo(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, "title", "summary");
+
+        return shareEntity;
     }
 
     //登陆回调
@@ -400,12 +434,11 @@ public class MainActivity extends AppCompatActivity {
         PermissionMgr.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         //xx
         if (1111 == requestCode) {
-            if (grantResults.length > 0
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                copy();
             } else {
                 Toast.makeText(MainActivity.this, "请授予存储权限!", Toast.LENGTH_LONG).show();
             }
-            return;
         }
     }
 
@@ -419,43 +452,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void copy() {
-        copyFile("eeee.mp4");
-        copyFile("aaa.png");
-        copyFile("bbb.jpg");
-        copyFile("ccc.JPG");
-        copyFile("eee.jpg");
-        copyFile("ddd.jpg");
-        copyFile("fff.jpg");
-        copyFile("ggg.JPG");
-        copyFile("hhhh.jpg");
-        copyFile("kkk.JPG");
-    }
 
-    private void copyFile(final String fileName) {
-        final File file = new File(getExternalFilesDir(null).getPath() + "/" + fileName);
-        if (!file.exists()) {
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        InputStream inputStream = getAssets().open(fileName);
-                        OutputStream outputStream = new FileOutputStream(file);
-                        byte[] buffer = new byte[1444];
-                        int readSize;
-                        while ((readSize = inputStream.read(buffer)) != 0) {
-                            outputStream.write(buffer, 0, readSize);
-                        }
-                        inputStream.close();
-                        outputStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            thread.start();
-        }
-    }
 
 
 }

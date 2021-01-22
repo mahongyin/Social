@@ -91,14 +91,11 @@ public class WbShare extends ShareApi {
               @Override
               public void onError(UiError error) {
                 callbackShareFail(error.errorMessage);
-                //                Toast.makeText(ShareActivity.this, "分享失败:" + error.errorMessage,
-                // Toast.LENGTH_SHORT).show();
               }
 
               @Override
               public void onCancel() {
                 callbackCancel();
-                //                Toast.makeText(ShareActivity.this, "分享取消", Toast.LENGTH_SHORT).show();
               }
             });
   }

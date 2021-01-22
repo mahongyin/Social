@@ -1,5 +1,6 @@
 package com.mhy.socialcommon;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,15 +16,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.quicksettings.TileService;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.StringDef;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +42,7 @@ import static android.content.Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED;
  * description .
  */
 public class ShareUtil {
-    Context mActivity;
+    private Context mActivity;
     private static ShareUtil shareUtil;
 
     public static ShareUtil getInstance(Context context) {
@@ -50,34 +56,46 @@ public class ShareUtil {
         this.mActivity = act;
     }
 
-    public void shareText(String content) {
-        Intent textIntent = new Intent(Intent.ACTION_SEND);
-        textIntent.setType("text/plain");
-        textIntent.putExtra(Intent.EXTRA_TEXT, content);
-        mActivity.startActivity(Intent.createChooser(textIntent, "分享"));
+    public void shareText(String msg,@PackageName String ...packageName) {
+        Intent qqIntent = new Intent(Intent.ACTION_SEND);
+        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+            qqIntent.setPackage(packageName[0]);
+        }
+        qqIntent.setType("text/plain");
+//        qqIntent.putExtra(Intent.EXTRA_SUBJECT, "选则要分享的应用");
+        qqIntent.putExtra(Intent.EXTRA_TEXT, msg);
+        qqIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+        mActivity.startActivity(qqIntent);
+        mActivity.startActivity(Intent.createChooser(qqIntent,"分享"));
     }
 
     /**
      * @param resImg 本地图片
      */
-    public void shareImg(int resImg) {
+    public void shareImg(@DrawableRes int resImg, @PackageName String ...packageName) {
         String path = getResourcesUri(resImg);
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
+        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+            imageIntent.setPackage(packageName[0]);
+        }
         imageIntent.setType("image/*");
         imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
+        imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
-    public void shareImg(String path) {
-//        String path = (saveImage(resImg));
+    public void shareImg(String path,@PackageName String ...packageName) {
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
+        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+            imageIntent.setPackage(packageName[0]);
+        }
         imageIntent.setType("image/*");
         imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
+        imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
-    public void shareMultPath(ArrayList<String> imagePaths) {
-
+    public void shareMultPath(ArrayList<String> imagePaths,@PackageName String ...packageName) {
         ArrayList<Uri> imageUris = new ArrayList<>();
         for (String imagePath : imagePaths) {
             Uri uri = Uri.parse(imagePath);
@@ -86,54 +104,32 @@ public class ShareUtil {
 
         Intent mulIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         mulIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
+        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+            mulIntent.setPackage(packageName[0]);
+        }
         mulIntent.setType("image/*");
+        mulIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(mulIntent, "分享"));
     }
 
-    public void shareMultImg(ArrayList<Integer> imageRes) {
-
+    public void shareMultImg(ArrayList<Integer> imageRes,@PackageName String ...packageName) {
         ArrayList<Uri> imageUris = new ArrayList<>();
         for (Integer imageRe : imageRes) {
             Uri uri1 = Uri.parse(getResourcesUri(imageRe));
             imageUris.add(uri1);
         }
-//
-//        Uri uri1 = Uri.parse(saveImage(R.drawable.dog));
-//        Uri uri2 = Uri.parse(saveImage(R.drawable.shu_1));
-//        imageUris.add(uri1);
-//        imageUris.add(uri2);
         Intent mulIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+            mulIntent.setPackage(packageName[0]);
+        }
         mulIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
         mulIntent.setType("image/*");
+        mulIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(mulIntent, "分享"));
     }
 
-    public void shareWx(String msg) {
-        Intent wechatIntent = new Intent(Intent.ACTION_SEND);
-        wechatIntent.setPackage("com.tencent.mm");
-        wechatIntent.setType("text/plain");
-        wechatIntent.putExtra(Intent.EXTRA_TEXT, msg);
-        mActivity.startActivity(wechatIntent);
-    }
-
-    public void shareWb(String msg) {
-        Intent weiboIntent = new Intent(Intent.ACTION_SEND);
-        weiboIntent.setPackage("com.sina.weibo");
-        weiboIntent.setType("text/plain");
-        weiboIntent.putExtra(Intent.EXTRA_TEXT, msg);
-        mActivity.startActivity(weiboIntent);
-    }
-
-    public void shareQq(String msg) {
-        Intent qqIntent = new Intent(Intent.ACTION_SEND);
-        qqIntent.setPackage("com.tencent.mobileqq");
-        qqIntent.setType("text/plain");
-        qqIntent.putExtra(Intent.EXTRA_TEXT, msg);
-        mActivity.startActivity(qqIntent);
-    }
-
     // 调用系统方法分享文件
-    public void shareFile(String filePath) {
+    public void shareFile(String filePath,@PackageName String ...packageName) {
         File file = new File(filePath);
         if (null != file && file.exists()) {
             Intent share = new Intent(Intent.ACTION_SEND);
@@ -147,9 +143,12 @@ public class ShareUtil {
             } else {
                 uri = Uri.fromFile(file);
             }
+            if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
+                share.setPackage(packageName[0]);
+            }
             share.putExtra(Intent.EXTRA_STREAM, uri);
             share.setType(getMimeType(file.getAbsolutePath()));//此处可发送多种文件
-            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                share.setFlags(FLAG_ACTIVITY_NEW_TASK);
             share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             mActivity.startActivity(Intent.createChooser(share, "分享文件"));
         }
@@ -176,11 +175,10 @@ public class ShareUtil {
 
     private String getResourcesUri(@DrawableRes int id) {
         Resources resources = mActivity.getResources();
-        String uriPath = ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+        return ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
                 resources.getResourcePackageName(id) + "/" +
                 resources.getResourceTypeName(id) + "/" +
                 resources.getResourceEntryName(id);
-        return uriPath;
     }
 
     public void sendEmail(String title, String content, String emails) {
@@ -260,42 +258,7 @@ public class ShareUtil {
         mActivity.startActivity(intent);
     }
 
-    /**
-     * res目录下面的一张图片保存到本地
-     *
-     * @param resId 图片的id
-     */
-    private String saveImage(int resId) {
-        //在本地创建一个文件
-        File file = new File(mActivity.getFilesDir().getAbsolutePath() + "/image/Image" + ".png");
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        FileOutputStream fOut = null;
-        try {
-            fOut = new FileOutputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Bitmap bitmap = BitmapFactory.decodeResource(mActivity.getResources(), resId);
 
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-        try {
-            fOut.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            fOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return file.getPath();
-    }
 
     public void openBrowser(String url) {
         Uri myBlogUri = Uri.parse(url);
@@ -327,7 +290,7 @@ public class ShareUtil {
         mActivity.startActivity(new Intent(Intent.ACTION_PACKAGE_ADDED, installUri));
     }
 
-    public void play(String path) {
+    public void playMedia(String path) {
         Uri playUri = Uri.parse(path/*"file:///sdcard/download/everything.mp3"*/);
         mActivity.startActivity(new Intent(Intent.ACTION_VIEW, playUri));
     }
@@ -356,16 +319,27 @@ public class ShareUtil {
         mActivity.startActivity(intent);
     }
 
+    /**
+     * 注解限定String类型为指定
+     */
+    @StringDef(value = {package_ali,package_qq,package_wb,package_wx})
+    @Retention(RetentionPolicy.SOURCE)
+     @interface PackageName{}
+     
+    public static final String package_qq = "com.tencent.mobileqq";
+    public static final String package_ali = "com.eg.android.AlipayGphone";
+    public static final String package_wx = "com.tencent.mm";
+    public static final String package_wb = "com.sina.weibo";
 
     public static final String AliPay_Barcode = "alipayqr://platformapi/startapp?saId=20000056";//付款码
     public static final String AliPay_Paycode = "alipayqr://platformapi/startapp?saId=20000123";//收款码
     public static final String AliPay_Hongbao = "alipay://platformapi/startapp?saId=88886666";//红包
     public static final String AliPay_Scan = "alipayqr://platformapi/startapp?saId=10000007";//扫码
     public static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
-    public static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";
-    public static final String WX_Scan = "weixin://scanqrcode";
-    public static final String WX = "weixin://";
-    public static final String AliPay = "alipays://platformapi/startApp";
+    public static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";//个体商户
+    public static final String WX_Scan = "weixin://scanqrcode";//微信扫码
+    public static final String WX = "weixin://";//打开微信
+    public static final String AliPay = "alipays://platformapi/startApp";//打开支付包
 
     /*利用URL Scheme
 
@@ -519,7 +493,7 @@ public class ShareUtil {
     public void openOutActivity(String packname, String className, Bundle bundle, int flag) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         ComponentName cmp = new ComponentName(packname, className);
-        intent.addFlags(flag);
+        if (flag!=0){intent.addFlags(flag);}
         if (bundle != null) {
             intent.putExtras(bundle);
         }
@@ -549,23 +523,9 @@ public class ShareUtil {
         Bundle bundle = new Bundle();
         bundle.putBoolean("LauncherUI.From.Scaner.Shortcut", true);
         openOutActivity("com.tencent.mm", "com.tencent.mm.ui.LauncherUI", bundle,FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
-
-//        Intent intent = new Intent();
-//        intent.setComponent(new ComponentName("com.tencent.mm", "com.tencent.mm.ui.LauncherUI"));
-//        intent.putExtra("LauncherUI.From.Scaner.Shortcut", true);
-////        intent.setFlags(335544320);==> 2进制 1400 0000  or运算
-//        intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TOP);
-////        或者
-////        intent.setFlags( FLAG_RECEIVER_FOREGROUND | FLAG_ACTIVITY_CLEAR_TOP );
-//        intent.setAction(Intent.ACTION_VIEW);
-//        if (checkWxInstalled()) {
-//            mActivity.startActivity(intent);
-//        } else {
-//            Toast.makeText(mActivity, "未安装微信", Toast.LENGTH_SHORT).show();
-//        }
     }
 
-    public void openwx() {
+    public void openWX() {
         openOutMain("com.tencent.mm", "com.tencent.mm.ui.LauncherUI", null);
 //   openUrl(WX);
     }
