@@ -264,7 +264,11 @@ public class MainActivity extends AppCompatActivity {
 //                AliShare aliShare = new AliShare(MainActivity.this, onShareListener);
 //                aliShare.doShare(AliShareEntity.createTextInfo("/aaa.png"));
 //                spi = aliShare;
-                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"hhhh.jpg");
+//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
+//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
+//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
                 v.startAnimation(shake);
                 return true;
             }

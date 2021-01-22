@@ -15,8 +15,10 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.service.quicksettings.TileService;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
@@ -55,8 +57,18 @@ public class ShareUtil {
     private ShareUtil(Context act) {
         this.mActivity = act;
     }
-
+    /**
+     * 分享前必须执行本代码，主要用于兼容SDK18以上的系统
+     */
+    private static void checkFileUriExposure() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            builder.detectFileUriExposure();
+        }
+    }
     public void shareText(String msg,@PackageName String ...packageName) {
+        checkFileUriExposure();
         Intent qqIntent = new Intent(Intent.ACTION_SEND);
         if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
             qqIntent.setPackage(packageName[0]);
@@ -72,11 +84,13 @@ public class ShareUtil {
     /**
      * @param resImg 本地图片
      */
-    public void shareImg(@DrawableRes int resImg, @PackageName String ...packageName) {
+    public void shareImg(@DrawableRes int resImg,  String packageName,String classname) {
+        checkFileUriExposure();
         String path = getResourcesUri(resImg);
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
-        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
-            imageIntent.setPackage(packageName[0]);
+        if (!TextUtils.isEmpty(packageName)&&!TextUtils.isEmpty(classname)){
+            ComponentName comp = new ComponentName(packageName, classname);
+            imageIntent.setComponent(comp);
         }
         imageIntent.setType("image/*");
         imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
@@ -84,10 +98,12 @@ public class ShareUtil {
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
-    public void shareImg(String path,@PackageName String ...packageName) {
+    public void shareImg(String path, String packageName,String classname) {
+        checkFileUriExposure();
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
-        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
-            imageIntent.setPackage(packageName[0]);
+        if (!TextUtils.isEmpty(packageName)&&!TextUtils.isEmpty(classname)){
+            ComponentName comp = new ComponentName(packageName, classname);
+            imageIntent.setComponent(comp);
         }
         imageIntent.setType("image/*");
         imageIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(path));
@@ -95,7 +111,8 @@ public class ShareUtil {
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
-    public void shareMultPath(ArrayList<String> imagePaths,@PackageName String ...packageName) {
+    public void shareMultPath(ArrayList<String> imagePaths, String packageName,String classname) {
+        checkFileUriExposure();
         ArrayList<Uri> imageUris = new ArrayList<>();
         for (String imagePath : imagePaths) {
             Uri uri = Uri.parse(imagePath);
@@ -104,23 +121,26 @@ public class ShareUtil {
 
         Intent mulIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
         mulIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
-        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
-            mulIntent.setPackage(packageName[0]);
+        if (!TextUtils.isEmpty(packageName)&&!TextUtils.isEmpty(classname)){
+            ComponentName comp = new ComponentName(packageName, classname);
+            mulIntent.setComponent(comp);
         }
         mulIntent.setType("image/*");
         mulIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(mulIntent, "分享"));
     }
 
-    public void shareMultImg(ArrayList<Integer> imageRes,@PackageName String ...packageName) {
+    public void shareMultImg(ArrayList<Integer> imageRes,String packageName,String classname) {
+        checkFileUriExposure();
         ArrayList<Uri> imageUris = new ArrayList<>();
         for (Integer imageRe : imageRes) {
             Uri uri1 = Uri.parse(getResourcesUri(imageRe));
             imageUris.add(uri1);
         }
         Intent mulIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-        if (packageName.length==1&&!TextUtils.isEmpty(packageName[0])){
-            mulIntent.setPackage(packageName[0]);
+        if (!TextUtils.isEmpty(packageName)&&!TextUtils.isEmpty(classname)){
+            ComponentName comp = new ComponentName(packageName, classname);
+            mulIntent.setComponent(comp);
         }
         mulIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imageUris);
         mulIntent.setType("image/*");
@@ -130,6 +150,7 @@ public class ShareUtil {
 
     // 调用系统方法分享文件
     public void shareFile(String filePath,@PackageName String ...packageName) {
+        checkFileUriExposure();
         File file = new File(filePath);
         if (null != file && file.exists()) {
             Intent share = new Intent(Intent.ACTION_SEND);
