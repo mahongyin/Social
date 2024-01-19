@@ -21,7 +21,7 @@ https://github.com/lingcimi 分开分享登录   支付
 qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信朋友圈分享  系统原生分享
 <br><br><br>
 
-<B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.2-brightgreen.svg)
+<B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.1-brightgreen.svg)
 
 ```
 //如果需要 根 添加如下
@@ -38,27 +38,17 @@ allprojects {
     implementation 'com.mhy.social:common:1.3.1'
 ```
 
-  //以下按需依赖
+//以下按需依赖
 
 ```
 //支付宝  
     implementation 'com.mhy.social:ali:1.3.1'
-    implementation (name: 'alipaySdk-15.7.6-20200521195109', ext: 'aar')
-```
-
-```
 //QQ
    implementation 'com.mhy.social:qq:1.3.1'
-   implementation files('libs/open_sdk_r8353806_lite.jar')
 //微信
     implementation 'com.mhy.social:wx:1.3.1'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:6.6.4'
-```
-
-```
 //微博   不支持x86
   implementation 'com.mhy.social:wb:1.3.1'
-   implementation 'com.sina.weibo.sdk:core:9.12.0:openDefaultRelease@aar'
 ```
 //////////////////////////////////////////////////////////////////////////////////////
 **AndroidManifest.xml配置**
@@ -76,6 +66,7 @@ allprojects {
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
+            android:exported="true"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -350,5 +341,5 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
 ```
 
 ```ei
- 关于分享 使用对应ShareEntity  的createxxx 方法传参调用对应分享内容包装W
+ 关于分享 使用对应ShareEntity  的createxxx 方法传参调用对应分享内容包装 参考demo
 ```

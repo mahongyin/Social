@@ -71,5 +71,4 @@ dependencies {
 //    implementation 'com.tencent.mm.opensdk:wechat-sdk-android:+'
 //    implementation 'com.alipay.sdk:alipaysdk-android:+@aar'
 //    implementation 'io.github.sinaweibosdk:core:13.10.1@aar'
-//    implementation files('libs/open_sdk_lite3.5.15.jar')
 }
