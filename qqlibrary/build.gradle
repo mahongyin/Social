@@ -1,0 +1,59 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk rootProject.ext.compile.compileSdkVersion
+    namespace "com.mhy.qqlibrary"
+    defaultConfig {
+        minSdkVersion  rootProject.ext.compile.minSdkVersion
+        targetSdkVersion rootProject.ext.compile.targetSdkVersion
+        versionCode rootProject.ext.compile.versionCode
+        versionName rootProject.ext.publish.version
+
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+////jcent
+//publish {
+//
+//    repoName = 'maven'//maven仓库名
+//    userOrg = rootProject.ext.publish.user// 用户所在组织,好像是用户名
+//    groupId = 'com.mhy.social'// 包名
+//    artifactId = 'qq'// library项目的名字
+//    publishVersion = rootProject.ext.publish.version// 版本
+//    desc = 'build social SDK'//不中文
+//    website = "https://github.com/mahongyin/Social"//你的开源地址，注意，一定要用GitHub地址
+//}
+////Terminal:gradlew clean build bintrayUpload -PbintrayUser=这里填你的JCenter账号 -PbintrayKey=这里填你的APIKey -PdryRun=false
+
+
+dependencies {
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(path: ':socialcommon')
+//    implementation 'com.mhy.social:common:1.2.0'
+    api files('libs/open_sdk_lite3.5.15.jar')
+//    implementation 'com.tencent.tauth:qqopensdk:+'//3.53.0
+}

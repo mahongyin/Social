@@ -1,0 +1,122 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.mhy.socialcommon">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        />
+    <!--Android 11 跳转权限-->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="audio/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="video/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <data android:mimeType="video/*" />
+        </intent>
+
+        <provider
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="true" />
+
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <!--android.intent.action.CALL需要在配置文件中添加拨号权限且点击后直接拨号-->
+            <!--android.intent.action.DIAL只是调用拨号键盘，不用在文件中添加权限-->
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="smsto" />
+        </intent>
+    </queries>
+    <application>
+        <!--MIME TYPE的基本用法<activity android:name=".opp.BluetoothOppLauncherActivity"
+        android:process="@string/process"
+        android:theme="@android:style/Theme.Material.Light.Dialog"
+        android:label="@string/bt_share_picker_label"
+        android:enabled="@bool/profile_supported_opp">
+        <intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="image/*" />
+            <data android:mimeType="video/*" />
+            <data android:mimeType="audio/*" />
+            <data android:mimeType="text/x-vcard" />
+            <data android:mimeType="text/x-vcalendar" />
+            <data android:mimeType="text/calendar" />
+            <data android:mimeType="text/plain" />
+            <data android:mimeType="text/html" />
+            <data android:mimeType="text/xml" />
+            <data android:mimeType="application/zip" />
+            <data android:mimeType="application/vnd.ms-excel" />
+            <data android:mimeType="application/msword" />
+            <data android:mimeType="application/vnd.ms-powerpoint" />
+            <data android:mimeType="application/pdf" />
+            <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+            <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
+            <data android:mimeType="application/x-hwp" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="image/*" />
+            <data android:mimeType="video/*" />
+            <data android:mimeType="x-mixmedia/*" />
+            <data android:mimeType="text/x-vcard" />
+        </intent-filter>
+        <intent-filter>
+            <action android:name="android.btopp.intent.action.OPEN" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="vnd.android.cursor.item/vnd.android.btopp" />
+        </intent-filter>
+        <intent-filter>
+        <actionandroid:name="android.intent.action.VIEW" />
+        <categoryandroid:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="image/jpeg ">
+    </intent-filter>
+
+    </activity>-->
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.social.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <!--android:grantUriPermissions，对应属性值也是一个boolean变量，设置为true，允许获得文件临时的访问权限-->
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>

@@ -1,0 +1,83 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdk rootProject.ext.compile.compileSdkVersion
+    namespace "com.mhy.alilibrary"
+    defaultConfig {
+        minSdkVersion  rootProject.ext.compile.minSdkVersion
+        targetSdkVersion rootProject.ext.compile.targetSdkVersion
+        versionCode rootProject.ext.compile.versionCode
+        versionName rootProject.ext.publish.version
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+        }
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+//            aidl.srcDirs = ['src/main/aidl']
+//            assets.srcDirs = ['src/main/assets']
+            // jni.srcDirs = []//不用项目自动生成jni目录
+            // jniLibs.srcDirs = ['src/main/jniLibs']
+//            resources.srcDirs = ['src/main/resources']
+//            renderscript.srcDirs = ['src/main/rs']
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    //multiDex的一些相关配置，这样配置可以让你的编译速度更快
+//    dexOptions {
+//        javaMaxHeapSize "4g"
+//        //让它不要对Lib做preDexing
+////        preDexLibraries = false
+////        additionalParameters = ['--multi-dex', '--main-dex-list='+ project.rootDir.absolutePath + '/app/maindexlist.txt', '--minimal-main-dex',
+////                                '--set-max-idx-number=1000']
+//    }
+//    aaptOptions {
+//        aaptOptions.cruncherEnabled = false
+//        aaptOptions.useNewCruncher = false
+//    }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+}
+////jcent
+//publish {
+//    repoName = 'maven'//maven仓库名
+//    userOrg = rootProject.ext.publish.user// 用户所在组织,好像是用户名
+//    groupId = 'com.mhy.social'// 包名
+//    artifactId = 'ali'// library项目的名字
+//    publishVersion = rootProject.ext.publish.version// 版本
+//    desc = 'build alipay SDK'//不中文
+//    website = "https://github.com/mahongyin/Social"//你的开源地址，注意，一定要用GitHub地址
+//}
+////Terminal:gradlew clean build bintrayUpload -PbintrayUser=这里填你的JCenter账号 -PbintrayKey=这里填你的APIKey -PdryRun=false
+
+dependencies {
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
+    implementation project(path: ':socialcommon')
+    // 支付宝 SDK AAR 包所需的配置
+    api 'com.alipay.sdk:alipaysdk-android:+@aar'
+}
