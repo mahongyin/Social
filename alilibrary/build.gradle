@@ -83,7 +83,7 @@ if (rootProject.ext.publish.isJitpack) {
 }
 dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    implementation project(path: ':socialcommon')
+    compileOnly project(path: ':socialcommon')
     // 支付宝 SDK AAR 包所需的配置
     api 'com.alipay.sdk:alipaysdk-android:+@aar'
 }

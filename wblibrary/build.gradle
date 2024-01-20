@@ -59,6 +59,6 @@ if (rootProject.ext.publish.isJitpack) {
 
 dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    implementation project(path: ':socialcommon')
+    compileOnly project(path: ':socialcommon')
     api 'io.github.sinaweibosdk:core:13.10.1@aar'
 }

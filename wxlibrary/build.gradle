@@ -48,6 +48,6 @@ if (rootProject.ext.publish.isJitpack) {
 
 dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    implementation project(path: ':socialcommon')
+    compileOnly project(path: ':socialcommon')
     api 'com.tencent.mm.opensdk:wechat-sdk-android:+'//6.8.26
 }

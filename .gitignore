@@ -9,3 +9,10 @@
 .externalNativeBuild
 /gradle/
 /.idea/
+/alishare/libs/libapshare20161108.jar
+/alishare/src/main/java/com/mhy/alishare/AliShare.java
+/alishare/src/main/java/com/mhy/alishare/AliShareEntity.java
+/alishare/src/main/AndroidManifest.xml
+/alishare/.gitignore
+/alishare/build.gradle
+/alishare/proguard-rules.pro

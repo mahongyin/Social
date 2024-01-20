@@ -58,7 +58,7 @@ if (rootProject.ext.publish.isJitpack) {
 
 dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
-    implementation project(path: ':socialcommon')
+    compileOnly project(path: ':socialcommon')
 //    implementation 'com.mhy.social:common:1.2.0'
     api files('libs/open_sdk_lite3.5.15.jar')
 //    implementation 'com.tencent.tauth:qqopensdk:+'//3.53.0

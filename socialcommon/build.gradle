@@ -59,6 +59,5 @@ if (rootProject.ext.publish.isJitpack) {
     apply from: "artifactory.gradle"
 }
 dependencies {
-
     compileOnly 'androidx.appcompat:appcompat:1.2.0'
 }
