@@ -97,7 +97,7 @@ public class ShareUtil {
 //        imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 //        mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
-    public void shareImg(@DrawableRes int resImg, String packageName) {
+    public void shareImg(@DrawableRes int resImg, String... packageName) {
         Bitmap bmp = BitmapFactory.decodeResource(mActivity.getResources(), resImg);
         shareBitMapImg(bmp, packageName);
         bmp.recycle();
@@ -127,23 +127,25 @@ public class ShareUtil {
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
-    public void shareImg(String path, String packageName) {
+    public void shareImg(String path, String... packageName) {
         checkFileUriExposure();
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
-        if (!TextUtils.isEmpty(packageName)) {
-            imageIntent.setPackage(packageName);
+        String pkg = null;
+        if (packageName.length == 1 && !TextUtils.isEmpty(packageName[0])) {
+            imageIntent.setPackage(packageName[0]);
+            pkg = packageName[0];
         }
         imageIntent.setType("image/*");
-        imageIntent.putExtra(Intent.EXTRA_STREAM, getFileUri(packageName, path));
+        imageIntent.putExtra(Intent.EXTRA_STREAM, getFileUri(pkg, path));
         imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
-    public void shareBitMapImg(Bitmap bitmap, String packageName) {
+    public void shareBitMapImg(Bitmap bitmap, String... packageName) {
         checkFileUriExposure();
         Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), bitmap, null,null));
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
-        if (!TextUtils.isEmpty(packageName)) {
-            imageIntent.setPackage(packageName);
+        if (packageName.length == 1 && !TextUtils.isEmpty(packageName[0])) {
+            imageIntent.setPackage(packageName[0]);
         }
         imageIntent.setType("image/*");
         imageIntent.putExtra(Intent.EXTRA_STREAM, uri);

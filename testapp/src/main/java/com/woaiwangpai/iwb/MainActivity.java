@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 ShareUtil shareUtil = ShareUtil.getInstance(MainActivity.this);
 //                shareUtil.shareImg(R.mipmap.ic_launcher, ShareUtil.package_ali);
 //                shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
-                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", ShareUtil.package_ali);
+                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
