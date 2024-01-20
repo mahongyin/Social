@@ -20,3 +20,4 @@ afterEvaluate {
         }
     }
 }
+//lib模块目录./gradlew publishToMavenLocal
