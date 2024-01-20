@@ -51,10 +51,12 @@ public class WxShare extends ShareApi {
             mWXApi.registerApp(getAppId());
         }
     }
+
     @Override
     protected String getAppId() {
         return WxSocial.getWeixinId();
     }
+
     /**
      * 基本信息验证
      *
@@ -93,13 +95,13 @@ public class WxShare extends ShareApi {
             callbackShareFail("微信版本过低，不支持分享朋友圈");
             return;
         }
-        boolean isCollection = mShareType==SocialType.WEIXIN_Favorite;
+        boolean isCollection = mShareType == SocialType.WEIXIN_Favorite;
         SendMessageToWX.Req req = new SendMessageToWX.Req();
         req.message = createMessage(req, mShareContent.getParams());
         if (req.message == null) {
             return;
         }
-        req.scene = isTimeLine ? SendMessageToWX.Req.WXSceneTimeline : isCollection?SendMessageToWX.Req.WXSceneFavorite: SendMessageToWX.Req.WXSceneSession;
+        req.scene = isTimeLine ? SendMessageToWX.Req.WXSceneTimeline : isCollection ? SendMessageToWX.Req.WXSceneFavorite : SendMessageToWX.Req.WXSceneSession;
         mWXApi.sendReq(req);
 
     }

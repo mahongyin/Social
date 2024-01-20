@@ -5,9 +5,11 @@ package com.mhy.socialcommon;
  * description payinfo 基类
  */
 public abstract class PayContent {
+    protected SocialType payType;
+
     /**
-     * @see SocialType
      * @return SocialType
+     * @see SocialType
      */
     public SocialType getPayType() {
         return payType;
@@ -16,6 +18,4 @@ public abstract class PayContent {
     public void setPayType(SocialType payType) {
         this.payType = payType;
     }
-
-    protected SocialType payType;
 }

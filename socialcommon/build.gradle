@@ -4,7 +4,7 @@ android {
     compileSdk rootProject.ext.compile.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion  rootProject.ext.compile.minSdkVersion
+        minSdkVersion rootProject.ext.compile.minSdkVersion
         targetSdkVersion rootProject.ext.compile.targetSdkVersion
         versionCode rootProject.ext.compile.versionCode
         versionName rootProject.ext.publish.version
@@ -33,10 +33,10 @@ android {
 
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
-    
+
 
 }
 ////jcent

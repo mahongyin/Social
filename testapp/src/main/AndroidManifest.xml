@@ -17,8 +17,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:replace="android:icon, android:label, android:theme">
         <activity
             android:name="com.woaiwangpai.iwb.MainActivity"
@@ -32,19 +32,21 @@
 
         <activity android:name=".H5PayDemoActivity" />
 
-         <!--qq -->
-                <activity
-                    android:name="com.tencent.tauth.AuthActivity"
-                    android:launchMode="singleTask"
-                    android:noHistory="true"
-                    android:exported="true">
-                    <intent-filter>
-                        <action android:name="android.intent.action.VIEW" />
-                        <category android:name="android.intent.category.DEFAULT" />
-                        <category android:name="android.intent.category.BROWSABLE" />
-                        <data android:scheme="tencent101807669" />
-                    </intent-filter>
-                </activity>
+        <!--qq -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent101807669" />
+            </intent-filter>
+        </activity>
 
         <!-- qq -->
         <!-- 微信 android:exported="true"，这样才可以被外部唤起 -->

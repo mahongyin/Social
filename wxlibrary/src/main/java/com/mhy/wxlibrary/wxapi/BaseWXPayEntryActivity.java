@@ -20,44 +20,47 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
  */
 public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
-	private static final String TAG = "WXPayBaseEntryActivity";
+    private static final String TAG = "WXPayBaseEntryActivity";
 
-	private IWXAPI api;
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    private IWXAPI api;
 
-		api = WXAPIFactory.createWXAPI(this, getAppId());
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        api = WXAPIFactory.createWXAPI(this, getAppId());
 //		api.registerApp(Social.getWeixinId());//add
-		api.handleIntent(getIntent(), this);
-	}
+        api.handleIntent(getIntent(), this);
+    }
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		setIntent(intent);
-		api.handleIntent(intent, this);
-	}
-	protected String getAppId() {
-		return WxSocial.getWeixinId();
-	}
-	@Override
-	public void onReq(BaseReq req){
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        api.handleIntent(intent, this);
+    }
 
-	@Override
-	public void onResp(BaseResp resp) {
+    protected String getAppId() {
+        return WxSocial.getWeixinId();
+    }
 
-		if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {//微信支付
-			//支付成功 通知Wxpay回调
-			if(resp.errCode == BaseResp.ErrCode.ERR_OK){
-				WxPay.callbackPayOk();
-			}else{
-				WxPay.callbackPayFail(resp.errStr);
-				Log.i("payfailcode:",String.valueOf(resp.errCode));
-			}
-		}
+    @Override
+    public void onReq(BaseReq req) {
+    }
 
-		finish();
-	}
+    @Override
+    public void onResp(BaseResp resp) {
+
+        if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {//微信支付
+            //支付成功 通知Wxpay回调
+            if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
+                WxPay.callbackPayOk();
+            } else {
+                WxPay.callbackPayFail(resp.errStr);
+                Log.i("payfailcode:", String.valueOf(resp.errCode));
+            }
+        }
+
+        finish();
+    }
 }

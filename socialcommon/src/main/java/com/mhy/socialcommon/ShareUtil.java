@@ -38,18 +38,32 @@ import java.util.List;
  * description .
  */
 public class ShareUtil {
-    private Context mActivity;
+    public static final String package_qq = "com.tencent.mobileqq";
+    public static final String package_ali = "com.eg.android.AlipayGphone";
+    public static final String package_wx = "com.tencent.mm";
+    public static final String package_wb = "com.sina.weibo";
+    public static final String AliPay_Barcode = "alipayqr://platformapi/startapp?saId=20000056";//付款码
+    public static final String AliPay_Paycode = "alipayqr://platformapi/startapp?saId=20000123";//收款码
+    public static final String AliPay_Hongbao = "alipay://platformapi/startapp?saId=88886666";//红包
+    public static final String AliPay_Scan = "alipayqr://platformapi/startapp?saId=10000007";//扫码
+    public static final String WX_Scan = "weixin://scanqrcode";//微信扫码
+    public static final String WX = "weixin://";//打开微信
+    public static final String AliPay = "alipays://platformapi/startApp";//打开支付包
+    private static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
+    private static final String AliPay_Qr_Url = "https://qr.alipay.com/";
+    private static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";//个体商户
     private static ShareUtil shareUtil;
+    private Context mActivity;
+
+    private ShareUtil(Context act) {
+        this.mActivity = act;
+    }
 
     public static ShareUtil getInstance(Context context) {
         if (shareUtil == null) {
             shareUtil = new ShareUtil(context);
         }
         return shareUtil;
-    }
-
-    private ShareUtil(Context act) {
-        this.mActivity = act;
     }
 
     /**
@@ -97,6 +111,7 @@ public class ShareUtil {
 //        imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
 //        mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
+
     public void shareImg(@DrawableRes int resImg, String... packageName) {
         Bitmap bmp = BitmapFactory.decodeResource(mActivity.getResources(), resImg);
         shareBitMapImg(bmp, packageName);
@@ -140,9 +155,10 @@ public class ShareUtil {
         imageIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
+
     public void shareBitMapImg(Bitmap bitmap, String... packageName) {
         checkFileUriExposure();
-        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), bitmap, null,null));
+        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), bitmap, null, null));
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
         if (packageName.length == 1 && !TextUtils.isEmpty(packageName[0])) {
             imageIntent.setPackage(packageName[0]);
@@ -377,65 +393,6 @@ public class ShareUtil {
         mActivity.startActivity(intent);
     }
 
-    /*
-    系统返回的一些常见 Uri 样式：
-    content://com.android.providers.media.documents..
-    content://com.android.providers.downloads...
-    content://media/external/images/media/...
-    content://com.android.externalstorage.documents..*/
-    @StringDef({ShareContentType.TEXT, ShareContentType.IMAGE, ShareContentType.AUDIO, ShareContentType.VIDEO, ShareContentType.File})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface ShareContentType {
-        /**
-         * Share Text
-         */
-        final String TEXT = "text/plain";
-
-        /**
-         * Share Image
-         */
-        final String IMAGE = "image/*";
-
-        /**
-         * Share Audio
-         */
-        final String AUDIO = "audio/*";
-
-        /**
-         * Share Video
-         */
-        final String VIDEO = "video/*";
-
-        /**
-         * Share File
-         */
-        final String File = "*/*";
-    }
-
-    /**
-     * 注解限定String类型为指定
-     */
-    @StringDef(value = {package_ali, package_qq, package_wb, package_wx})
-    @Retention(RetentionPolicy.SOURCE)
-    @interface PackageName {
-    }
-
-    public static final String package_qq = "com.tencent.mobileqq";
-    public static final String package_ali = "com.eg.android.AlipayGphone";
-    public static final String package_wx = "com.tencent.mm";
-    public static final String package_wb = "com.sina.weibo";
-
-    public static final String AliPay_Barcode = "alipayqr://platformapi/startapp?saId=20000056";//付款码
-    public static final String AliPay_Paycode = "alipayqr://platformapi/startapp?saId=20000123";//收款码
-    public static final String AliPay_Hongbao = "alipay://platformapi/startapp?saId=88886666";//红包
-    public static final String AliPay_Scan = "alipayqr://platformapi/startapp?saId=10000007";//扫码
-    private static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
-    private static final String AliPay_Qr_Url = "https://qr.alipay.com/";
-    private static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";//个体商户
-    public static final String WX_Scan = "weixin://scanqrcode";//微信扫码
-    public static final String WX = "weixin://";//打开微信
-    public static final String AliPay = "alipays://platformapi/startApp";//打开支付包
-
     /*利用URL Scheme
 
       比如在自带浏览器里面输入
@@ -612,7 +569,6 @@ public class ShareUtil {
         }
     }
 
-
     /**
      * 打开weixin扫一扫界面 如需收款，请自行操作保存收款码到相册步骤
      */
@@ -641,9 +597,10 @@ public class ShareUtil {
 //        openUrl(AliPay_Scan + "&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F" + urlCode + "%3F_s%3Dweb-other");
         openUrl(AliPay_Scan + AliPay_Qr + urlCode);
     }
+
     //通过浏览器打开
     public void alipayMeUrl(String urlCode) {
-        openUrl(AliPay_Qr_Url+urlCode);
+        openUrl(AliPay_Qr_Url + urlCode);
     }
 
     /**
@@ -652,9 +609,11 @@ public class ShareUtil {
     public void alipayMe() {
         openUrl(AliPay_Scan + AliPay_Qr_Me);
     }
+
     public void alipayMeUrl() {
-        openUrl(AliPay_Qr_Url+"fkx19000ssxku6zeqdfnc1f");
+        openUrl(AliPay_Qr_Url + "fkx19000ssxku6zeqdfnc1f");
     }
+
     /**
      * 是否安装某APP
      *
@@ -722,5 +681,48 @@ public class ShareUtil {
         } else {
             return Uri.fromFile(file);
         }
+    }
+
+    /*
+    系统返回的一些常见 Uri 样式：
+    content://com.android.providers.media.documents..
+    content://com.android.providers.downloads...
+    content://media/external/images/media/...
+    content://com.android.externalstorage.documents..*/
+    @StringDef({ShareContentType.TEXT, ShareContentType.IMAGE, ShareContentType.AUDIO, ShareContentType.VIDEO, ShareContentType.File})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface ShareContentType {
+        /**
+         * Share Text
+         */
+        final String TEXT = "text/plain";
+
+        /**
+         * Share Image
+         */
+        final String IMAGE = "image/*";
+
+        /**
+         * Share Audio
+         */
+        final String AUDIO = "audio/*";
+
+        /**
+         * Share Video
+         */
+        final String VIDEO = "video/*";
+
+        /**
+         * Share File
+         */
+        final String File = "*/*";
+    }
+
+    /**
+     * 注解限定String类型为指定
+     */
+    @StringDef(value = {package_ali, package_qq, package_wb, package_wx})
+    @Retention(RetentionPolicy.SOURCE)
+    @interface PackageName {
     }
 }

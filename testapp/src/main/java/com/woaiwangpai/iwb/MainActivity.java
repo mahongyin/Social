@@ -61,6 +61,83 @@ public class MainActivity extends AppCompatActivity {
     private AuthApi mAuthApi;
     private ShareApi mShareApi;
     private Animation shake;
+    //登陆回调
+    private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
+        @Override
+        public void onComplete(SocialType type, Object user) {
+            switch (type) {
+                case ALIPAY_Auth:
+//                    ali AuthResult
+                    AuthResult authResult = (AuthResult) user;
+                    Log.e("code交给后端和登陆绑定手机等逻辑", authResult.getAuthCode());
+                    Toast.makeText(MainActivity.this, "支付宝登录成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case QQ_Auth:
+                    Toast.makeText(MainActivity.this, "QQ登录成功", Toast.LENGTH_SHORT).show();
+                    JSONObject data = (JSONObject) user;
+                    try {
+                        String openID = data.getString("openid");
+                        String accessToken = data.getString("access_token");
+                        String expires = data.getString("expires_in");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case WEIBO_Auth:
+                    Toast.makeText(MainActivity.this, "微博登录成功", Toast.LENGTH_SHORT).show();
+//                    wb（Oauth2AccessToken）user
+                    String accessToken = ((Oauth2AccessToken) user).getAccessToken();
+                    break;
+                case WEIXIN_Auth:
+                    Toast.makeText(MainActivity.this, "微信登录成功", Toast.LENGTH_SHORT).show();
+//                    wx((WeiXin)user).getCode()
+                    String code = ((WeiXin) user).getCode();
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onError(SocialType type, String error) {
+            Toast.makeText(MainActivity.this, "登录失败:" + error, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SocialType type) {
+            Toast.makeText(MainActivity.this, "登录取消", Toast.LENGTH_SHORT).show();
+        }
+    };
+    //支付回调
+    private PayApi.OnPayListener onPayListener = new PayApi.OnPayListener() {
+        @Override
+        public void onPayOk(SocialType type) {
+            Toast.makeText(MainActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onPayFail(SocialType type, String msg) {
+            Toast.makeText(MainActivity.this, "支付失败：" + msg, Toast.LENGTH_SHORT).show();
+        }
+
+
+    };
+    //分享回调
+    private ShareApi.OnShareListener onShareListener = new ShareApi.OnShareListener() {
+        @Override
+        public void onShareOk(SocialType type) {
+            Toast.makeText(MainActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onShareFail(SocialType type, String msg) {
+            Toast.makeText(MainActivity.this, "分享失败:" + msg, Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onCancel(SocialType type) {
+            Toast.makeText(MainActivity.this, "分享cancel", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private void copy() {
         copyFile("eeee.mp4");
@@ -115,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 ShareUtil shareUtil = ShareUtil.getInstance(MainActivity.this);
 //                shareUtil.shareImg(R.mipmap.ic_launcher, ShareUtil.package_ali);
 //                shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
-                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg");
+                shareUtil.shareImg(getExternalFilesDir(null) + "/hhhh.jpg");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
 //                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
@@ -142,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
 //                mShareApi.doShare(WbShareEntity.createImageText(
 //                        getExternalFilesDir(null) + "/ccc.JPG",
 //                        "测试图文分享"));
-                mShareApi.doShare(WbShareEntity.createWeb("https://www.baidu.com","百度一下",
+                mShareApi.doShare(WbShareEntity.createWeb("https://www.baidu.com", "百度一下",
                         "百度一下，你就知道",
                         getExternalFilesDir(null) + "/ccc.JPG",
                         "测试图文分享"));
@@ -258,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mShareApi = new QqShare(MainActivity.this, onShareListener);
                 mShareApi.doShare(QQShareEntity.createImageText(
-                        "百度","https://baidu.com",
+                        "百度", "https://baidu.com",
 //                        "https://vod.5club.cctv.cn/cctv/cctvh5/l/zhanbao.png",
                         getExternalFilesDir(null) + "/aaa.png",
                         "百度一下",
@@ -281,7 +358,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //说说
-        findViewById(R.id.btn_share_qq_zone).setOnLongClickListener(new View.OnLongClickListener() {            @Override
+        findViewById(R.id.btn_share_qq_zone).setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
             public boolean onLongClick(View v) {
                 ArrayList<String> imgUrls = new ArrayList<>();
                 imgUrls.add(getExternalFilesDir(null) + "/aaa.png");
@@ -290,8 +368,8 @@ public class MainActivity extends AppCompatActivity {
                 mShareApi.doShare(QQShareEntity.createPublishTextToQZone("发个说说"));
                 //spi = mShareApi;
                 v.startAnimation(shake);
-            return true;
-        }
+                return true;
+            }
         });
     }
 
@@ -376,89 +454,10 @@ public class MainActivity extends AppCompatActivity {
         String title = "百度一下";
         String summary = "百度一下，你就知道";
 //        shareEntity = WxShareEntity.createWebPage(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, title, summary);
-        shareEntity = WxShareEntity.createWebPage(pyq? WxType.TYPE_TIME_LINE:WxType.TYPE_SESSION, "http://www.baidu.com", getExternalFilesDir(null) + "/fff.jpg", title, summary);
+        shareEntity = WxShareEntity.createWebPage(pyq ? WxType.TYPE_TIME_LINE : WxType.TYPE_SESSION, "http://www.baidu.com", getExternalFilesDir(null) + "/fff.jpg", title, summary);
 
         return shareEntity;
     }
-
-    //登陆回调
-    private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
-        @Override
-        public void onComplete(SocialType type, Object user) {
-            switch (type) {
-                case ALIPAY_Auth:
-//                    ali AuthResult
-                    AuthResult authResult = (AuthResult) user;
-                    Log.e("code交给后端和登陆绑定手机等逻辑", authResult.getAuthCode());
-                    Toast.makeText(MainActivity.this, "支付宝登录成功", Toast.LENGTH_SHORT).show();
-                    break;
-                case QQ_Auth:
-                    Toast.makeText(MainActivity.this, "QQ登录成功", Toast.LENGTH_SHORT).show();
-                    JSONObject data = (JSONObject) user;
-                    try {
-                        String openID = data.getString("openid");
-                        String accessToken = data.getString("access_token");
-                        String expires = data.getString("expires_in");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case WEIBO_Auth:
-                    Toast.makeText(MainActivity.this, "微博登录成功", Toast.LENGTH_SHORT).show();
-//                    wb（Oauth2AccessToken）user
-                    String accessToken = ((Oauth2AccessToken) user).getAccessToken();
-                    break;
-                case WEIXIN_Auth:
-                    Toast.makeText(MainActivity.this, "微信登录成功", Toast.LENGTH_SHORT).show();
-//                    wx((WeiXin)user).getCode()
-                    String code = ((WeiXin) user).getCode();
-                    break;
-            }
-
-        }
-
-        @Override
-        public void onError(SocialType type, String error) {
-            Toast.makeText(MainActivity.this, "登录失败:" + error, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SocialType type) {
-            Toast.makeText(MainActivity.this, "登录取消", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    //支付回调
-    private PayApi.OnPayListener onPayListener = new PayApi.OnPayListener() {
-        @Override
-        public void onPayOk(SocialType type) {
-            Toast.makeText(MainActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onPayFail(SocialType type, String msg) {
-            Toast.makeText(MainActivity.this, "支付失败：" + msg, Toast.LENGTH_SHORT).show();
-        }
-
-
-    };
-    //分享回调
-    private ShareApi.OnShareListener onShareListener = new ShareApi.OnShareListener() {
-        @Override
-        public void onShareOk(SocialType type) {
-            Toast.makeText(MainActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onShareFail(SocialType type, String msg) {
-            Toast.makeText(MainActivity.this, "分享失败:" + msg, Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onCancel(SocialType type) {
-            Toast.makeText(MainActivity.this, "分享cancel", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

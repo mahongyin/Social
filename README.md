@@ -2,7 +2,7 @@
 
 #### Documentation
 
-微信 微博 支付宝 QQ 【 登陆 、分享、支付  原生分享】 。独立library 调用方便 详看文档
+微信 微博 支付宝 QQ 【 登陆 、分享、支付 原生分享】 。独立library 调用方便 详看文档
 
 ![img](social.png)
 
@@ -16,7 +16,7 @@
 登录：
 支付宝授权，微信授权，qq授权，微博授权<br>
 分享：
-qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信朋友圈分享  系统原生分享
+qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信朋友圈分享 系统原生分享
 <br><br><br>
 
 <B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.1-brightgreen.svg)
@@ -48,6 +48,7 @@ allprojects {
 //微博   不支持x86
   implementation 'com.gitee.mahongyin.social:wb:1.3.1'
 ```
+
 //////////////////////////////////////////////////////////////////////////////////////
 **AndroidManifest.xml配置**
 

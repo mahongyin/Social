@@ -13,6 +13,7 @@ import com.mhy.socialcommon.SocialType;
 import java.util.ArrayList;
 
 /**
+ *
  */
 public class WbShareEntity extends ShareEntity {
 
@@ -28,7 +29,9 @@ public class WbShareEntity extends ShareEntity {
     public static final int TYPE_WEB = 4;
     public static final int TYPE_IMG_STORY = 5;
     public static final int TYPE_VIDEO_STORY = 6;
-    /**超话*/
+    /**
+     * 超话
+     */
     public static final int TYPE_SUPER_TALK = 7;
 
     public static final String KEY_WB_TITLE = "key_wb_title";
@@ -42,7 +45,8 @@ public class WbShareEntity extends ShareEntity {
 
     public static final String KEY_WB_SUPER_SG = "key_wb_super_sg";
     public static final String KEY_WB_SUPER_SEC = "key_wb_super_sec";
-    public static final String KEY_WB_SUPER_SG_EXT = "key_wb_super_sp_ext";;
+    public static final String KEY_WB_SUPER_SG_EXT = "key_wb_super_sp_ext";
+    ;
 
     private WbShareEntity(SocialType type) {
         super(type);
@@ -92,16 +96,18 @@ public class WbShareEntity extends ShareEntity {
         addTitleSummaryAndThumb(entity.params, "", "", img);
         return entity;
     }
+
     public static ShareEntity createImage(@DrawableRes int img) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_IMG);
         addTitleSummaryAndThumb(entity.params, "", "", img);
         return entity;
     }
+
     /**
      * 分享图story
      *
-     * @param imgPath  本地图片绝对路径
+     * @param imgPath 本地图片绝对路径
      */
     public static ShareEntity createImageStory(String imgPath) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
@@ -109,9 +115,11 @@ public class WbShareEntity extends ShareEntity {
         addParams(entity.params, KEY_WB_IMG_LOCAL, imgPath);
         return entity;
     }
+
     /**
      * 分享视频story
-     * @param videoPath  本地视频绝对路径
+     *
+     * @param videoPath 本地视频绝对路径
      */
     public static ShareEntity createVideoStory(String videoPath) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
@@ -124,7 +132,7 @@ public class WbShareEntity extends ShareEntity {
      * 分享多图
      *
      * @param imagePaths 图片路径List，最多9张
-     * @param text   文本内容
+     * @param text       文本内容
      */
     public static ShareEntity createMultiImage(ArrayList<String> imagePaths, String text) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
@@ -137,16 +145,16 @@ public class WbShareEntity extends ShareEntity {
     /**
      * 分享视频
      *
-     * @param videoPath   视频路径，本地视频
+     * @param videoPath  视频路径，本地视频
      * @param coverImage 视频封面
      * @param text       文本内容
      */
-    public static ShareEntity createVideo(String text, String videoPath,@Nullable String coverImage) {
+    public static ShareEntity createVideo(String text, String videoPath, @Nullable String coverImage) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_VIDEO);
         addParams(entity.params, KEY_WB_VIDEO_URL, videoPath);
         addParams(entity.params, KEY_WB_TEXT, text);
-        if (TextUtils.isEmpty(coverImage)){
+        if (TextUtils.isEmpty(coverImage)) {
             return entity;
         }
         addTitleSummaryAndThumb(entity.params, "", "", coverImage);
@@ -159,7 +167,7 @@ public class WbShareEntity extends ShareEntity {
      * @param webUrl  网页链接
      * @param title   网页标题
      * @param summary 网页摘要
-     * @param imgPath     网页左边图标，本地路径
+     * @param imgPath 网页左边图标，本地路径
      * @param text    文本内容
      */
     public static ShareEntity createWeb(String webUrl, String title, String summary, String imgPath, String text) {
@@ -177,10 +185,10 @@ public class WbShareEntity extends ShareEntity {
      * @param webUrl  网页链接
      * @param title   网页标题
      * @param summary 网页摘要
-     * @param imgRes     网页左边图标，应用内图片资源
+     * @param imgRes  网页左边图标，应用内图片资源
      * @param text    文本内容
      */
-    public static ShareEntity createWeb(String webUrl, String title, String summary,@DrawableRes int imgRes, String text) {
+    public static ShareEntity createWeb(String webUrl, String title, String summary, @DrawableRes int imgRes, String text) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WB_WEB_URL, webUrl);
@@ -191,13 +199,14 @@ public class WbShareEntity extends ShareEntity {
 
     /**
      * 创建超话
+     *
      * @param title
      * @param sgName
      * @param sgExtParam
      * @param secName
      * @return
      */
-    public static ShareEntity createSuperTalk(String title, @NonNull String sgName,@NonNull String secName,@NonNull String sgExtParam) {
+    public static ShareEntity createSuperTalk(String title, @NonNull String sgName, @NonNull String secName, @NonNull String sgExtParam) {
         ShareEntity entity = new ShareEntity(SocialType.WEIBO_Share);
         addParams(entity.params, KEY_WB_TYPE, TYPE_WEB);
         addParams(entity.params, KEY_WB_SUPER_SG, sgName.trim());
@@ -210,7 +219,7 @@ public class WbShareEntity extends ShareEntity {
     /**
      * @param title   标题
      * @param summary 摘要
-     * @param imgPath  本地图片地址
+     * @param imgPath 本地图片地址
      */
     private static void addTitleSummaryAndThumb(Bundle params, String title, String summary, String imgPath) {
         addParams(params, KEY_WB_TITLE, title);

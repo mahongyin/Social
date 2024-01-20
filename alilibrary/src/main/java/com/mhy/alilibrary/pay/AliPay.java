@@ -1,5 +1,7 @@
 package com.mhy.alilibrary.pay;
 
+import static com.mhy.alilibrary.AliSoial.SDK_PAY_FLAG;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
@@ -16,40 +18,11 @@ import com.mhy.socialcommon.SocialType;
 
 import java.util.Map;
 
-import static com.mhy.alilibrary.AliSoial.SDK_PAY_FLAG;
-
 /**
  * @author mahongyin 2020-05-29 18:27 @CopyRight mhy.work@qq.com
  * description 支付宝支付
  */
 public class AliPay extends PayApi {
-
-    public AliPay(Activity act, OnPayListener l) {
-        super(act, l);
-        mPayType=SocialType.ALIPAY_Pay;
-    }
-
-    /**
-     * 支付宝支付
-     *
-     * @param payInfo 支付的OrderInfo 统一由后端返回 或者自己拼接后传入
-     */
-    @Override
-    public void doPay(PayContent payInfo) {
-        if (payInfo == null) {
-            callbackPayFail( "orderInfo为空");
-            return;
-        }
-//        if (payInfo instanceof AliPayContent){
-        if (payInfo.getPayType() == SocialType.ALIPAY_Pay) {
-            if (TextUtils.isEmpty(((AliPayContent) payInfo).getOrderInfo())){
-                callbackPayFail("orderInfo为空");
-            }else {
-                payV2(((AliPayContent) payInfo).getOrderInfo());}
-        } else {
-            callbackPayFail("类型参数错误");
-        }
-    }
 
     @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
@@ -88,6 +61,33 @@ public class AliPay extends PayApi {
         ;
     };
 
+    public AliPay(Activity act, OnPayListener l) {
+        super(act, l);
+        mPayType = SocialType.ALIPAY_Pay;
+    }
+
+    /**
+     * 支付宝支付
+     *
+     * @param payInfo 支付的OrderInfo 统一由后端返回 或者自己拼接后传入
+     */
+    @Override
+    public void doPay(PayContent payInfo) {
+        if (payInfo == null) {
+            callbackPayFail("orderInfo为空");
+            return;
+        }
+//        if (payInfo instanceof AliPayContent){
+        if (payInfo.getPayType() == SocialType.ALIPAY_Pay) {
+            if (TextUtils.isEmpty(((AliPayContent) payInfo).getOrderInfo())) {
+                callbackPayFail("orderInfo为空");
+            } else {
+                payV2(((AliPayContent) payInfo).getOrderInfo());
+            }
+        } else {
+            callbackPayFail("类型参数错误");
+        }
+    }
 
     /**
      * 支付宝支付业务示例

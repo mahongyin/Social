@@ -21,7 +21,6 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 /**
  * 微信回调  类名为WXEntryActivity
- *
  */
 public abstract class BaseWXActivity extends Activity implements IWXAPIEventHandler {
 
@@ -31,6 +30,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     protected String getAppId() {
         return WxSocial.getWeixinId();
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +51,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     public void onReq(BaseReq arg0) {
 
     }
+
     //1登陆，2分享
     @Override
     public void onResp(BaseResp resp) {
@@ -61,7 +62,8 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                     WxShare.callbackShareOk();
                     break;
                 case BaseResp.ErrCode.ERR_USER_CANCEL:
-                    WxShare.callbackCancel();;
+                    WxShare.callbackCancel();
+                    ;
                     break;
                 case BaseResp.ErrCode.ERR_AUTH_DENIED:
                     WxShare.callbackShareFail(resp.errStr);
@@ -79,7 +81,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
 //            EventBus.getDefault().post(weiXin);
             switch (resp.errCode) {
                 case BaseResp.ErrCode.ERR_OK:
-                    String code=((SendAuth.Resp)resp).code;
+                    String code = ((SendAuth.Resp) resp).code;
                     //把code交给后台去和wx后台通信
                     WxAuth.setCompleteCallBack(new WeiXin(SocialType.WEIXIN_Auth, resp.errCode, code));
                     break;
@@ -93,7 +95,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                     WxAuth.setErrorCallBack(resp.errStr);
                     break;
             }
-        }else if (resp.getType() == ConstantsAPI.COMMAND_LAUNCH_WX_MINIPROGRAM) {
+        } else if (resp.getType() == ConstantsAPI.COMMAND_LAUNCH_WX_MINIPROGRAM) {
             //微信小程序
             WXLaunchMiniProgram.Resp launchMiniProResp = (WXLaunchMiniProgram.Resp) resp;
 //           https://www.jianshu.com/p/c08b54299e8a
@@ -101,7 +103,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
 //    <view class='suspension'>
 //      <button class="server_button" open-type="launchApp" app-parameter="wechat" binderror="launchAppError">打开APP</button>
 //    </view>//小程序给APP传值
-            String extraData =launchMiniProResp.extMsg;
+            String extraData = launchMiniProResp.extMsg;
             WxAuth.setCompleteCallBack(extraData); //TODO 回调区分
         }
 

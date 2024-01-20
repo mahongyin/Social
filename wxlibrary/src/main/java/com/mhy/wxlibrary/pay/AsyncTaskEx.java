@@ -17,28 +17,39 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 异步抽像任务，使用方法参考@see ImageDownloader
- * @author skylai
  *
- *  传入的参数  抽象方法，子类必须实现
- *  更新实时的任务进度 抽象方法，子类必须实现
- *  异步方法结束后传回的实体  抽象方法，子类必须实现
+ * @author skylai
+ * <p>
+ * 传入的参数  抽象方法，子类必须实现
+ * 更新实时的任务进度 抽象方法，子类必须实现
+ * 异步方法结束后传回的实体  抽象方法，子类必须实现
  */
 abstract class AsyncTaskEx<Params, Progress, Result> {
     private static final String LOG_TAG = "AsyncTaskEx";
-    
-    /** 线程池维护线程的最少数量 */
+
+    /**
+     * 线程池维护线程的最少数量
+     */
     private static final int CORE_POOL_SIZE = 5;
-    
-    /** 线程池维护线程的最大数量 */
+
+    /**
+     * 线程池维护线程的最大数量
+     */
     private static final int MAXIMUM_POOL_SIZE = 10;
-    
-    /**  线程池维护线程所允许的空闲时间 */
+
+    /**
+     * 线程池维护线程所允许的空闲时间
+     */
     private static final int KEEP_ALIVE = 10;
 
-    /** 线程池所使用的缓冲队列 */
+    /**
+     * 线程池所使用的缓冲队列
+     */
     private static final LinkedBlockingQueue<Runnable> sWorkQueue = new LinkedBlockingQueue<Runnable>();
 
-    /** 线程池对拒绝任务的处理策略 */
+    /**
+     * 线程池对拒绝任务的处理策略
+     */
     private static final ThreadFactory sThreadFactory = new ThreadFactory() {
         private final AtomicInteger mCount = new AtomicInteger(1);
 
@@ -50,15 +61,15 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
 
     /**
      * 线程池中的数量小于CORE_POOL_SIZE，即使线程池中的线程都处于空闲状态，也要创建新的线程来处理被添加的任务。
-     * 
+     * <p>
      * 线程池中的数量等于 MAXIMUM_POOL_SIZE，但是缓冲队列 workQueue未满，那么任务被放入缓冲队列。
-     * 
+     * <p>
      * 线程池中的数量大于CORE_POOL_SIZE，缓冲队列sWorkQueue满，并且线程池中的数量小于MAXIMUM_POOL_SIZE，建新的线程来处理被添加的任务。
-     * 
+     * <p>
      * 线程池中的数量大于CORE_POOL_SIZE，缓冲队列sWorkQueue满，并且线程池中的数量等于MAXIMUM_POOL_SIZE，
      * 那么通过 sThreadFactory所指定的策略来处理此任务。也就是：处理任务的优先级为：核心线程CORE_POOL_SIZE、
      * 任务队列sWorkQueue、最大线程MAXIMUM_POOL_SIZE，如果三者都满了，使用handler处理被拒绝的任务。
-     * 
+     * <p>
      * 当线程池中的线程数量大于 CORE_POOL_SIZE时，如果某线程空闲时间超过TimeUnit.SECONDS，线程将被终止。
      * 这样，线程池可以动态的调整池中的线程数。
      */
@@ -75,17 +86,6 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
     private final FutureTask<Result> mFuture;
 
     private volatile Status mStatus = Status.PENDING;
-
-    public enum Status {
-
-        PENDING,
-        RUNNING,
-        FINISHED,
-    }
-        
-    public static void clearQueue() {
-        sWorkQueue.clear();
-    }
 
     public AsyncTaskEx() {
         mWorker = new WorkerRunnable<Params, Result>() {
@@ -126,21 +126,43 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
         };
     }
 
+    public static void clearQueue() {
+        sWorkQueue.clear();
+    }
+
     public final Status getStatus() {
         return mStatus;
     }
 
-    /** 在onPreExecute 方法执行后马上执行，该方法运行在后台线程中 */
+    /**
+     * 在onPreExecute 方法执行后马上执行，该方法运行在后台线程中
+     */
     protected abstract Result doInBackground(Params... params);
-    /** 将在执行实际的后台操作前被UI thread调用 */
-    protected void onPreExecute(Params... params) {}
-    /** 在doInBackground 执行完成后，onPostExecute 方法将被UI thread调用 */
-    protected void onPostExecute(Result result) {}
-    /** 在publishProgress方法被调用后，UI thread将调用这个方法从而在界面上展示任务的进展情况 */
-    protected void onProgressUpdate(Progress... values) {}
-    /** 方法取消的时候出发 */
-    protected void onCancelled() {}
-    
+
+    /**
+     * 将在执行实际的后台操作前被UI thread调用
+     */
+    protected void onPreExecute(Params... params) {
+    }
+
+    /**
+     * 在doInBackground 执行完成后，onPostExecute 方法将被UI thread调用
+     */
+    protected void onPostExecute(Result result) {
+    }
+
+    /**
+     * 在publishProgress方法被调用后，UI thread将调用这个方法从而在界面上展示任务的进展情况
+     */
+    protected void onProgressUpdate(Progress... values) {
+    }
+
+    /**
+     * 方法取消的时候出发
+     */
+    protected void onCancelled() {
+    }
+
     public final boolean isCancelled() {
         return mFuture.isCancelled();
     }
@@ -192,8 +214,15 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
         mStatus = Status.FINISHED;
     }
 
+    public enum Status {
+
+        PENDING,
+        RUNNING,
+        FINISHED,
+    }
+
     private static class InternalHandler extends Handler {
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         @Override
         public void handleMessage(Message msg) {
             AsyncTaskExResult result = (AsyncTaskExResult) msg.obj;

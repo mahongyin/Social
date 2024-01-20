@@ -45,8 +45,8 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享文本
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param text       文本
+     * @param type 是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param text 文本
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createText(@WxType int type, String text) {
@@ -65,7 +65,7 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享图片
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param type        是否分享到朋友圈，好友列表,朋友圈,收藏
      * @param imgFilePath 本地图片地址
      * @return ShareEntity 分享内容包装
      */
@@ -85,8 +85,8 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享图片
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param imgRes     应用内图片资源
+     * @param type   是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param imgRes 应用内图片资源
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createImage(@WxType int type, @DrawableRes int imgRes) {
@@ -105,11 +105,11 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享音乐
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param musicUrl   音乐url，不支持本地音乐
-     * @param imgUrl     本地图片地址，缩略图大小
-     * @param title      音乐标题
-     * @param summary    音乐摘要
+     * @param type     是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param musicUrl 音乐url，不支持本地音乐
+     * @param imgUrl   本地图片地址，缩略图大小
+     * @param title    音乐标题
+     * @param summary  音乐摘要
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createMusic(@WxType int type, String musicUrl, String imgUrl, String title, String summary) {
@@ -129,11 +129,11 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享音乐
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param musicUrl   音乐url，不支持本地音乐
-     * @param imgRes     应用内图片资源，缩略图大小
-     * @param title      音乐标题
-     * @param summary    音乐摘要
+     * @param type     是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param musicUrl 音乐url，不支持本地音乐
+     * @param imgRes   应用内图片资源，缩略图大小
+     * @param title    音乐标题
+     * @param summary  音乐摘要
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createMusic(@WxType int type, String musicUrl, @DrawableRes int imgRes, String title, String summary) {
@@ -153,11 +153,11 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享视频
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param videoUrl   视频url，不支持本地音乐
-     * @param imgUrl     本地图片地址，缩略图大小
-     * @param title      视频标题
-     * @param summary    视频摘要
+     * @param type     是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param videoUrl 视频url，不支持本地音乐
+     * @param imgUrl   本地图片地址，缩略图大小
+     * @param title    视频标题
+     * @param summary  视频摘要
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createVideo(@WxType int type, String videoUrl, String imgUrl, String title, String summary) {
@@ -177,11 +177,11 @@ public final class WxShareEntity extends ShareEntity {
     /**
      * 分享视频
      *
-     * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param videoUrl   音乐url，不支持本地音乐
-     * @param imgRes     应用内图片资源，缩略图大小
-     * @param title      视频标题
-     * @param summary    视频摘要
+     * @param type     是否分享到朋友圈，好友列表,朋友圈,收藏
+     * @param videoUrl 音乐url，不支持本地音乐
+     * @param imgRes   应用内图片资源，缩略图大小
+     * @param title    视频标题
+     * @param summary  视频摘要
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createVideo(@WxType int type, String videoUrl, @DrawableRes int imgRes, String title, String summary) {
@@ -226,10 +226,10 @@ public final class WxShareEntity extends ShareEntity {
      * 分享网页
      *
      * @param type    是否分享到朋友圈，好友列表,朋友圈,收藏
-     * @param webUrl     音乐url，不支持本地音乐
-     * @param imgRes     应用内图片资源，缩略图大小
-     * @param title      网页标题
-     * @param summary    网页摘要
+     * @param webUrl  音乐url，不支持本地音乐
+     * @param imgRes  应用内图片资源，缩略图大小
+     * @param title   网页标题
+     * @param summary 网页摘要
      * @return ShareEntity 分享内容包装
      */
     public static ShareEntity createWebPage(@WxType int type, String webUrl, @DrawableRes int imgRes, String title, String summary) {

@@ -2,8 +2,7 @@ package com.mhy.wxlibrary;
 
 /**
  * @author mahongyin 2020-05-28 11:21 @CopyRight mhy.work@qq.com
- *  WxSocial.setWeixinId("xxxxxxxx");
- *
+ * WxSocial.setWeixinId("xxxxxxxx");
  */
 public class WxSocial {
 

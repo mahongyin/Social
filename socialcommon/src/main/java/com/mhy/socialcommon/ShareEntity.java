@@ -15,18 +15,6 @@ public class ShareEntity {
         this.params = new Bundle();
     }
 
-    public Bundle getParams() {
-        return params;
-    }
-
-    public void setParams(Bundle params) {
-        this.params = params;
-    }
-
-    public SocialType getType() {
-        return type;
-    }
-
     protected static void addParams(Bundle params, String key, String value) {
         if (params == null || TextUtils.isEmpty(key) || TextUtils.isEmpty(value)) {
             return;
@@ -46,5 +34,17 @@ public class ShareEntity {
             return;
         }
         params.putStringArrayList(key, value);
+    }
+
+    public Bundle getParams() {
+        return params;
+    }
+
+    public void setParams(Bundle params) {
+        this.params = params;
+    }
+
+    public SocialType getType() {
+        return type;
     }
 }

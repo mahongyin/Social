@@ -10,14 +10,13 @@ import java.lang.ref.WeakReference;
  */
 public abstract class PayApi {
 
-    protected WeakReference<Activity> mActivity;
     //只允许一个实例化回调
     protected static OnPayListener mPayResultListener;
-
     protected static SocialType mPayType;
+    protected WeakReference<Activity> mActivity;
 
 
-    public PayApi(Activity act,OnPayListener l){
+    public PayApi(Activity act, OnPayListener l) {
         mActivity = new WeakReference<>(act);
         setOnPayListener(l);
     }
@@ -27,25 +26,10 @@ public abstract class PayApi {
 //    }
 
     /**
-     * 调用支付sdk
-     * @param payInfo 支付sdk
-     */
-    public abstract void doPay(PayContent payInfo);
-
-
-    /**
-     * 设置支付回调
-     * @param l
-     */
-    protected void setOnPayListener(OnPayListener l){
-        mPayResultListener = l;
-    };
-
-    /**
      * 返回支付成功
      */
-    public static void callbackPayOk(){
-        if(mPayResultListener != null){
+    public static void callbackPayOk() {
+        if (mPayResultListener != null) {
             mPayResultListener.onPayOk(mPayType);
         }
     }
@@ -53,10 +37,28 @@ public abstract class PayApi {
     /**
      * 返回支付失败
      */
-    public static void callbackPayFail(String msg){
-        if(mPayResultListener != null){
+    public static void callbackPayFail(String msg) {
+        if (mPayResultListener != null) {
             mPayResultListener.onPayFail(mPayType, msg);
         }
+    }
+
+    ;
+
+    /**
+     * 调用支付sdk
+     *
+     * @param payInfo 支付sdk
+     */
+    public abstract void doPay(PayContent payInfo);
+
+    /**
+     * 设置支付回调
+     *
+     * @param l
+     */
+    protected void setOnPayListener(OnPayListener l) {
+        mPayResultListener = l;
     }
 
     /**
@@ -67,12 +69,12 @@ public abstract class PayApi {
         /**
          * 支付回调-成功支付
          */
-        void onPayOk( SocialType type);
+        void onPayOk(SocialType type);
 
         /**
          * 支付回调-支付失败
          */
-        void onPayFail( SocialType type, String msg);
+        void onPayFail(SocialType type, String msg);
 
     }
 

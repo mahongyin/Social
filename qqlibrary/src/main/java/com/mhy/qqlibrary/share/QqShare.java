@@ -18,6 +18,7 @@ import com.tencent.tauth.UiError;
  */
 public class QqShare extends ShareApi {
     Tencent mTencent;
+    BaseUiListener mQQCallbackListener = new BaseUiListener();
 
     public QqShare(Activity act, OnShareListener l) {
         super(act, l);
@@ -69,8 +70,16 @@ public class QqShare extends ShareApi {
         return false;
     }
 
+    public IUiListener getQQCallbackListener() {
+        return mQQCallbackListener;
+    }
 
-    BaseUiListener mQQCallbackListener = new BaseUiListener();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == Constants.REQUEST_QQ_SHARE||requestCode == Constants.REQUEST_QZONE_SHARE) {
+        Tencent.onActivityResultData(requestCode, resultCode, data, getQQCallbackListener());
+//        }
+    }
 
     public class BaseUiListener implements IUiListener {
         @Override
@@ -96,16 +105,5 @@ public class QqShare extends ShareApi {
         public void onWarning(int i) {
 
         }
-    }
-
-    public IUiListener getQQCallbackListener() {
-        return mQQCallbackListener;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == Constants.REQUEST_QQ_SHARE||requestCode == Constants.REQUEST_QZONE_SHARE) {
-        Tencent.onActivityResultData(requestCode, resultCode, data, getQQCallbackListener());
-//        }
     }
 }

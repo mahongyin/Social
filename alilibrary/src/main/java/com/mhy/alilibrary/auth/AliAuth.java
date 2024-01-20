@@ -1,5 +1,7 @@
 package com.mhy.alilibrary.auth;
 
+import static com.mhy.alilibrary.AliSoial.SDK_AUTH_FLAG;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
@@ -13,16 +15,41 @@ import com.mhy.socialcommon.SocialType;
 
 import java.util.Map;
 
-import static com.mhy.alilibrary.AliSoial.SDK_AUTH_FLAG;
-
 /**
  * @author mahongyin 2020-05-29 18:29 @CopyRight mhy.work@qq.com
  * description .
  */
 public class AliAuth extends AuthApi {
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            if (msg.what == SDK_AUTH_FLAG) {
+                @SuppressWarnings("unchecked")
+                AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
+                String resultStatus = authResult.getResultStatus();
+
+                // 判断resultStatus 为“9000”且result_code
+                // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
+                if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
+                    // 获取alipay_open_id，调支付时作为参数extern_token 的value
+                    // 传入，则支付账户为该授权账户
+//                        showAlert(PayDemoActivity.this, getString(R.string.auth_success) + authResult);
+                    setCompleteCallBack(authResult);
+                } else {
+                    // 其他状态值则为授权失败
+//                        showAlert(PayDemoActivity.this, getString(R.string.auth_failed) + authResult);
+                    setErrorCallBack(resultStatus);
+                }
+            }
+        }
+
+        ;
+    };
+
     public AliAuth(Activity act, OnAuthListener l) {
         super(act, l);
-        mAuthType= SocialType.ALIPAY_Auth;
+        mAuthType = SocialType.ALIPAY_Auth;
     }
 
     @Override
@@ -30,14 +57,14 @@ public class AliAuth extends AuthApi {
         return "";
     }
 
-
     public void doAuth(String orderInfo) {
-        if(orderInfo.isEmpty()){
+        if (orderInfo.isEmpty()) {
             setErrorCallBack("orderInfo是空");
             return;
         }
         authV2(orderInfo);
     }
+
     /**
      * 支付宝账户授权业务示例
      */
@@ -66,29 +93,4 @@ public class AliAuth extends AuthApi {
         Thread authThread = new Thread(authRunnable);
         authThread.start();
     }
-
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @SuppressWarnings("unused")
-        public void handleMessage(Message msg) {
-            if (msg.what == SDK_AUTH_FLAG) {
-                @SuppressWarnings("unchecked")
-                AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
-                String resultStatus = authResult.getResultStatus();
-
-                // 判断resultStatus 为“9000”且result_code
-                // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
-                if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
-                    // 获取alipay_open_id，调支付时作为参数extern_token 的value
-                    // 传入，则支付账户为该授权账户
-//                        showAlert(PayDemoActivity.this, getString(R.string.auth_success) + authResult);
-                    setCompleteCallBack(authResult);
-                } else {
-                    // 其他状态值则为授权失败
-//                        showAlert(PayDemoActivity.this, getString(R.string.auth_failed) + authResult);
-                    setErrorCallBack(resultStatus);
-                }
-            }
-        };
-    };
 }

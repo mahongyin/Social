@@ -10,7 +10,7 @@ public class WeiXin {
 
     public WeiXin(SocialType type, int errCode, String code) {
         this.type = type;
-        this.errCode=errCode;
+        this.errCode = errCode;
         this.code = code;
     }
 

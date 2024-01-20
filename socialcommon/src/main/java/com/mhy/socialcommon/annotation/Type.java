@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * Author        Mahongyin
  * Description   用于 接受回调区分   整体区分 是 哪一个   qq/空间/微信 /朋友圈/微博/支付宝
- *
+ * <p>
  * 自定义注解
  * 使用注解限定参数类型，这样可以避免传入限定以外的值
  */
@@ -57,7 +57,6 @@ public @interface Type {
     int ALIPAY_Share = 6;
 
 
-
     /** QQ */
     int QQ_Auth = 11;
 
@@ -69,7 +68,6 @@ public @interface Type {
 
     /** 支付宝 */
     int ALIPAY_Auth = 14;
-
 
 
     /** 微信 */

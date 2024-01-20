@@ -9,20 +9,52 @@ import java.lang.ref.WeakReference;
  * 社会化组件基类实现
  */
 public abstract class AuthApi {
+    protected static SocialType mAuthType;
+    protected static OnAuthListener mOnAuthListener;
     // 防止在支付宝 等App 被强行退出等情况下，OpenAuthTask.Callback 一定时间内无法释放导致Activity 泄漏。
     protected WeakReference<Activity> mActivity;
-
-    protected static SocialType mAuthType;
-
-    protected static OnAuthListener mOnAuthListener;
 
     public AuthApi(Activity act, OnAuthListener l) {
         mActivity = new WeakReference<>(act);
         setAuthListener(l);
     }
 
-    protected abstract String getAppId();
+    /**
+     * 登陆成功回调
+     */
+    public static void setCompleteCallBack(Object user) {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onComplete(mAuthType, user);
+        }
+    }
 //    public abstract void doAuth(String mInfo);
+
+    /**
+     * 登陆错误回调
+     */
+    public static void setErrorCallBack(String error) {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onError(mAuthType, error);
+        }
+    }
+
+    /**
+     * 登陆取消回调
+     */
+    public static void setCancelCallBack() {
+        if (mOnAuthListener != null) {
+            mOnAuthListener.onCancel(mAuthType);
+        }
+    }
+
+    /**
+     * 释放资源
+     */
+    public static void release() {
+        mOnAuthListener = null;
+    }
+
+    protected abstract String getAppId();
 
     /**
      * qq weibo 需要
@@ -48,40 +80,6 @@ public abstract class AuthApi {
 
     private void setAuthListener(OnAuthListener l) {
         mOnAuthListener = l;
-    }
-
-    /**
-     * 登陆成功回调
-     */
-    public static void setCompleteCallBack(Object user) {
-        if (mOnAuthListener != null) {
-            mOnAuthListener.onComplete(mAuthType, user);
-        }
-    }
-
-    /**
-     * 登陆错误回调
-     */
-    public static void setErrorCallBack(String error) {
-        if (mOnAuthListener != null) {
-            mOnAuthListener.onError(mAuthType, error);
-        }
-    }
-
-    /**
-     * 登陆取消回调
-     */
-    public static void setCancelCallBack() {
-        if (mOnAuthListener != null) {
-            mOnAuthListener.onCancel(mAuthType);
-        }
-    }
-
-    /**
-     * 释放资源
-     */
-    public static void release() {
-        mOnAuthListener = null;
     }
 
     public interface OnAuthListener {

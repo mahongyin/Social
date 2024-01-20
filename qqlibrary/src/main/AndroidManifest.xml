@@ -24,18 +24,18 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!--            android:theme="@style/Assist_Style" /><item name="android:windowIsTranslucent">false</item>-->
 
-<!--        <activity-->
-<!--            android:name="com.tencent.tauth.AuthActivity"-->
-<!--            android:exported="true"-->
-<!--            android:launchMode="singleTask"-->
-<!--            android:noHistory="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                &lt;!&ndash;                <category android:name="android.intent.category.BROWSABLE" />&ndash;&gt;-->
-<!--                &lt;!&ndash;                <data android:scheme="tencent101807669" />&ndash;&gt;-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <!--        <activity-->
+        <!--            android:name="com.tencent.tauth.AuthActivity"-->
+        <!--            android:exported="true"-->
+        <!--            android:launchMode="singleTask"-->
+        <!--            android:noHistory="true">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="android.intent.action.VIEW" />-->
+        <!--                <category android:name="android.intent.category.DEFAULT" />-->
+        <!--                &lt;!&ndash;                <category android:name="android.intent.category.BROWSABLE" />&ndash;&gt;-->
+        <!--                &lt;!&ndash;                <data android:scheme="tencent101807669" />&ndash;&gt;-->
+        <!--            </intent-filter>-->
+        <!--        </activity>-->
         <!-- qq配置结束 -->
         <!-- common包 -->
         <!--        <provider-->

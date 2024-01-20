@@ -74,14 +74,6 @@ public class WxAuth extends AuthApi {
         mWXApi.sendReq(req);
     }
 
-    //限定值 小程序发布类型
-    @IntDef(value = {WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE,
-            WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_TEST,
-            WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW})
-    @Retention(RetentionPolicy.SOURCE)//源码级别，注解只存在源码中
-    private @interface MiniProgramType {
-    }
-
     /**
      * 打开微信小程序
      *
@@ -169,6 +161,14 @@ public class WxAuth extends AuthApi {
      */
     private void unRegister() {
         mWXApi.unregisterApp();
+    }
+
+    //限定值 小程序发布类型
+    @IntDef(value = {WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE,
+            WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_TEST,
+            WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW})
+    @Retention(RetentionPolicy.SOURCE)//源码级别，注解只存在源码中
+    private @interface MiniProgramType {
     }
 
 }

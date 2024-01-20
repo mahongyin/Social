@@ -7,7 +7,7 @@ package com.mhy.qqlibrary;
 
 public class QqSocial {
 
-   private static String appId;
+    private static String appId;
 
     public static String getAppId() {
         return appId;

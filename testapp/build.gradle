@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
-def isWeibo=false
+def isWeibo = false
 android {
     compileSdk rootProject.ext.compile.compileSdkVersion
     namespace 'com.woaiwangpai.iwb'
     defaultConfig {
-        if(isWeibo) {
+        if (isWeibo) {
             applicationId "com.sina.weibo.sdk.demo"
-        }else{
+        } else {
             applicationId "com.woaiwangpai.iwb"
         }
         minSdkVersion rootProject.ext.compile.minSdkVersion
@@ -36,16 +36,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            if(isWeibo) {
+            if (isWeibo) {
                 signingConfig signingConfigs.weibo
-            }else{
+            } else {
                 signingConfig signingConfigs.release
             }
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     repositories {

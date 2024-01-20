@@ -18,14 +18,15 @@ import java.io.File;
  * Date    2024/1/19 23:49
  */
 public class AliShare extends ShareApi {
-    @Override
-    protected String getAppId() {
-        return "";
-    }
     public AliShare(Activity act, OnShareListener l) {
         super(act, l);
         mShareType = SocialType.ALIPAY_Share;
 
+    }
+
+    @Override
+    protected String getAppId() {
+        return "";
     }
 
     @Override
@@ -58,7 +59,7 @@ public class AliShare extends ShareApi {
                     title = content.params.getString(AliShareEntity.TITLE);
                     imageurl = content.params.getString(AliShareEntity.IMG_URL);
                     String description = content.params.getString(AliShareEntity.SUMMARY);
-                    ShareUtil.getInstance(mActivity.get()).shareText(description+" "+tageturl, ShareUtil.package_ali);
+                    ShareUtil.getInstance(mActivity.get()).shareText(description + " " + tageturl, ShareUtil.package_ali);
                     break;
                 case AliShareEntity.TYPE_TEXT:
                     String summary = content.params.getString(AliShareEntity.SUMMARY);

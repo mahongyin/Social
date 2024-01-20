@@ -23,7 +23,6 @@ import com.mhy.wblibrary.bean.WbShareEntity;
 import com.sina.weibo.sdk.api.ImageObject;
 import com.sina.weibo.sdk.api.MediaObject;
 import com.sina.weibo.sdk.api.MultiImageObject;
-
 import com.sina.weibo.sdk.api.SuperGroupObject;
 import com.sina.weibo.sdk.api.TextObject;
 import com.sina.weibo.sdk.api.VideoSourceObject;
@@ -49,6 +48,7 @@ import java.util.UUID;
  */
 public class WbShare extends ShareApi {
     private IWBAPI mWBAPI;
+    private String defautText = "分享网页";
 
     /**
      * 执行登陆操作
@@ -67,6 +67,27 @@ public class WbShare extends ShareApi {
         mWBAPI.registerApp(act, authInfo);
         // mWBAPI.setLoggerEnable(true);
 
+    }
+
+    public static Bitmap byteToBitmap(byte[] data) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        return bitmap;
+    }
+
+    /**
+     * 以最省内存的方式读取本地资源的图片
+     * 将res下的资源图片转成Bitmap
+     *
+     * @return 最后记得 bitmap.recycle();
+     */
+    public static Bitmap resImgToBitmap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565; // Bitmap.Config.ARGB_8888
+        opt.inPurgeable = true; // 允许可清除
+        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
+        // 获取资源图片
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
     }
 
     private boolean cpuX86() {
@@ -102,40 +123,6 @@ public class WbShare extends ShareApi {
                         callbackCancel();
                     }
                 });
-    }
-    @Override
-    protected String getAppId() {
-        return WbSocial.getAppKy();
-    }
-    /*基本信息验证*/
-    private boolean baseVerify() {
-        if (TextUtils.isEmpty(getAppId()) || TextUtils.isEmpty(WbSocial.getRedirectUrl())) {
-            callbackShareFail("请检查appid是否为空");
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 分享 有客户端用客户端。没则网页
-     *
-     * @param shareEntity
-     */
-    @Override
-    public void doShare(ShareEntity shareEntity) {
-        if (cpuX86()) {
-            return;
-        }
-        if (baseVerify()) {
-            return;
-        }
-
-        WeiboMultiMessage weiboMessage = getShareMessage(shareEntity.getParams());
-        if (weiboMessage == null) {
-            return;
-        }
-        boolean onlyClient = false;
-        mWBAPI.shareMessage(mActivity.get(), weiboMessage, onlyClient);
     }
 
 //  /**
@@ -296,6 +283,42 @@ public class WbShare extends ShareApi {
 //
 //    mWBAPI.shareMessage(message, false);
 //  }
+
+    @Override
+    protected String getAppId() {
+        return WbSocial.getAppKy();
+    }
+
+    /*基本信息验证*/
+    private boolean baseVerify() {
+        if (TextUtils.isEmpty(getAppId()) || TextUtils.isEmpty(WbSocial.getRedirectUrl())) {
+            callbackShareFail("请检查appid是否为空");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 分享 有客户端用客户端。没则网页
+     *
+     * @param shareEntity
+     */
+    @Override
+    public void doShare(ShareEntity shareEntity) {
+        if (cpuX86()) {
+            return;
+        }
+        if (baseVerify()) {
+            return;
+        }
+
+        WeiboMultiMessage weiboMessage = getShareMessage(shareEntity.getParams());
+        if (weiboMessage == null) {
+            return;
+        }
+        boolean onlyClient = false;
+        mWBAPI.shareMessage(mActivity.get(), weiboMessage, onlyClient);
+    }
 
     private WeiboMultiMessage getShareMessage(Bundle params) {
         WeiboMultiMessage msg = new WeiboMultiMessage();
@@ -473,8 +496,6 @@ public class WbShare extends ShareApi {
         return videoSourceObject;
     }
 
-    private String defautText = "分享网页";
-
     private WebpageObject getWebPageObj(Bundle params) {
         WebpageObject webpageObject = new WebpageObject();
         webpageObject.identify = UUID.randomUUID().toString();
@@ -615,27 +636,6 @@ public class WbShare extends ShareApi {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static Bitmap byteToBitmap(byte[] data) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        return bitmap;
-    }
-
-    /**
-     * 以最省内存的方式读取本地资源的图片
-     * 将res下的资源图片转成Bitmap
-     *
-     * @return 最后记得 bitmap.recycle();
-     */
-    public static Bitmap resImgToBitmap(Context context, int resId) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565; // Bitmap.Config.ARGB_8888
-        opt.inPurgeable = true; // 允许可清除
-        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
-        // 获取资源图片
-        InputStream is = context.getResources().openRawResource(resId);
-        return BitmapFactory.decodeStream(is, null, opt);
     }
 
 }

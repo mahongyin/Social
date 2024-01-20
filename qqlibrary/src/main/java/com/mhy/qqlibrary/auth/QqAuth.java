@@ -24,7 +24,10 @@ import org.json.JSONObject;
  * description .
  */
 public class QqAuth extends AuthApi {
+    String accessToken;
+    BaseUiListener baseUiListener = new BaseUiListener();
     private Tencent mTencent;
+
 
     public QqAuth(Activity act, OnAuthListener l) {
         super(act, l);
@@ -40,7 +43,6 @@ public class QqAuth extends AuthApi {
     protected String getAppId() {
         return QqSocial.getAppId();
     }
-
 
     public void doAuth() {
         if (baseVerify()) {
@@ -212,8 +214,60 @@ public class QqAuth extends AuthApi {
         }
     }
 
-    String accessToken;
-    BaseUiListener baseUiListener = new BaseUiListener();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("TAG", "-->onActivityResult " + requestCode + " resultCode=" + resultCode);
+//        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+        Tencent.onActivityResultData(requestCode, resultCode, data, baseUiListener);
+//        }
+//        if(requestCode == Constants.REQUEST_API) {
+//            if(resultCode == Constants.REQUEST_LOGIN) {
+//                Tencent.handleResultData(data, baseUiListener);
+//            }
+//        }
+//        if (resultCode == Constants.ACTIVITY_OK) {
+//            if (requestCode == Constants.REQUEST_LOGIN) {
+////                if (baseUiListener != null){ Tencent.onActivityResultData(requestCode, resultCode, data, baseUiListener);}
+//        Tencent.onActivityResultData(requestCode, resultCode, data,baseUiListener);
+//            }
+////            else if (requestCode == Constants.REQUEST_OLD_SHARE) {
+////                if (shareListener != null)
+////                    Tencent.onActivityResultData(requestCode, resultCode, data, shareListener);
+////            }
+//
+//        }
+    }
+
+//    private IUiListener iUiListener = new IUiListener() {
+//        @Override
+//        public void onComplete(Object o) {
+//            if (o != null) {
+//                setCompleteCallBack(o);
+//                Log.e("UserInfo", o.toString());
+//                try {
+//                    Log.e("用户名", ((JSONObject) o).getString("nickname"));
+//                    Log.e("用户性别", ((JSONObject) o).getString("gender"));01
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+////                Toast.makeText(context, "QQ信息为空", Toast.LENGTH_LONG).show();
+//                setErrorCallBack("QQ信息为空");
+//            }
+//        }
+//
+//        @Override
+//        public void onError(UiError uiError) {
+////            Toast.makeText(context, "授权QQ失败", Toast.LENGTH_LONG).show();
+//            setErrorCallBack("授权QQ失败" + uiError.errorMessage);
+//        }
+//
+//        @Override
+//        public void onCancel() {
+////            Toast.makeText(context, "取消登录", Toast.LENGTH_SHORT).show();
+//            setCancelCallBack();
+//        }
+//    };
 
     public class BaseUiListener implements IUiListener {
         @Override
@@ -255,60 +309,5 @@ public class QqAuth extends AuthApi {
         public void onWarning(int i) {
 
         }
-    }
-
-//    private IUiListener iUiListener = new IUiListener() {
-//        @Override
-//        public void onComplete(Object o) {
-//            if (o != null) {
-//                setCompleteCallBack(o);
-//                Log.e("UserInfo", o.toString());
-//                try {
-//                    Log.e("用户名", ((JSONObject) o).getString("nickname"));
-//                    Log.e("用户性别", ((JSONObject) o).getString("gender"));01
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            } else {
-////                Toast.makeText(context, "QQ信息为空", Toast.LENGTH_LONG).show();
-//                setErrorCallBack("QQ信息为空");
-//            }
-//        }
-//
-//        @Override
-//        public void onError(UiError uiError) {
-////            Toast.makeText(context, "授权QQ失败", Toast.LENGTH_LONG).show();
-//            setErrorCallBack("授权QQ失败" + uiError.errorMessage);
-//        }
-//
-//        @Override
-//        public void onCancel() {
-////            Toast.makeText(context, "取消登录", Toast.LENGTH_SHORT).show();
-//            setCancelCallBack();
-//        }
-//    };
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("TAG", "-->onActivityResult " + requestCode + " resultCode=" + resultCode);
-//        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
-        Tencent.onActivityResultData(requestCode, resultCode, data, baseUiListener);
-//        }
-//        if(requestCode == Constants.REQUEST_API) {
-//            if(resultCode == Constants.REQUEST_LOGIN) {
-//                Tencent.handleResultData(data, baseUiListener);
-//            }
-//        }
-//        if (resultCode == Constants.ACTIVITY_OK) {
-//            if (requestCode == Constants.REQUEST_LOGIN) {
-////                if (baseUiListener != null){ Tencent.onActivityResultData(requestCode, resultCode, data, baseUiListener);}
-//        Tencent.onActivityResultData(requestCode, resultCode, data,baseUiListener);
-//            }
-////            else if (requestCode == Constants.REQUEST_OLD_SHARE) {
-////                if (shareListener != null)
-////                    Tencent.onActivityResultData(requestCode, resultCode, data, shareListener);
-////            }
-//
-//        }
     }
 }
