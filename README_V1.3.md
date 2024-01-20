@@ -62,6 +62,7 @@ allprojects {
 <activity
     android:name=".wxapi.WXPayEntryActivity"
     android:exported="true"/>
+    
  <!-- qq登陆认证 -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
@@ -117,12 +118,14 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-**然后 所有回调都从以下3个人接口对应出来 只需实现方法即可** 
+    
+// 回调 ****************************** 
+**所有回调都从以下3个接口对应出来 只需实现方法即可** 
   //登陆回调
     private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
         @Override
         public void onComplete(int type, Object user) {
-//这里根据type使用不同对象 
+            //这里根据type使用不同对象 
            switch (type){
                 case SocialType.ALIPAY_Auth:
 //                    ali AuthResult
@@ -139,6 +142,7 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
                 case SocialType.WEIXIN_Auth:
 //                    wx((WeiXin)user).getCode()
                     break;
+                ...
             }
             Toast.makeText(MainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
         }
@@ -166,6 +170,7 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
             Toast.makeText(MainActivity.this, "支付失败：" + msg, Toast.LENGTH_SHORT).show();
         }
     };
+    
     //分享回调
     private ShareApi.OnShareListener onShareListener = new ShareApi.OnShareListener() {
         @Override
@@ -180,6 +185,22 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
     };
 
  **再说使用*******************************  
+ //原生分享
+        findViewById(R.id.btn_share_local).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.startAnimation(shake);
+                ShareUtil shareUtil = ShareUtil.getInstance(MainActivity.this);
+//                shareUtil.shareImg(R.mipmap.ic_launcher, ShareUtil.package_ali);
+//                shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
+                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", ShareUtil.package_ali);
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+//                shareUtil.shareImg(getExternalFilesDir(null) + "/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+            }
+        });
  
         //微信分享
         findViewById(R.id.btn_share_wx).setOnClickListener(new View.OnClickListener() {
@@ -221,17 +242,8 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
                 api = authApi;//onActivityResult()内使用
             }
         });
-        //原生分享
-        findViewById(R.id.btn_share_local).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(shake);
-                ShareUtil shareUtil = new ShareUtil(MainActivity.this);
-//                shareUtil.shareFile(new File(getExternalFilesDir(null) + "/ccc.JPG"));
-                shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
-            }
-        });
-        //长按 打开小程序
+  
+        //打开qq小程序
         findViewById(R.id.btn_mini_qq).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,12 +275,25 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
                 v.startAnimation(shake);
             }
         });
+        //qq空间说说
+        findViewById(R.id.btn_share_qq_zone).setOnLongClickListener(new View.OnLongClickListener() {            @Override
+            public boolean onLongClick(View v) {
+                ArrayList<String> imgUrls = new ArrayList<>();
+                imgUrls.add(getExternalFilesDir(null) + "/aaa.png");
+                imgUrls.add(getExternalFilesDir(null) + "/bbb.jpg");
+                mShareApi = new QqShare(MainActivity.this, onShareListener);
+                mShareApi.doShare(QQShareEntity.createPublishTextToQZone("发个说说"));
+                //spi = mShareApi;
+                v.startAnimation(shake);
+            return true;
+        }
+        });
         //支付宝登陆
         findViewById(R.id.btn_login_ali).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AliAuth authApi = new AliAuth(MainActivity.this, onAuthListener);
-                authApi.doAuth("");
+                authApi.doAuth("找后台要拼接字符串，格式看阿里文档");
                 v.startAnimation(shake);
             }
         });
@@ -277,7 +302,7 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
             @Override
             public void onClick(View v) {
                 AliPay authApi = new AliPay(MainActivity.this, onPayListener);
-                authApi.doPay(new AliPayContent(""));
+                authApi.doPay(new AliPayContent("找后台要拼接字符串，格式看阿里文档"));
                 v.startAnimation(shake);
             }
         });

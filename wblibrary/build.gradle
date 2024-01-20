@@ -48,6 +48,13 @@ android {
 //publishVersion = rootProject.ext.publish.version// 版本
 //desc = 'build social SDK'//不中文
 //website = "https://github.com/mahongyin/Social"//你的开源地址，注意，一定要用GitHub地址
+if (rootProject.ext.publish.isJitpack) {
+//添加发布到jitpack脚本
+    apply from: "jitpack.gradle"
+} else {
+    //发布到artifactory
+    apply from: "artifactory.gradle"
+}
 
 
 dependencies {

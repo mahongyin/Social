@@ -427,8 +427,9 @@ public class ShareUtil {
     public static final String AliPay_Paycode = "alipayqr://platformapi/startapp?saId=20000123";//收款码
     public static final String AliPay_Hongbao = "alipay://platformapi/startapp?saId=88886666";//红包
     public static final String AliPay_Scan = "alipayqr://platformapi/startapp?saId=10000007";//扫码
-    public static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
-    public static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";//个体商户
+    private static final String AliPay_Qr = "&qrcode=https%3a%2f%2fqr.alipay.com%2f";//扫码字段
+    private static final String AliPay_Qr_Url = "https://qr.alipay.com/";
+    private static final String AliPay_Qr_Me = "&qrcode=https%3a%2f%2fqr.alipay.com%2ffkx19000ssxku6zeqdfnc1f";//个体商户
     public static final String WX_Scan = "weixin://scanqrcode";//微信扫码
     public static final String WX = "weixin://";//打开微信
     public static final String AliPay = "alipays://platformapi/startApp";//打开支付包
@@ -625,19 +626,33 @@ public class ShareUtil {
     }
 
     /**
-     * 支付宝个人 捐赠 扫码支付
+     * 支付宝个人/商家 捐赠 扫码支付
      *
      * @param urlCode 收款码 /末尾
      *                <p>
      *                scheme=alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2Fc1x05309e4ttz2v7xrwrzcd%3F_s%3Dweb-other
      *                alipays://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fwww.baidu.com%2F //使用支付宝打开指定网址
      */
+
     public void alipayMe(String urlCode) {
 //        urlCode="fkx150444qjqymmownj8acb";//00c060630igcenu4bfbud2e
 //        openUrl(AliPay_Scan + "&clientVersion=3.7.0.0718&qrcode=https%3A%2F%2Fqr.alipay.com%2F" + urlCode + "%3F_s%3Dweb-other");
         openUrl(AliPay_Scan + AliPay_Qr + urlCode);
     }
+    //通过浏览器打开
+    public void alipayMeUrl(String urlCode) {
+        openUrl(AliPay_Qr_Url+urlCode);
+    }
 
+    /**
+     * 我的收款页
+     */
+    public void alipayMe() {
+        openUrl(AliPay_Scan + AliPay_Qr_Me);
+    }
+    public void alipayMeUrl() {
+        openUrl(AliPay_Qr_Url+"fkx19000ssxku6zeqdfnc1f");
+    }
     /**
      * 是否安装某APP
      *

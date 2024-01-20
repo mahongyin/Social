@@ -113,11 +113,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 v.startAnimation(shake);
                 ShareUtil shareUtil = ShareUtil.getInstance(MainActivity.this);
-                shareUtil.shareImg(
-//                        R.mipmap.ic_launcher,
-                        getExternalFilesDir(null) + "/ccc.JPG",
-                        ShareUtil.package_ali);
+//                shareUtil.shareImg(R.mipmap.ic_launcher, ShareUtil.package_ali);
 //                shareUtil.shareText("【flutter凉了吗?】知乎：… https://www.zhihu.com/question/374113031/answer/1253795562?utm_source=com.eg.android.alipaygphone&utm_medium=social&utm_oi=1020568397012209664 （分享自知乎网）");
+                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", ShareUtil.package_ali);
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
+//                shareUtil.shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
+//                shareUtil.shareImg(getExternalFilesDir(null) + "/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
             }
         });
         initWeixin();
@@ -175,15 +178,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //防止误支付
 //                AliPay authApi = new AliPay(MainActivity.this, onPayListener);
+                //不要乱支付！！！
 //                authApi.doPay(new AliPayContent("alipay_sdk=alipay-sdk-php-20180705&app_id=2018111362152255&biz_content=%7B%22body%22%3A%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22subject%22%3A+%22%E5%85%85%E5%80%BC%E7%88%B1%E8%B1%86%22%2C%22out_trade_no%22%3A+%222020060211083065315693%22%2C%22timeout_express%22%3A+%2230m%22%2C%22total_amount%22%3A+%221%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fapi.alpha.woaiwangpai.com%2Fapi%2FIntegral%2FnotifyHandle&sign_type=RSA2&timestamp=2020-06-02+11%3A08%3A39&version=1.0&sign=Qt0h%2BWRrK2NcmGrFQNPLEbdVQorUoX8RKRgaru87kY69gimuZzuT4ihT73CaKvKgLc7QmtRsPZYvQ1TyuxScncr%2FDRLCiaStc7YO6srNVp41ZVCmTDrUCdMVQf5wJ5zFTASOtkRlfK2ucwPedeC2I2YKj1uIoi5w79l3iELV34tLRSyZZukf73%2Bl%2FU3Xbgk4u0hgL4wfyyhMGULXer21sK4ZzBpquBJYVelIco5uQycHlN0YZOYyXYHBGufN%2Ff%2Bb6EsVaAxwPDAbdPq9EUaC7HDvOGTEVvO90so2%2FcrXR%2Fd55kj3lM67r8Xca9gqrQyVDx07XycLwjJHjiViEL3h4Q%3D%3D"));
                 v.startAnimation(shake);
-                ShareUtil.getInstance(MainActivity.this).alipayMe("fkx19000ssxku6zeqdfnc1f");
-                //浏览器
-//                ShareUtil.getInstance(MainActivity.this).openUrl("https://qr.alipay.com/fkx19000ssxku6zeqdfnc1f");
+                //个人收款
+                ShareUtil.getInstance(MainActivity.this).alipayMe();
+
+//                ShareUtil.getInstance(MainActivity.this).alipayMeUrl();
 //                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX);
 //                ShareUtil.getInstance(MainActivity.this).openUrl(ShareUtil.WX_Scan);
-//                openUrl(AliPay_Barcode);  openUrl(AliPay_Scan);
-
+//                ShareUtil.getInstance(MainActivity.this).openUrl(AliPay_Barcode);
+//                ShareUtil.getInstance(MainActivity.this).openUrl(AliPay_Scan);
             }
         });
 
@@ -221,14 +226,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 v.startAnimation(shake);
                 mShareApi = new AliShare(MainActivity.this, onShareListener);
-                mShareApi.doShare(AliShareEntity.createImageRes(R.mipmap.ic_launcher));
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", ShareUtil.package_ali);
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.sina.weibo", "com.sina.weibo.EditActivity");
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.qzone", "com.qzonex.module.operation.ui.QZonePublishMoodActivity");
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) +"/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
-//                ShareUtil.getInstance(MainActivity.this).shareImg(getExternalFilesDir(null) + "/hhhh.jpg", "com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
-
+                mShareApi.doShare(AliShareEntity.createImagePath(getExternalFilesDir(null) + "/hhhh.jpg"));
             }
         });
     }
@@ -281,6 +279,19 @@ public class MainActivity extends AppCompatActivity {
                 //spi = mShareApi;
                 v.startAnimation(shake);
             }
+        });
+        //说说
+        findViewById(R.id.btn_share_qq_zone).setOnLongClickListener(new View.OnLongClickListener() {            @Override
+            public boolean onLongClick(View v) {
+                ArrayList<String> imgUrls = new ArrayList<>();
+                imgUrls.add(getExternalFilesDir(null) + "/aaa.png");
+                imgUrls.add(getExternalFilesDir(null) + "/bbb.jpg");
+                mShareApi = new QqShare(MainActivity.this, onShareListener);
+                mShareApi.doShare(QQShareEntity.createPublishTextToQZone("发个说说"));
+                //spi = mShareApi;
+                v.startAnimation(shake);
+            return true;
+        }
         });
     }
 

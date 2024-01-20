@@ -136,7 +136,7 @@ public final class QQShareEntity extends ShareEntity {
      * @param summary 摘要，长度限制600个字
      */
     public static ShareEntity createPublishTextToQZone(@ParamsRequired String summary) {
-        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISHshare);
+        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISH_Share);
         addParams(entity.params, QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzonePublish.PUBLISH_TO_QZONE_TYPE_PUBLISHMOOD);
         addParams(entity.params, QzoneShare.SHARE_TO_QQ_SUMMARY, summary);
         return entity;
@@ -148,7 +148,7 @@ public final class QQShareEntity extends ShareEntity {
      * @param imgUrl 图片地址，只支持本地图片；注：<=9张图片为发表说说，>9张为上传图片到相册
      */
     public static ShareEntity createPublishImageToQZone(@ParamsRequired ArrayList<String> imgUrl) {
-        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISHshare);
+        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISH_Share);
         addParams(entity.params, QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzonePublish.PUBLISH_TO_QZONE_TYPE_PUBLISHMOOD);
         addParams(entity.params, QzonePublish.PUBLISH_TO_QZONE_IMAGE_URL, imgUrl);
         return entity;
@@ -160,7 +160,7 @@ public final class QQShareEntity extends ShareEntity {
      * @param videoUrl 视频地址，只支持本地视频；上传视频的大小最好控制在100M以内（因为QQ普通用户上传视频必须在100M以内，黄钻用户可上传1G以内视频，大于1G会直接报错。）
      */
     public static ShareEntity createPublishVideoToQZone(@ParamsRequired String videoUrl) {
-        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISHshare);
+        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISH_Share);
         addParams(entity.params, QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzonePublish.PUBLISH_TO_QZONE_TYPE_PUBLISHVIDEO);
         addParams(entity.params, QzonePublish.PUBLISH_TO_QZONE_VIDEO_PATH, videoUrl);
         return entity;
@@ -208,7 +208,7 @@ public final class QQShareEntity extends ShareEntity {
      * @return ShareEntity
      */
     public static ShareEntity createMiniAppToQZone(@ParamsRequired String title, ArrayList<String> imageUrls, String summary, String targetUrl, String miniAppid, String miniAppPath, String miniAppType) {
-        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISHshare);
+        ShareEntity entity = new ShareEntity(SocialType.QQ_PUBLISH_Share);
         addParams(entity.params, QzoneShare.SHARE_TO_QZONE_KEY_TYPE, QzoneShare.SHARE_TO_QZONE_TYPE_MINI_PROGRAM);
         addParams(entity.params, QQShare.SHARE_TO_QQ_TITLE, title);
         addParams(entity.params, QQShare.SHARE_TO_QQ_SUMMARY, summary);

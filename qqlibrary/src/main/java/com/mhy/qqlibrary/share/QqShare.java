@@ -43,7 +43,7 @@ public class QqShare extends ShareApi {
                 if (Tencent.isSupportShareToQQ(mActivity.get())) {
                     mTencent.shareToQQ(mActivity.get(), shareInfo.getParams(), mQQCallbackListener);
                 }
-            } else if (shareInfo.getType() == SocialType.QQ_PUBLISHshare) {
+            } else if (shareInfo.getType() == SocialType.QQ_PUBLISH_Share) {
                 if (Tencent.isSupportPushToQZone(mActivity.get())) {
                     mTencent.publishToQzone(mActivity.get(), shareInfo.getParams(), mQQCallbackListener);
                 }

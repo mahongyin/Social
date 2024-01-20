@@ -1,0 +1,37 @@
+apply plugin: 'maven-publish'
+
+def ARTIFACT_ID = "wx"
+def VERSION_NAME = rootProject.ext.publish.version// 版本
+def GROUP_ID = 'com.mhy.social'
+//远程发布， 发布到我自己的私有库
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.release
+//                artifact androidSourcesJar //打包源码，去除这行打的包将看不到源码
+                groupId = GROUP_ID
+                artifactId = ARTIFACT_ID
+                version = VERSION_NAME
+                description "lib is a auth with wx"
+            }
+        }
+
+        repositories {
+            maven {
+                allowInsecureProtocol true
+                url = MAVEN_URL
+                credentials {
+                    it.username = MAVEN_USER
+                    it.password = MAVEN_PASSWORD
+                }
+            }
+        }
+    }
+}
+// 用于打包源代码的任务
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    //from android.sourceSets.main.java.sourceFiles //仅Java源码
+    from android.sourceSets.main.java.srcDirs //包括Java和Kotlin源码和资源
+}
