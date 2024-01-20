@@ -7,8 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -20,33 +20,33 @@
         <activity
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <!--            android:theme="@style/Assist_Style" /><item name="android:windowIsTranslucent">false</item>-->
+        <!--android:theme="@style/Assist_Style" /><item name="android:windowIsTranslucent">false</item>-->
 
-        <!--        <activity-->
-        <!--            android:name="com.tencent.tauth.AuthActivity"-->
-        <!--            android:exported="true"-->
-        <!--            android:launchMode="singleTask"-->
-        <!--            android:noHistory="true">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.intent.action.VIEW" />-->
-        <!--                <category android:name="android.intent.category.DEFAULT" />-->
-        <!--                &lt;!&ndash;                <category android:name="android.intent.category.BROWSABLE" />&ndash;&gt;-->
-        <!--                &lt;!&ndash;                <data android:scheme="tencent101807669" />&ndash;&gt;-->
-        <!--            </intent-filter>-->
-        <!--        </activity>-->
+        <!--<activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="appid" />
+            </intent-filter>
+        </activity>-->
         <!-- qq配置结束 -->
         <!-- common包 -->
-        <!--        <provider-->
-        <!--            android:authorities="${applicationId}.social.fileprovider"-->
-        <!--            android:name="android.support.v4.content.FileProvider"-->
-        <!--            android:exported="false"-->
-        <!--            android:grantUriPermissions="true"-->
-        <!--            >-->
-        <!--            <meta-data-->
-        <!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-        <!--                android:resource="@xml/file_paths"/>-->
-        <!--        </provider>-->
+        <!--<provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.social.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>-->
     </application>
 </manifest>

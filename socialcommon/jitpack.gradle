@@ -12,7 +12,7 @@ afterEvaluate {
 //        singleVariant("release")
         publications {
             release(MavenPublication) {
-                from components.release
+//                from components.release
                 groupId = GROUP_ID
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
