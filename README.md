@@ -22,9 +22,9 @@ qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信�
 <B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.1-brightgreen.svg)
 
 ```
-//如果需要 根 添加如下
+//添加如下仓库
 allprojects {
-        maven { url "https://xxxx/maven/" }//仓库
+        maven { url "https://jitpack.io" }
 }
 ```
 
@@ -33,20 +33,20 @@ allprojects {
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-    implementation 'com.mhy.social:common:1.3.1'
+    implementation 'com.gitee.mahongyin.social:common:1.3.1'
 ```
 
 //以下按需依赖
 
 ```
 //支付宝  
-    implementation 'com.mhy.social:ali:1.3.1'
+    implementation 'com.gitee.mahongyin.social:ali:1.3.1'
 //QQ
-   implementation 'com.mhy.social:qq:1.3.1'
+   implementation 'com.gitee.mahongyin.social:qq:1.3.1'
 //微信
-    implementation 'com.mhy.social:wx:1.3.1'
+    implementation 'com.gitee.mahongyin.social:wx:1.3.1'
 //微博   不支持x86
-  implementation 'com.mhy.social:wb:1.3.1'
+  implementation 'com.gitee.mahongyin.social:wb:1.3.1'
 ```
 //////////////////////////////////////////////////////////////////////////////////////
 **AndroidManifest.xml配置**
@@ -62,18 +62,18 @@ allprojects {
     android:exported="true"/>
     
  <!-- qq登陆认证 -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:exported="true"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tencent换成你的appid" />
-            </intent-filter>
-        </activity> 
+ <activity
+     android:name="com.tencent.tauth.AuthActivity"
+     android:launchMode="singleTask"
+     android:exported="true"
+     android:noHistory="true">
+     <intent-filter>
+         <action android:name="android.intent.action.VIEW" />
+         <category android:name="android.intent.category.DEFAULT" />
+         <category android:name="android.intent.category.BROWSABLE" />
+         <data android:scheme="tencent换成你的appid" />
+     </intent-filter>
+ </activity> 
 ```
 
 **Application配置**
@@ -83,7 +83,7 @@ allprojects {
 在你包名下 新建wxapi包里面新建类 分享登陆WXEntryActivity  支付WXPayEntryActivity
 两个类按需新建 都建无妨  只需按如下继承即可,不需要其他代码
 public class WXEntryActivity extends BaseWXActivity {}
-public class WXPayEntryActivity extends BaseWXPayEntryActivity{} 
+public class WXPayEntryActivity extends BaseWXPayEntryActivity {} 
 ```
 
 ```
@@ -363,6 +363,6 @@ protected void onActivityResult(int requestCode, int resultCode, @Nullable Inten
         });
 ```
 
-```ei
- 关于分享 使用对应ShareEntity  的createxxx 方法传参调用对应分享内容包装 参考demo
+```text
+ 关于分享 使用对应ShareEntity  的createXXX 方法传参调用对应分享的包装内容 参考demo
 ```
