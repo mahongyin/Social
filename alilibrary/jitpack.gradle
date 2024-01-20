@@ -14,7 +14,7 @@ afterEvaluate {
         publications {
             release(MavenPublication) {
                 //jitpack 没android
-//                from components.release
+                from components.release
                 groupId = GROUP_ID
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
