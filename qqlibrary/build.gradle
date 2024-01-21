@@ -1,5 +1,5 @@
 apply plugin: 'com.android.library'
-
+description = 'qq: share auth'
 android {
     compileSdk rootProject.ext.compile.compileSdkVersion
     namespace "com.mhy.qqlibrary"
@@ -31,10 +31,16 @@ android {
 
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    lintOptions {
+        abortOnError false        // true by default
+        checkAllWarnings false
+        checkReleaseBuilds false
+        ignoreWarnings true       // false by default
+        quiet true                // false by default
+    }
 }
 ////jcent
 //publish {

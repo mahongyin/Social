@@ -24,7 +24,7 @@ qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信�
 ```
 //添加如下仓库
 allprojects {
-        maven { url "https://jitpack.io" }
+    maven{ url 'https://gitee.com/mahongyin/Social/raw/master/repo'}
 }
 ```
 

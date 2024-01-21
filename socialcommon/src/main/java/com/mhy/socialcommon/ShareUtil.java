@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
-import android.provider.MediaStore;
 import android.service.quicksettings.TileService;
 import android.text.TextUtils;
 
@@ -28,6 +27,7 @@ import androidx.annotation.StringDef;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -156,9 +156,36 @@ public class ShareUtil {
         mActivity.startActivity(Intent.createChooser(imageIntent, "分享"));
     }
 
+    /*
+     * 保存文件，文件名为当前日期
+     */
+    public Uri saveBitmap(Bitmap bitmap, String bitName) {
+        String fileName = mActivity.getExternalFilesDir(null) + "/" + bitName;
+        File file = new File(fileName);
+        if (file != null && file.exists()) {
+            file.delete();
+        }
+        FileOutputStream out;
+        Uri uri = null;
+        try {
+            out = new FileOutputStream(file);
+            if (bitmap.compress(Bitmap.CompressFormat.PNG, 75, out)) {
+                out.flush();
+                out.close();
+                uri = getFileUri(null, fileName);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return uri;
+    }
+
     public void shareBitMapImg(Bitmap bitmap, String... packageName) {
         checkFileUriExposure();
-        Uri uri = Uri.parse(MediaStore.Images.Media.insertImage(mActivity.getContentResolver(), bitmap, null, null));
+        Uri uri = saveBitmap(bitmap, "share.jpg");
+//        ContentResolver contentResolver = mActivity.getContentResolver();
+//        uri = Uri.parse(MediaStore.Images.Media.insertImage(contentResolver, bitmap, null, null));
         Intent imageIntent = new Intent(Intent.ACTION_SEND);
         if (packageName.length == 1 && !TextUtils.isEmpty(packageName[0])) {
             imageIntent.setPackage(packageName[0]);

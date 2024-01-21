@@ -2,27 +2,41 @@
 apply plugin: 'maven-publish'//jitpack
 
 /*****************jitpack***************/
-//注意：不需要去配置 GROUP_ID、ARTIFACT_ID、VERSION；
 def VERSION_NAME = rootProject.ext.publish.version// 版本
 def GROUP_ID = 'com.gitee.mahongyin.social'
 def ARTIFACT_ID = "ali"
 group = GROUP_ID
 version = VERSION_NAME
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    // 源码路径，包含Java、kotlin代码
+    from android.sourceSets.main.java.getSrcDirs()
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
 afterEvaluate {
     publishing {
-//        singleVariant("release")
+        //singleVariant("release")
         publications {
             release(MavenPublication) {
-                //jitpack 没android
                 from components.release
                 groupId = GROUP_ID
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
+                artifact androidSourcesJar
+            }
+        }
+
+        repositories {
+            maven {
+                url = "../repo"
             }
         }
     }
 }
-//lib模块目录./gradlew publishToMavenLocal 发布到mavenLocal() (对应USER_HOME/.m2/文件夹)
+//gradle :qqlibrary:publish
+//lib模块目录./gradlew publishToMavenLocal 发布到mavenLocal() (对应USER_HOME/.m2/repository文件夹)
 //apply plugin: "maven-publish"
 ////该脚本支持android模块和java模块， 默认会发布源码和注释到aar依赖中；
 //afterEvaluate { project ->

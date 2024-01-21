@@ -1,0 +1,107 @@
+//引入maven-publish和签名插件
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+//./gradlew :alilibrary:publishMavenPublicationToMavenRepository
+def VERSION_NAME = rootProject.ext.publish.version// 版本
+def GROUP_ID = 'io.github.mahongyin.social'
+def ARTIFACT_ID = "ali"
+def DESCRIPTION = 'Android支付宝分享登录支付'
+def GIT_LOCATION = 'github.com/mahongyin/Social'
+def GIT_LOCATION_URL = 'https://'+GIT_LOCATION
+//发布aar的版本号，有-SNAPSHOT代表发布snapshot，没有则发release
+//def VERSION_NAME=rootProject.ext.publish.version+'-SNAPSHOT'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    // 源码路径，包含Java、kotlin代码
+    from android.sourceSets.main.java.getSrcDirs()
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
+publishing {
+    publications {
+        //这里的maven是闭包名，可以随便定义的，也可以叫aar、release等等
+        maven(MavenPublication) {
+            // group id，发布后引用的依赖的 group id
+            groupId GROUP_ID//'io.github.mahongyin'
+            // 发布后引用的依赖的 artifact id
+            artifactId ARTIFACT_ID
+            // 发布的版本
+            version VERSION_NAME
+            // 发布的aar，依赖bundleReleaseAar task，module要先构建出aar
+            afterEvaluate { artifact(tasks.getByName("bundleReleaseAar")) }
+            //发布的源码文件，从上面定义的task androidSourcesJar获取
+            artifact androidSourcesJar
+            pom {
+                packaging 'aar'
+                // 构件名称，可以自定义
+                name = ARTIFACT_ID
+                // 构件描述
+                description = DESCRIPTION
+                // 构件主页
+
+                url = GIT_LOCATION_URL
+                // 许可证名称和地址
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                // 开发者信息
+                developers {
+                    developer {
+                        id = 'mahongyin'
+                        name = 'mahongyin'
+                        email = '1976222027@qq.com'
+                    }
+                }
+                // 版本控制仓库地址
+                scm {
+                    connection = 'scm:git:'+GIT_LOCATION+'.git'
+                    developerConnection = 'scm:git:ssh://'+GIT_LOCATION+'.git'
+                    url = GIT_LOCATION_URL
+                }
+            }
+
+            // pom文件中声明依赖，从而传递到使用方
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.implementation.allDependencies.each {
+                    // 避免出现空节点或 artifactId=unspecified 的节点
+                    if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                        println "dependency=${it.toString()}"
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                        dependencyNode.appendNode('scope', 'implementation')
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "nexus"
+            allowInsecureProtocol = true
+            // 发布的仓库地址，这里根据发布的版本区分了release和snapshot版本两种情况
+            def deployRepoUrl = deploy_REPO_URL
+            def releasesRepoUrl = releases_REPO_URL
+            def snapshotsRepoUrl = snapshots_REPO_URL
+            url = VERSION_NAME.endsWith('-SNAPSHOT') ? snapshotsRepoUrl : deployRepoUrl
+
+            credentials {
+                // 这里就是之前在 issues.sonatype.org 注册的账号
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+//签名
+signing {
+    sign publishing.publications
+}

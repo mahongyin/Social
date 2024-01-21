@@ -7,6 +7,14 @@ def GROUP_ID = 'com.gitee.mahongyin.social'
 def ARTIFACT_ID = "qq"
 group = GROUP_ID
 version = VERSION_NAME
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set("sources")
+    // 源码路径，包含Java、kotlin代码
+    from android.sourceSets.main.java.getSrcDirs()
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class"
+}
+
 afterEvaluate {
     publishing {
 //        singleVariant("release")
@@ -16,6 +24,12 @@ afterEvaluate {
                 groupId = GROUP_ID
                 artifactId = ARTIFACT_ID
                 version = VERSION_NAME
+                artifact androidSourcesJar
+            }
+        }
+        repositories {
+            maven {
+                url = "../repo"
             }
         }
     }

@@ -22,6 +22,7 @@ buildscript {
         }
         google()
         mavenCentral()
+        gradlePluginPortal()
         jcenter()
     }
 
@@ -40,9 +41,9 @@ allprojects {
         mavenCentral()
         jcenter()
 //        maven { url "https://dl.bintray.com/thelasterstar/maven/" }
-        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
-        maven { url "https://mirrors.tencent.com/repository/maven/QQOpenSDK" }
-        maven { url "https://jitpack.io" }
+//        maven { url "https://mirrors.tencent.com/nexus/repository/maven-public/" }
+//        maven { url "https://mirrors.tencent.com/repository/maven/QQOpenSDK" }
+        maven{ url 'https://gitee.com/mahongyin/Social/raw/master/repo'}
 
     }
     tasks.withType(Javadoc) {
@@ -52,9 +53,165 @@ allprojects {
             links "http://docs.oracle.com/javase/7/docs/api"
             failOnError false
         }
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+tasks.withType(JavaCompile) {
+    // Try to turn them all off automatically
+    options.compilerArgs << '-Xlint:none'
+    options.compilerArgs << '-nowarn' // same as '-Xlint:none'
+
+    // Turn them off manually
+    options.compilerArgs << '-Xlint:-auxiliaryclass'
+    options.compilerArgs << '-Xlint:-cast'
+    options.compilerArgs << '-Xlint:-classfile'
+    options.compilerArgs << '-Xlint:-deprecation'
+    options.compilerArgs << '-Xlint:-dep-ann'
+    options.compilerArgs << '-Xlint:-divzero'
+    options.compilerArgs << '-Xlint:-empty'
+    options.compilerArgs << '-Xlint:-fallthrough'
+    options.compilerArgs << '-Xlint:-finally'
+    options.compilerArgs << '-Xlint:-options'
+    options.compilerArgs << '-Xlint:-overloads'
+    options.compilerArgs << '-Xlint:-overrides'
+    options.compilerArgs << '-Xlint:-path'
+    options.compilerArgs << '-Xlint:-processing'
+    options.compilerArgs << '-Xlint:-rawtypes'
+    options.compilerArgs << '-Xlint:-serial'
+    options.compilerArgs << '-Xlint:-static'
+    options.compilerArgs << '-Xlint:-try'
+    options.compilerArgs << '-Xlint:-unchecked'
+    options.compilerArgs << '-Xlint:-varargs'
+}
+
+def file = 'local.properties'
+def SOCIAL_VERSION=rootProject.ext.publish.version
+def SOCIAL_GROUP='io.github.mahongyin'
+def SOCIAL_GROUP_ID='io.github.mahongyin.social'
+
+if (new File(file).exists()) {
+    Properties properties = new Properties()
+    properties.load(new FileInputStream(file))
+    if ('true' == properties['SOCIAL_PUBLISH']) {
+        subprojects {
+            print("name=$name")
+            if (name.endsWith("library")) {
+                group = SOCIAL_GROUP
+                version = SOCIAL_VERSION
+                String[] alis = name.split('libra')
+                if (alis.length > 2) {
+
+                    apply plugin: 'maven-publish'
+                    apply plugin: 'signing'
+
+                    afterEvaluate {
+
+                        task androidSourcesJar(type: Jar) {
+                            archiveClassifier.set("sources")
+                            from android.sourceSets.main.java.source
+                            exclude "**/R.class"
+                            exclude "**/BuildConfig.class"
+                        }
+
+                        def projectName = name
+                        def projectDescription = description
+                        publishing {
+                            publications {
+                                mavenJava(MavenPublication) {
+                                    // group id，发布后引用的依赖的 group id
+                                    groupId SOCIAL_GROUP_ID
+                                    // 发布后引用的依赖的 artifact id
+                                    artifactId alis[0]//projectName
+                                    // 发布的版本
+                                    version SOCIAL_VERSION
+                                    // 发布的 arr 的文件和源码文件
+                                    artifact("$buildDir/outputs/aar/${projectName}-release.aar")
+                                    artifact androidSourcesJar
+                                    pom {
+                                        // 构件名称，可以自定义
+                                        name = alis[0]//projectName
+                                        // 构件描述
+                                        description = projectDescription
+                                        // 构件主页
+                                        url = "https://github.com/mahongyin/${rootProject.name}"
+                                        // 许可证名称和地址
+                                        licenses {
+                                            license {
+                                                name = 'The Apache License, Version 2.0'
+                                                url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                            }
+                                        }
+                                        // 开发者信息
+                                        developers {
+                                            developer {
+                                                name = sonatypeUsername
+                                                email = sonatypePassword
+                                            }
+                                        }
+                                        // 版本控制仓库地址
+                                        scm {
+                                            url = "https://github.com/mahongyin/${rootProject.name}"
+                                            connection = "scm:git:github.com/mahongyin/${rootProject.name}.git"
+                                            developerConnection = "scm:git:ssh://git@github.com/mahongyin/${rootProject.name}.git"
+                                        }
+                                        // 解决依赖关系
+                                        withXml {
+                                            def dependenciesNode = asNode().appendNode('dependencies')
+                                            project.configurations.all { configuration ->
+                                                def name = configuration.name
+                                                if (name != "implementation" && name != "compile" && name != "api") {
+                                                    return
+                                                }
+                                                configuration.dependencies.each {
+                                                    if (it.name == "unspecified") {
+                                                        // 忽略无法识别的
+                                                        return
+                                                    }
+                                                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                                                    dependencyNode.appendNode('groupId', SMART_GROUP_MVN)
+                                                    dependencyNode.appendNode('artifactId', it.name)
+                                                    dependencyNode.appendNode('version', it.version)
+                                                    if (name == "api" || name == "compile") {
+                                                        dependencyNode.appendNode("scope", "compile")
+                                                    } else { // implementation
+                                                        dependencyNode.appendNode("scope", "runtime")
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            repositories {
+                                maven {
+                                    // 发布的位置，这里根据发布的版本区分了 SNAPSHOT 和最终版本两种情况
+                                    def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+                                    def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+                                    url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                                    credentials {
+                                        // 这里就是之前在 issues.sonatype.org 注册的账号
+                                        username "${properties["sonatype.username"]}"
+                                        password new String(Base64.mimeDecoder.decode("${properties["sonatype.password"]}"), "UTF-8")
+                                    }
+                                }
+                            }
+                        }
+                        signing {
+                            sign publishing.publications
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

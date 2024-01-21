@@ -5,6 +5,7 @@ import static com.mhy.alilibrary.AliSoial.SDK_PAY_FLAG;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,7 +26,7 @@ import java.util.Map;
 public class AliPay extends PayApi {
 
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private static Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         @SuppressWarnings("unused")
         public void handleMessage(Message msg) {
