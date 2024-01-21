@@ -22,9 +22,12 @@ qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信�
 <B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.1-brightgreen.svg)
 
 ```
-//添加如下仓库
+//添加如下仓库二选一
 allprojects {
+    //国内
     maven{ url 'https://gitee.com/mahongyin/Social/raw/master/repo'}
+    //国外
+    maven{ url 'https://github.com/mahongyin/Social/raw/master/repo'}
 }
 ```
 
