@@ -83,7 +83,6 @@ public class H5PayDemoActivity extends Activity {
         }
         settings.setDomStorageEnabled(true);
 
-        mWebView.setVerticalScrollbarOverlay(true);
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl(url);
 
