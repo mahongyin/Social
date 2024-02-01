@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.mhy.socialcommon.PayApi;
-import com.mhy.socialcommon.PayContent;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WxPayContent;
@@ -17,7 +16,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 /**
  * 微信支付
  */
-public class WxPay extends PayApi {
+public class WxPay extends PayApi<WxPayContent> {
 
     private IWXAPI msgApi;
 
@@ -40,7 +39,7 @@ public class WxPay extends PayApi {
      */
 
     @Override
-    public void doPay(PayContent payInfo) {
+    public void doPay(WxPayContent payInfo) {
         if (payInfo == null) {
             callbackPayFail("payInfo为空");
             return;

@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.mhy.qqlibrary.QqSocial;
+import com.mhy.qqlibrary.bean.QQShareEntity;
 import com.mhy.socialcommon.ShareApi;
-import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
 import com.tencent.tauth.IUiListener;
 import com.tencent.tauth.Tencent;
@@ -16,7 +16,7 @@ import com.tencent.tauth.UiError;
  * @author mahongyin 2020-05-29 19:32 @CopyRight mhy.work@qq.com
  * description .
  */
-public class QqShare extends ShareApi {
+public class QqShare extends ShareApi<QQShareEntity> {
     Tencent mTencent;
     BaseUiListener mQQCallbackListener = new BaseUiListener();
 
@@ -30,7 +30,7 @@ public class QqShare extends ShareApi {
     }
 
     @Override
-    public void doShare(ShareEntity shareInfo) {
+    public void doShare(QQShareEntity shareInfo) {
         if (shareInfo == null) {
             return;
         }

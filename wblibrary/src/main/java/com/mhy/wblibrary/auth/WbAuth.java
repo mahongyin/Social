@@ -21,7 +21,7 @@ import com.sina.weibo.sdk.openapi.WBAPIFactory;
  * @author mahongyin
  */
 public class WbAuth extends AuthApi {
-    private IWBAPI mWBAPI;
+    private IWBAPI mWBApi;
 
     /**
      * @param act activity
@@ -35,8 +35,8 @@ public class WbAuth extends AuthApi {
         }
         AuthInfo authInfo =
                 new AuthInfo(act, getAppId(), WbSocial.getRedirectUrl(), WbSocial.getScope());
-        mWBAPI = WBAPIFactory.createWBAPI(act);
-        mWBAPI.registerApp(act, authInfo);
+        mWBApi = WBAPIFactory.createWBAPI(act);
+        mWBApi.registerApp(act, authInfo);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class WbAuth extends AuthApi {
             return;
         }
         // auth 客户端和web
-        mWBAPI.authorize(mActivity.get(),
+        mWBApi.authorize(mActivity.get(),
                 new WbAuthListener() {
                     @Override
                     public void onComplete(Oauth2AccessToken token) {
@@ -89,7 +89,7 @@ public class WbAuth extends AuthApi {
      * 仅客户端
      */
     public void doClientAuth() {
-        mWBAPI.authorizeClient(mActivity.get(), new WbAuthListener() {
+        mWBApi.authorizeClient(mActivity.get(), new WbAuthListener() {
             @Override
             public void onComplete(Oauth2AccessToken token) {
                 setCompleteCallBack(token);
@@ -111,7 +111,7 @@ public class WbAuth extends AuthApi {
      * 仅web
      */
     public void dotWebAuth() {
-        mWBAPI.authorizeWeb(mActivity.get(), new WbAuthListener() {
+        mWBApi.authorizeWeb(mActivity.get(), new WbAuthListener() {
             @Override
             public void onComplete(Oauth2AccessToken token) {
                 setCompleteCallBack(token);
@@ -131,6 +131,6 @@ public class WbAuth extends AuthApi {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        mWBAPI.authorizeCallback(mActivity.get(), requestCode, resultCode, data);
+        mWBApi.authorizeCallback(mActivity.get(), requestCode, resultCode, data);
     }
 }

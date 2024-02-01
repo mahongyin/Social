@@ -2,9 +2,9 @@ package com.mhy.alilibrary.auth;
 
 import static com.mhy.alilibrary.AliSoial.SDK_AUTH_FLAG;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
@@ -20,9 +20,8 @@ import java.util.Map;
  * description .
  */
 public class AliAuth extends AuthApi {
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @SuppressWarnings("unused")
+
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             if (msg.what == SDK_AUTH_FLAG) {
                 @SuppressWarnings("unchecked")
@@ -43,8 +42,6 @@ public class AliAuth extends AuthApi {
                 }
             }
         }
-
-        ;
     };
 
     public AliAuth(Activity act, OnAuthListener l) {
@@ -58,7 +55,7 @@ public class AliAuth extends AuthApi {
     }
 
     public void doAuth(String orderInfo) {
-        if (orderInfo.isEmpty()) {
+        if (TextUtils.isEmpty(orderInfo)) {
             setErrorCallBack("orderInfo是空");
             return;
         }
@@ -92,5 +89,8 @@ public class AliAuth extends AuthApi {
         // 必须异步调用
         Thread authThread = new Thread(authRunnable);
         authThread.start();
+    }
+    public void release(){
+        mHandler.removeCallbacksAndMessages(null);
     }
 }

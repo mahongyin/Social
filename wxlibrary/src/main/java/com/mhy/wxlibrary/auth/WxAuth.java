@@ -22,22 +22,22 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * 微信登陆
+ * @author mahongyin
  */
 public class WxAuth extends AuthApi {
     private IWXAPI mWXApi;
 
-    /*
+    /**
      * 执行登陆操作
+     *
      * @param act activity
-     * @param l 回调监听
+     * @param l   回调监听
      */
     public WxAuth(Activity act, OnAuthListener l) {
         super(act, l);
         mAuthType = SocialType.WEIXIN_Auth;
-        if (mWXApi == null) {
-            mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
-            mWXApi.registerApp(getAppId());
-        }
+        mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
+        mWXApi.registerApp(getAppId());
     }
 
     @Override
@@ -45,7 +45,9 @@ public class WxAuth extends AuthApi {
         return WxSocial.getWeixinId();
     }
 
-    /*基本信息验证*/
+    /**
+     * 基本信息验证
+     */
     private boolean baseVerify() {
         if (TextUtils.isEmpty(getAppId())) {
             setErrorCallBack("appid为空");
@@ -163,11 +165,13 @@ public class WxAuth extends AuthApi {
         mWXApi.unregisterApp();
     }
 
-    //限定值 小程序发布类型
+    /**
+     * 限定值 小程序发布类型 开发版,体验版,正式版
+     */
     @IntDef(value = {WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE,
             WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_TEST,
             WXLaunchMiniProgram.Req.MINIPROGRAM_TYPE_PREVIEW})
-    @Retention(RetentionPolicy.SOURCE)//源码级别，注解只存在源码中
+    @Retention(RetentionPolicy.SOURCE)
     private @interface MiniProgramType {
     }
 

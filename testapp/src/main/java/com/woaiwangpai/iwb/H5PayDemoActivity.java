@@ -18,14 +18,12 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
-import com.alipay.sdk.app.H5PayCallback;
-import com.alipay.sdk.app.PayTask;
-import com.alipay.sdk.util.H5PayResultModel;
+import com.mhy.alilibrary.pay.AliWebPay;
 
 public class H5PayDemoActivity extends Activity {
 
     private WebView mWebView;
-
+    private AliWebPay aliWebPay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +72,7 @@ public class H5PayDemoActivity extends Activity {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
-
+//
         // 启用二方/三方 Cookie 存储和 DOM Storage
         // 注意：若要在实际 App 中使用，请先了解相关设置项细节。
         CookieManager.getInstance().setAcceptCookie(true);
@@ -82,7 +80,7 @@ public class H5PayDemoActivity extends Activity {
             CookieManager.getInstance().setAcceptThirdPartyCookies(mWebView, true);
         }
         settings.setDomStorageEnabled(true);
-
+        aliWebPay = new AliWebPay(H5PayDemoActivity.this);
         mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl(url);
 
@@ -125,45 +123,17 @@ public class H5PayDemoActivity extends Activity {
 
     //重点
     private class MyWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(final WebView view, String url) {
-            if (!(url.startsWith("http") || url.startsWith("https"))) {
-                return true;
-            }
-
-            /**
-             * 推荐采用的新的二合一接口(payInterceptorWithUrl),只需调用一次
-             */
-            final PayTask task = new PayTask(H5PayDemoActivity.this);
-            boolean isIntercepted = task.payInterceptorWithUrl(url, true, new H5PayCallback() {
-                @Override
-                public void onPayResult(final H5PayResultModel result) {
-                    final String url = result.getReturnUrl();
-                    if (!TextUtils.isEmpty(url)) {
-                        H5PayDemoActivity.this.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                view.loadUrl(url);
-                            }
-                        });
-                    }
-                }
-            });
-
-            /**
-             * 判断是否成功拦截
-             * 若成功拦截，则无需继续加载该URL；否则继续加载
-             */
-            if (!isIntercepted) {
-                view.loadUrl(url);
-            }
-            return true;
-        }
 
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                return shouldOverrideUrlLoading(view, request.getUrl().toString());
+            }
             return super.shouldOverrideUrlLoading(view, request);
+        }
+        @Override
+        public boolean shouldOverrideUrlLoading(final WebView view, String url) {
+            return aliWebPay.shouldOverrideUrlLoading(view, url);
         }
     }
 }

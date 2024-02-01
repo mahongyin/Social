@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import com.mhy.socialcommon.ShareApi;
-import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wblibrary.WbSocial;
@@ -46,7 +45,7 @@ import java.util.UUID;
 /**
  * 分享平台公共组件模块-微博分享
  */
-public class WbShare extends ShareApi {
+public class WbShare extends ShareApi<WbShareEntity> {
     private IWBAPI mWBAPI;
     private String defautText = "分享网页";
 
@@ -103,14 +102,13 @@ public class WbShare extends ShareApi {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-
         mWBAPI.doResultIntent(
                 data,
                 new WbShareCallback() {
                     @Override
                     public void onComplete() {
                         callbackShareOk();
-                        //                Toast.makeText(ShareActivity.this, "分享成功", Toast.LENGTH_SHORT).show();
+                        //分享成功
                     }
 
                     @Override
@@ -304,7 +302,7 @@ public class WbShare extends ShareApi {
      * @param shareEntity
      */
     @Override
-    public void doShare(ShareEntity shareEntity) {
+    public void doShare(WbShareEntity shareEntity) {
         if (cpuX86()) {
             return;
         }
@@ -528,7 +526,7 @@ public class WbShare extends ShareApi {
                 }
                 if (imgUrl.startsWith("http")) {
                     callbackShareFail("请使用Resources或本地文件类型的图片");
-//                        msg.thumbData = bitmap1;
+//                  msg.thumbData = bitmap1;
                 } else {
                     //先判断文件存在
                     // String contentPath = getFileUri(imgUrl).toString();

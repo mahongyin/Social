@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import androidx.annotation.DrawableRes;
 
 import com.mhy.socialcommon.ShareApi;
-import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 
@@ -17,7 +16,7 @@ import java.io.File;
  * Created By Mahongyin
  * Date    2024/1/19 23:49
  */
-public class AliShare extends ShareApi {
+public class AliShare extends ShareApi<AliShareEntity> {
     public AliShare(Activity act, OnShareListener l) {
         super(act, l);
         mShareType = SocialType.ALIPAY_Share;
@@ -30,7 +29,7 @@ public class AliShare extends ShareApi {
     }
 
     @Override
-    public void doShare(ShareEntity content) {
+    public void doShare(AliShareEntity content) {
         if (content == null) {
             return;
         }

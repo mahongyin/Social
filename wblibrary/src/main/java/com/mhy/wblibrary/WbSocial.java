@@ -44,10 +44,8 @@ public class WbSocial {
 
     public static void setWbApp(String appKey) {
         APP_KY = appKey;
-        REDIRECT_URL = "http://www.sina.com";
-        SCOPE = "email,direct_messages_read,direct_messages_write,"
-                + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
-                + "follow_app_official_microblog," + "invitation_write";
+        REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
+        SCOPE = "all";
     }
 
     /**
@@ -56,9 +54,8 @@ public class WbSocial {
     public static void setWbApp(String appKey, String redirectUrl) {
         APP_KY = appKey;
         REDIRECT_URL = redirectUrl;
-        SCOPE = "email,direct_messages_read,direct_messages_write,"
-                + "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
-                + "follow_app_official_microblog," + "invitation_write";
+        SCOPE = "email,direct_messages_read,direct_messages_write,friendships_groups_read,friendships_groups_write,statuses_to_me_read,follow_app_official_microblog,invitation_write";
+
     }
 
 }

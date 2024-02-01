@@ -1,9 +1,8 @@
 package com.mhy.socialcommon;
 
 /**
- * Created By Mahongyin
- * Date    2020/11/28 9:31
- * 枚举性能不好
+ * Date 2020/11/28 9:31
+ * @author mahongyin
  */
 public enum SocialType {
     QQ_Share, QQ_ZONE_Share, QQ_PUBLISH_Share, WEIXIN_Share, WEIXIN_Favorite, WEIXIN_TimeLine_Share, WEIBO_Share, ALIPAY_Share,

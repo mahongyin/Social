@@ -7,11 +7,12 @@ import java.lang.ref.WeakReference;
 
 /**
  * 社会化组件基类实现
+ * @author mahongyin
  */
 public abstract class AuthApi {
     protected static SocialType mAuthType;
     protected static OnAuthListener mOnAuthListener;
-    // 防止在支付宝 等App 被强行退出等情况下，OpenAuthTask.Callback 一定时间内无法释放导致Activity 泄漏。
+    /** 防止在支付宝 等App 被强行退出等情况下，OpenAuthTask.Callback 一定时间内无法释放导致Activity 泄漏。*/
     protected WeakReference<Activity> mActivity;
 
     public AuthApi(Activity act, OnAuthListener l) {
@@ -47,36 +48,12 @@ public abstract class AuthApi {
         }
     }
 
-    /**
-     * 释放资源
-     */
-    public static void release() {
-        mOnAuthListener = null;
-    }
-
     protected abstract String getAppId();
 
-    /**
-     * qq weibo 需要
+    /** 登陆授权回调
+     * qq/微博 需要
      */
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        switch (getAuthType()) {
-////            case AuthType.QQ:
-////                if (requestCode == Constants.REQUEST_LOGIN) {
-////                    Tencent.handleResultData(data, ((QQAuth)this).getUIListener());
-////                }
-////                break;
-////            case AuthType.WEIBO:
-////                SsoHandler ssoHandler = ((WeiboAuth)this).getSsoHandler();
-////                if(ssoHandler != null) {
-////                    ((WeiboAuth) this).getSsoHandler().authorizeCallBack(requestCode, resultCode, data);
-////                }
-////                break;
-//            case SocialType.WEIXIN_Auth:
-//
-//                break;
-//        }
-    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {}
 
     private void setAuthListener(OnAuthListener l) {
         mOnAuthListener = l;

@@ -51,7 +51,8 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     @Override
     public void onResp(BaseResp resp) {
 
-        if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {//微信支付
+        if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
+            //微信支付
             //支付成功 通知Wxpay回调
             if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
                 WxPay.callbackPayOk();
@@ -60,7 +61,6 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
                 Log.i("payfailcode:", String.valueOf(resp.errCode));
             }
         }
-
         finish();
     }
 }

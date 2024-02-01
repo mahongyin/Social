@@ -30,26 +30,22 @@ allprojects {
     maven{ url 'https://github.com/mahongyin/Social/raw/master/repo'}
 }
 ```
-
 //公共库必须依赖
-
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-   implementation 'com.gitee.mahongyin.social:common:1.3.1'
+   implementation 'com.mhy.social:common:1.3.1'
 ```
-
 //以下按需依赖
-
 ```
 //支付宝  
-   implementation 'com.gitee.mahongyin.social:ali:1.3.1'
+   implementation 'com.mhy.social:ali:1.3.1'
 //QQ
-   implementation 'com.gitee.mahongyin.social:qq:1.3.1'
+   implementation 'com.mhy.social:qq:1.3.1'
 //微信
-   implementation 'com.gitee.mahongyin.social:wx:1.3.1'
+   implementation 'com.mhy.social:wx:1.3.1'
 //微博   不支持x86
-   implementation 'com.gitee.mahongyin.social:wb:1.3.1'
+   implementation 'com.mhy.social:wb:1.3.1'
 ```
 
 //////////////////////////////////////////////////////////////////////////////////////
