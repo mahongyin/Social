@@ -12,8 +12,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
-
+//import androidx.core.content.FileProvider;
+import com.sina.weibo.sdk.content.FileProvider;
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;

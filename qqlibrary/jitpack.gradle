@@ -34,4 +34,4 @@ afterEvaluate {
         }
     }
 }
-//lib模块目录./gradlew publishToMavenLocal
+//lib模块目录./gradlew publish

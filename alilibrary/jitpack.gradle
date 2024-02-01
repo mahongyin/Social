@@ -1,6 +1,6 @@
 //apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'maven-publish'//jitpack
-
+//gradlew publish
 /*****************jitpack***************/
 def VERSION_NAME = rootProject.ext.publish.version// 版本
 def GROUP_ID = 'com.mhy.social'
