@@ -41,7 +41,7 @@ public class QqAuth extends AuthApi {
 
     @Override
     protected String getAppId() {
-        return QqSocial.getAppId();
+        return QqSocial.getInstance().getAppId();
     }
 
     public void doAuth() {

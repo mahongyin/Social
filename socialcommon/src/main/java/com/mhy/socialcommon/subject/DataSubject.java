@@ -1,4 +1,4 @@
-package com.mhy.wxlibrary.subject;
+package com.mhy.socialcommon.subject;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -49,8 +49,7 @@ class DataSubject<T> {
     }
 
     // 注销所以该类型观察者
-    void unregisterObserverAll(T object) {
-        Class<T> clazz = (Class<T>) object.getClass();
+    void unregisterObserverAll(Class<T> clazz) {
         objects.remove(clazz);
     }
 

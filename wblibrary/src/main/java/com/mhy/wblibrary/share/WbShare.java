@@ -60,33 +60,13 @@ public class WbShare extends ShareApi {
         super(act, l);
         mShareType = SocialType.WEIBO_Share;
 
-        AuthInfo authInfo = new AuthInfo(act, getAppId(), WbSocial.getRedirectUrl(), WbSocial.getScope());
+        AuthInfo authInfo = new AuthInfo(act, getAppId(), WbSocial.getInstance().getRedirectUrl(), WbSocial.getInstance().getScope());
         mWBAPI = WBAPIFactory.createWBAPI(act);
         mWBAPI.registerApp(act, authInfo);
         // mWBAPI.setLoggerEnable(true);
 
     }
 
-    public static Bitmap byteToBitmap(byte[] data) {
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        return bitmap;
-    }
-
-    /**
-     * 以最省内存的方式读取本地资源的图片
-     * 将res下的资源图片转成Bitmap
-     *
-     * @return 最后记得 bitmap.recycle();
-     */
-    public static Bitmap resImgToBitmap(Context context, int resId) {
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inPreferredConfig = Bitmap.Config.RGB_565; // Bitmap.Config.ARGB_8888
-        opt.inPurgeable = true; // 允许可清除
-        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
-        // 获取资源图片
-        InputStream is = context.getResources().openRawResource(resId);
-        return BitmapFactory.decodeStream(is, null, opt);
-    }
 
     private boolean cpuX86() {
         String arch = System.getProperty("os.arch");
@@ -283,12 +263,12 @@ public class WbShare extends ShareApi {
 
     @Override
     protected String getAppId() {
-        return WbSocial.getAppKy();
+        return WbSocial.getInstance().getAppKy();
     }
 
     /*基本信息验证*/
     private boolean baseVerify() {
-        if (TextUtils.isEmpty(getAppId()) || TextUtils.isEmpty(WbSocial.getRedirectUrl())) {
+        if (TextUtils.isEmpty(getAppId()) || TextUtils.isEmpty(WbSocial.getInstance().getRedirectUrl())) {
             callbackShareFail("请检查appid是否为空");
             return true;
         }
@@ -632,4 +612,24 @@ public class WbShare extends ShareApi {
         }
     }
 
+    private Bitmap byteToBitmap(byte[] data) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        return bitmap;
+    }
+
+    /**
+     * 以最省内存的方式读取本地资源的图片
+     * 将res下的资源图片转成Bitmap
+     *
+     * @return 最后记得 bitmap.recycle();
+     */
+    private Bitmap resImgToBitmap(Context context, int resId) {
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inPreferredConfig = Bitmap.Config.RGB_565; // Bitmap.Config.ARGB_8888
+        opt.inPurgeable = true; // 允许可清除
+        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
+        // 获取资源图片
+        InputStream is = context.getResources().openRawResource(resId);
+        return BitmapFactory.decodeStream(is, null, opt);
+    }
 }

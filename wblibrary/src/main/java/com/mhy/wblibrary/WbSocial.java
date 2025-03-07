@@ -6,35 +6,46 @@ package com.mhy.wblibrary;
  */
 public class WbSocial {
 
-
     /**
      * 在微博开发平台为应用申请的App Key
      */
-    private static String APP_KY;
+    private String APP_KY;
     /**
      * 在微博开放平台设置的授权回调页
      */
-    private static String REDIRECT_URL;
+    private String REDIRECT_URL;
     /**
      * 在微博开放平台为应用申请的高级权限
      */
-    private static String SCOPE;
+    private String SCOPE;
 
-    public static String getAppKy() {
+    public String getAppKy() {
         return APP_KY;
     }
 
-    public static String getRedirectUrl() {
+    public String getRedirectUrl() {
         return REDIRECT_URL;
     }
 
-    public static String getScope() {
+    public String getScope() {
         return SCOPE;
     }
 
+    private static WbSocial singleton;
 
-// 微博AuthInfo(yspcar, "1446396360", "https://api.weibo.com/oauth2/default.html", "all")
-    public static void setWbApp(String appKey) {
+    public static WbSocial getInstance() {
+        if (singleton == null) {
+            synchronized (WbSocial.class) {
+                if (singleton == null) {
+                    singleton = new WbSocial();
+                }
+            }
+        }
+        return singleton;
+    }
+
+    // 微博AuthInfo(yspcar, "1446396360", "https://api.weibo.com/oauth2/default.html", "all")
+    public void init(String appKey) {
         APP_KY = appKey;
         REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";//"http://www.sina.com";
         SCOPE = "all";
@@ -44,7 +55,7 @@ public class WbSocial {
     /**
      * @param redirectUrl 重定向 URL 授权回调页
      */
-    public static void setWbApp(String appKey, String redirectUrl) {
+    public void init(String appKey, String redirectUrl) {
         APP_KY = appKey;
         REDIRECT_URL = redirectUrl;
         SCOPE = "email,direct_messages_read,direct_messages_write,friendships_groups_read,friendships_groups_write,statuses_to_me_read,follow_app_official_microblog,invitation_write";
@@ -54,7 +65,7 @@ public class WbSocial {
      * @param redirectUrl 重定向URL 授权回调页
      * @param scope       在微博开放平台为应用申请的高级权限范围
      */
-    public static void setWbApp(String appKey, String redirectUrl, String scope) {
+    public void init(String appKey, String redirectUrl, String scope) {
         APP_KY = appKey;
         REDIRECT_URL = redirectUrl;
         SCOPE = scope;

@@ -59,7 +59,7 @@ public class QqShare extends ShareApi {
 
     @Override
     protected String getAppId() {
-        return QqSocial.getAppId();
+        return QqSocial.getInstance().getAppId();
     }
 
     /*基本信息验证*/

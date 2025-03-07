@@ -32,14 +32,14 @@ public class WbAuth extends AuthApi {
         mAuthType = SocialType.WEIBO_Auth;
 
         AuthInfo authInfo =
-                new AuthInfo(act, getAppId(), WbSocial.getRedirectUrl(), WbSocial.getScope());
+                new AuthInfo(act, getAppId(), WbSocial.getInstance().getRedirectUrl(), WbSocial.getInstance().getScope());
         mWBApi = WBAPIFactory.createWBAPI(act);
         mWBApi.registerApp(act, authInfo);
     }
 
     @Override
     protected String getAppId() {
-        return WbSocial.getAppKy();
+        return WbSocial.getInstance().getAppKy();
     }
 
     private boolean cpuX86() {
@@ -57,7 +57,6 @@ public class WbAuth extends AuthApi {
      * 执行登陆操作 客户端或web
      */
     public void doAuth() {
-
         // auth 客户端和web
         mWBApi.authorize(mActivity.get(),
                 new WbAuthListener() {

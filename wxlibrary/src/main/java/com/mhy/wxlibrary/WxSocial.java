@@ -28,8 +28,11 @@ public class WxSocial {
         return singleton;
     }
     public void init(Context context, String appId) {
-        this.wxAppId = appId;
         boolean verifySignature = true; //验证签名
+        init(context, appId, verifySignature);
+    }
+    public void init(Context context, String appId, boolean verifySignature) {
+        this.wxAppId = appId;
         mWXApi = WXAPIFactory.createWXAPI(context.getApplicationContext(), this.wxAppId, verifySignature);
         mWXApi.registerApp(this.wxAppId);
     }

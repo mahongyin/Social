@@ -14,8 +14,4 @@ public abstract class PayContent {
     public SocialType getPayType() {
         return payType;
     }
-
-    public void setPayType(SocialType payType) {
-        this.payType = payType;
-    }
 }

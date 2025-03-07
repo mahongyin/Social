@@ -1,4 +1,4 @@
-package com.mhy.wxlibrary.subject;
+package com.mhy.socialcommon.subject;
 
 
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -11,9 +11,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Scope {
 
     private CopyOnWriteArraySet<Event.DataObserver> scopeObserver = new CopyOnWriteArraySet<>();
-    public <T> void registerObserver(Event.DataObserver<T> dataObserver) {
+    public <T> Scope registerObserver(Event.DataObserver<T> dataObserver) {
         scopeObserver.add(dataObserver);
         Event.getInstance().registerObserver(dataObserver);
+        return this;
     }
 
     /**

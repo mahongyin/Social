@@ -1,4 +1,4 @@
-package com.mhy.wxlibrary.subject;
+package com.mhy.socialcommon.subject;
 
 
 import java.lang.reflect.ParameterizedType;
@@ -34,7 +34,7 @@ public class Event {
     /**
      * 注册单个观察者
      */
-     <T> void registerObserver(Event.DataObserver<T> dataObserver) {
+    <T> void registerObserver(Event.DataObserver<T> dataObserver) {
         ObjectSubject dataSubject = null;
         Class<T> clazz = genericType(dataObserver.getClass());//获取泛型里的类型
         if (objects.containsKey(clazz)) {//有就直接用，一种类型只能对应1个dataObserver
@@ -50,7 +50,7 @@ public class Event {
     /**
      * 注销单个观察者
      */
-     <T> void unregisterObserver(Event.DataObserver dataObserver) {
+    <T> void unregisterObserver(Event.DataObserver dataObserver) {
         ObjectSubject dataSubject = null;
         Class<T> clazz = genericType(dataObserver.getClass());//获取泛型里的类型
         if (objects.containsKey(clazz)) {
@@ -60,6 +60,7 @@ public class Event {
             }
         }
     }
+
     /**
      * @param context Activity / Fragment
      */
@@ -92,9 +93,9 @@ public class Event {
         ObjectSubject dataSubject = null;
         if (objects.containsKey(data.getClass())) {
             dataSubject = objects.get(data.getClass());
-        }
-        if (dataSubject != null) {
-            dataSubject.postData(data);
+            if (dataSubject != null) {
+                dataSubject.postData(data);
+            }
         }
     }
 

@@ -20,9 +20,9 @@ public class APP extends Application {
 
     private void initSocial() {
         //AliShare.setAppId("2018111362152255");///2015060900117932//2018111362152255
-        WxSocial.getInstance().init(this,"wx63824eb73699220c"/*"wxbddb62b534debb5f"*/);
-        QqSocial.setAppId("101807669");
-        WbSocial.setWbApp("4092786483");//"2045436852", /*包名是"com.sina.weibo.sdk.demo"*/
+        WxSocial.getInstance().init(this,"wxbddb62b534debb5f");
+        QqSocial.getInstance().init("101807669");
+        WbSocial.getInstance().init("4092786483");//"2045436852", /*包名是"com.sina.weibo.sdk.demo"*/
 //        public static String QQ_APP_ID = "101844360";//QQ开放平台的APP_ID 1106556586//mybase101807669//rele1107492512
 //        public static String QQ_APP_KEY = "6fff04a5ad90bdff081cc78544057d2d";//QQ开放平台的APP_ID
 //        public static String WEIBO_APP_KEY = "4092786483";//微博开放平台的APP_key//0c7daf8aecca98536708479e42286b81

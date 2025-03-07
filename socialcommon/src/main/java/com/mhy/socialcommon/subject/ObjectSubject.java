@@ -1,4 +1,4 @@
-package com.mhy.wxlibrary.subject;
+package com.mhy.socialcommon.subject;
 
 
 /**
@@ -16,23 +16,20 @@ class ObjectSubject<T> {
      * 注册单个观察者
      */
     void registerObserver(Event.DataObserver<T> dataObserver) {
-        // 注册观察者
         dataSubject.registerObserver(dataObserver);
     }
     /**
      * 注销单个观察者
      */
     void unregisterObserver(Event.DataObserver<T> dataObserver) {
-        // 注销观察者
         dataSubject.unregisterObserver(dataObserver);
     }
 
     /**
      * 注销所有某类型的观察者
      */
-    void unregisterAll(T object) {
-        // 注销观察者
-        dataSubject.unregisterObserverAll(object);
+    void unregisterAll(Class<T> dataClazz) {
+        dataSubject.unregisterObserverAll(dataClazz);
     }
 
     void postData(T data) {

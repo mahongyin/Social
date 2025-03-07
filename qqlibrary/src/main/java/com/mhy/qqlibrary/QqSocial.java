@@ -7,13 +7,26 @@ package com.mhy.qqlibrary;
 
 public class QqSocial {
 
-    private static String appId;
+    private String appId;
 
-    public static String getAppId() {
+    public String getAppId() {
         return appId;
     }
 
-    public static void setAppId(String Id) {
+    private static QqSocial singleton;
+
+    public static QqSocial getInstance() {
+        if (singleton == null) {
+            synchronized (QqSocial.class) {
+                if (singleton == null) {
+                    singleton = new QqSocial();
+                }
+            }
+        }
+        return singleton;
+    }
+
+    public void init(String Id) {
         appId = Id;
     }
 }

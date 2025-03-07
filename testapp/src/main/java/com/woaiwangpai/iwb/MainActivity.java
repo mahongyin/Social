@@ -42,7 +42,6 @@ import com.mhy.wxlibrary.bean.WxShareEntity;
 import com.mhy.wxlibrary.pay.WxPay;
 import com.mhy.wxlibrary.share.WxShare;
 import com.mhy.wxlibrary.share.WxType;
-import com.mhy.wxlibrary.subject.Event;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
@@ -190,8 +189,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        checkPermission();
-        // copy();//准备资源
+//        checkPermission();
+         copy();//准备资源
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
         //原生分享
         findViewById(R.id.btn_share_local).setOnClickListener(new View.OnClickListener() {
@@ -213,12 +212,6 @@ public class MainActivity extends AppCompatActivity {
         initQQ();
         initAliPay();
         initWeibo();
-        Event.getInstance().register(this).registerObserver(new Event.DataObserver<String>() {
-            @Override
-            public void onDataChanged(String data) {
-                Log.e("测试收2", "" + data);
-            }
-        });
     }
 
     private void initWeibo() {
@@ -419,8 +412,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_login_wxqr).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Event.getInstance().postData("555");
-
                 Toast.makeText(MainActivity.this, "需要开放平台开通", Toast.LENGTH_SHORT).show();
                 WxAuth wxAuth = new WxAuth(MainActivity.this, onAuthListener);
                 wxAuth.doAuthQRCode("qeuRRdzufZaOpdhfU2Q4gDO4bj5fim3HgizHQyKthEkzdnnSlWCDNjXl09Tojv-QLLpgYeW6iUec9xGn_X-JtQ");
@@ -498,19 +489,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        Log.d("TAG", "-->onStart");
-        PermissionMgr.getInstance().requestPermissions(this);
-        PermissionMgr.getInstance().requestExternalStoragePermission(this);
-
-        super.onStart();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionMgr.getInstance().onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         //xx
         if (1111 == requestCode) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
