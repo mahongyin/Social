@@ -121,10 +121,10 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                         WxAuth.setCancelCallBack();
                         break;
                     case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                        WxAuth.setErrorCallBack(resp.errStr);
+                        WxAuth.setErrorCallBack("用户拒绝"+resp.errStr);
                         break;
                     default:
-                        WxAuth.setErrorCallBack(resp.errStr);
+                        WxAuth.setErrorCallBack("未知错误"+resp.errStr);
                         break;
                 }
             } else if (resp.getType() == ConstantsAPI.COMMAND_LAUNCH_WX_MINIPROGRAM) {
