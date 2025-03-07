@@ -8,7 +8,7 @@ import java.lang.ref.WeakReference;
 /**
  * 支付基类
  */
-public abstract class PayApi<D extends PayContent> {
+public abstract class PayApi {
 
     //只允许一个实例化回调
     protected static OnPayListener mPayResultListener;
@@ -43,14 +43,16 @@ public abstract class PayApi<D extends PayContent> {
         }
     }
 
-    ;
+    public static void cancelCallback() {
+        mPayResultListener = null;
+    }
 
     /**
      * 调用支付sdk
      *
      * @param payInfo 支付sdk
      */
-    public abstract void doPay(D payInfo);
+    public abstract void doPay(PayContent payInfo);
 
     /**
      * 设置支付回调

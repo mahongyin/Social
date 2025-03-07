@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class AuthApi {
     protected static SocialType mAuthType;
-    protected static OnAuthListener mOnAuthListener;
+    private static OnAuthListener mOnAuthListener;
     /** 防止在支付宝 等App 被强行退出等情况下，OpenAuthTask.Callback 一定时间内无法释放导致Activity 泄漏。*/
     protected WeakReference<Activity> mActivity;
 
@@ -28,7 +28,6 @@ public abstract class AuthApi {
             mOnAuthListener.onComplete(mAuthType, user);
         }
     }
-//    public abstract void doAuth(String mInfo);
 
     /**
      * 登陆错误回调
@@ -38,7 +37,9 @@ public abstract class AuthApi {
             mOnAuthListener.onError(mAuthType, error);
         }
     }
-
+    public static void cancelCallback() {
+        mOnAuthListener = null;
+    }
     /**
      * 登陆取消回调
      */

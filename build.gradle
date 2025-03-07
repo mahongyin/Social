@@ -3,12 +3,12 @@ ext {
     publish = [
             version  : "1.3.1",
             user     : "mahongyin",
-            isJitpack: true
+            isJitpack: false
     ]
     compile = [
             compileSdkVersion: 31,
             targetSdkVersion : 31,
-            minSdkVersion    : 19,
+            minSdkVersion    : 22,//微博sdk需要22
             versionCode      : 3
     ]
 }
@@ -16,10 +16,10 @@ ext {
 buildscript {
 
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url "http://a1000.top:8082/artifactory/maven/"
-        }
+//        maven {
+//            allowInsecureProtocol = true
+//            url "http://a1000.top:8082/artifactory/maven/"
+//        }
         google()
         mavenCentral()
         gradlePluginPortal()
@@ -33,10 +33,10 @@ buildscript {
 
 allprojects {
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url 'http://a1000.top:8082/artifactory/maven'
-        }
+//        maven {
+//            allowInsecureProtocol = true
+//            url 'http://a1000.top:8082/artifactory/maven'
+//        }
         google()
         mavenCentral()
         jcenter()

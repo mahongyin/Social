@@ -12,8 +12,9 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
-//import androidx.core.content.FileProvider;
-import com.sina.weibo.sdk.content.FileProvider;
+import com.mhy.socialcommon.ShareEntity;
+import androidx.core.content.FileProvider;
+//import com.sina.weibo.sdk.content.FileProvider;//若用微博sdk的/xml也得同步改，暂不用
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
@@ -45,7 +46,7 @@ import java.util.UUID;
 /**
  * 分享平台公共组件模块-微博分享
  */
-public class WbShare extends ShareApi<WbShareEntity> {
+public class WbShare extends ShareApi {
     private IWBAPI mWBAPI;
     private String defautText = "分享网页";
 
@@ -58,9 +59,7 @@ public class WbShare extends ShareApi<WbShareEntity> {
     public WbShare(Activity act, OnShareListener l) {
         super(act, l);
         mShareType = SocialType.WEIBO_Share;
-        if (cpuX86()) {
-            return;
-        }
+
         AuthInfo authInfo = new AuthInfo(act, getAppId(), WbSocial.getRedirectUrl(), WbSocial.getScope());
         mWBAPI = WBAPIFactory.createWBAPI(act);
         mWBAPI.registerApp(act, authInfo);
@@ -302,10 +301,7 @@ public class WbShare extends ShareApi<WbShareEntity> {
      * @param shareEntity
      */
     @Override
-    public void doShare(WbShareEntity shareEntity) {
-        if (cpuX86()) {
-            return;
-        }
+    public void doShare(ShareEntity shareEntity) {
         if (baseVerify()) {
             return;
         }

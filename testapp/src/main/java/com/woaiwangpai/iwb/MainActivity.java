@@ -3,6 +3,7 @@ package com.woaiwangpai.iwb;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -40,6 +42,7 @@ import com.mhy.wxlibrary.bean.WxShareEntity;
 import com.mhy.wxlibrary.pay.WxPay;
 import com.mhy.wxlibrary.share.WxShare;
 import com.mhy.wxlibrary.share.WxType;
+import com.mhy.wxlibrary.subject.Event;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 
@@ -62,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private ShareApi mShareApi;
     private Animation shake;
     //登陆回调
-    private AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
+    private final AuthApi.OnAuthListener onAuthListener = new AuthApi.OnAuthListener() {
         @Override
         public void onComplete(SocialType type, Object user) {
             switch (type) {
@@ -92,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "微信登录成功", Toast.LENGTH_SHORT).show();
 //                    wx((WeiXin)user).getCode()
                     String code = ((WeiXin) user).getCode();
+                    Log.e("授权完成", code);
+                    break;
+                case WEIXIN_Qr_Auth:
+                    Bitmap bitmap = ((Bitmap) user);
+                    ImageView iv = findViewById(R.id.iv);
+                    iv.setImageBitmap(bitmap);
                     break;
             }
 
@@ -204,6 +213,12 @@ public class MainActivity extends AppCompatActivity {
         initQQ();
         initAliPay();
         initWeibo();
+        Event.getInstance().register(this).registerObserver(new Event.DataObserver<String>() {
+            @Override
+            public void onDataChanged(String data) {
+                Log.e("测试收2", "" + data);
+            }
+        });
     }
 
     private void initWeibo() {
@@ -216,13 +231,13 @@ public class MainActivity extends AppCompatActivity {
 //                imgUrls.add(getExternalFilesDir(null) + "/bbb.jpg");
 //                imgUrls.add(getExternalFilesDir(null) + "/ccc.JPG");
                 mShareApi = new WbShare(MainActivity.this, onShareListener);
-//                mShareApi.doShare(WbShareEntity.createImageText(
-//                        getExternalFilesDir(null) + "/ccc.JPG",
-//                        "测试图文分享"));
-                mShareApi.doShare(WbShareEntity.createWeb("https://www.baidu.com", "百度一下",
-                        "百度一下，你就知道",
+                mShareApi.doShare(WbShareEntity.createImageText(
                         getExternalFilesDir(null) + "/ccc.JPG",
                         "测试图文分享"));
+//                mShareApi.doShare(WbShareEntity.createWeb("https://www.baidu.com", "百度一下",
+//                        "百度一下，你就知道",
+//                        getExternalFilesDir(null) + "/ccc.JPG",
+//                        "测试图文分享"));
                 v.startAnimation(shake);
             }
         });
@@ -399,7 +414,16 @@ public class MainActivity extends AppCompatActivity {
                 WxAuth authApi = new WxAuth(MainActivity.this, onAuthListener);
                 authApi.doAuth();
                 v.startAnimation(shake);
+            }
+        });
+        findViewById(R.id.btn_login_wxqr).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Event.getInstance().postData("555");
 
+                Toast.makeText(MainActivity.this, "需要开放平台开通", Toast.LENGTH_SHORT).show();
+                WxAuth wxAuth = new WxAuth(MainActivity.this, onAuthListener);
+                wxAuth.doAuthQRCode("qeuRRdzufZaOpdhfU2Q4gDO4bj5fim3HgizHQyKthEkzdnnSlWCDNjXl09Tojv-QLLpgYeW6iUec9xGn_X-JtQ");
             }
         });
         //微信支付
@@ -435,7 +459,6 @@ public class MainActivity extends AppCompatActivity {
                 v.startAnimation(shake);
 //            WxShare wxShare=new WxShare(MainActivity.this,SocialType.WEIXIN_Share,onShareListener);
 //            wxShare.doShare(WxShareEntity.createMiniApp( miniAppid, miniPath, webpageUrl, title, desc, imgUrl));
-
                 WxAuth wxAuth = new WxAuth(MainActivity.this, onAuthListener);
                 wxAuth.doOpenMiniApp("gh_d43f693ca31f", "", WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE);
             }
@@ -510,5 +533,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

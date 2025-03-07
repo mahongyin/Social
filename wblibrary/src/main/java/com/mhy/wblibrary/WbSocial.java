@@ -32,20 +32,13 @@ public class WbSocial {
         return SCOPE;
     }
 
-    /**
-     * @param redirectUrl 重定向URL 授权回调页
-     * @param scope       在微博开放平台为应用申请的高级权限范围
-     */
-    public static void setWbApp(String appKey, String redirectUrl, String scope) {
-        APP_KY = appKey;
-        REDIRECT_URL = redirectUrl;
-        SCOPE = scope;
-    }
 
+// 微博AuthInfo(yspcar, "1446396360", "https://api.weibo.com/oauth2/default.html", "all")
     public static void setWbApp(String appKey) {
         APP_KY = appKey;
-        REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";
+        REDIRECT_URL = "https://api.weibo.com/oauth2/default.html";//"http://www.sina.com";
         SCOPE = "all";
+//        SCOPE = "email,direct_messages_read,direct_messages_write,friendships_groups_read,friendships_groups_write,statuses_to_me_read,follow_app_official_microblog,invitation_write";
     }
 
     /**
@@ -55,7 +48,15 @@ public class WbSocial {
         APP_KY = appKey;
         REDIRECT_URL = redirectUrl;
         SCOPE = "email,direct_messages_read,direct_messages_write,friendships_groups_read,friendships_groups_write,statuses_to_me_read,follow_app_official_microblog,invitation_write";
-
     }
 
+    /**
+     * @param redirectUrl 重定向URL 授权回调页
+     * @param scope       在微博开放平台为应用申请的高级权限范围
+     */
+    public static void setWbApp(String appKey, String redirectUrl, String scope) {
+        APP_KY = appKey;
+        REDIRECT_URL = redirectUrl;
+        SCOPE = scope;
+    }
 }

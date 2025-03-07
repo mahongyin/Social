@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import androidx.core.content.FileProvider;
 
 import com.mhy.socialcommon.ShareApi;
+import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
@@ -34,7 +35,7 @@ import java.io.File;
 /**
  * 分享平台公共组件模块-微信分享
  */
-public class WxShare extends ShareApi<WxShareEntity> {
+public class WxShare extends ShareApi {
     private IWXAPI mWXApi;
 
     /**
@@ -46,14 +47,15 @@ public class WxShare extends ShareApi<WxShareEntity> {
     public WxShare(Activity act, OnShareListener l) {
         super(act, l);
         if (mWXApi == null) {
-            mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
-            mWXApi.registerApp(getAppId());
+//            mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
+//            mWXApi.registerApp(getAppId());
+            mWXApi = WxSocial.getInstance().getWXApi();
         }
     }
 
     @Override
     protected String getAppId() {
-        return WxSocial.getWeixinId();
+        return WxSocial.getInstance().getWxAppId();
     }
 
     /**
@@ -75,7 +77,7 @@ public class WxShare extends ShareApi<WxShareEntity> {
      * @param mShareContent 分享内容包装
      */
     @Override
-    public void doShare(WxShareEntity mShareContent) {
+    public void doShare(ShareEntity mShareContent) {
         if (null == mShareContent) {
             return;
         }

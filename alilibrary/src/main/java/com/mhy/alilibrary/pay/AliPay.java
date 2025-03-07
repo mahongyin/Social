@@ -13,6 +13,7 @@ import com.alipay.sdk.app.PayTask;
 import com.mhy.alilibrary.bean.AliPayContent;
 import com.mhy.alilibrary.bean.PayResult;
 import com.mhy.socialcommon.PayApi;
+import com.mhy.socialcommon.PayContent;
 import com.mhy.socialcommon.SocialType;
 
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Map;
  * @author mahongyin 2020-05-29 18:27 @CopyRight mhy.work@qq.com
  * description 支付宝支付
  */
-public class AliPay extends PayApi<AliPayContent> {
+public class AliPay extends PayApi {
 
     private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -60,16 +61,16 @@ public class AliPay extends PayApi<AliPayContent> {
      * @param payInfo 支付的OrderInfo 统一由后端返回 或者自己拼接后传入
      */
     @Override
-    public void doPay(AliPayContent payInfo) {
+    public void doPay(PayContent payInfo) {
         if (payInfo == null) {
             callbackPayFail("orderInfo为空");
             return;
         }
         if (payInfo.getPayType() == SocialType.ALIPAY_Pay) {
-            if (TextUtils.isEmpty(payInfo.getOrderInfo())) {
+            if (TextUtils.isEmpty(((AliPayContent) payInfo).getOrderInfo())) {
                 callbackPayFail("orderInfo为空");
             } else {
-                payV2(payInfo.getOrderInfo());
+                payV2(((AliPayContent) payInfo).getOrderInfo());
             }
         } else {
             callbackPayFail("类型参数错误");

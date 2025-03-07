@@ -8,13 +8,13 @@ import java.lang.ref.WeakReference;
 /**
  * 分享平台公共组件模块
  */
-public abstract class ShareApi<T extends ShareEntity> {
+public abstract class ShareApi {
 
     /**
      * 分享类型
      */
     protected static SocialType mShareType;
-    protected static OnShareListener mShareListener;
+    private static OnShareListener mShareListener;
     protected WeakReference<Activity> mActivity;
 
     public ShareApi(Activity act, OnShareListener l) {
@@ -48,11 +48,16 @@ public abstract class ShareApi<T extends ShareEntity> {
         }
     }
 
+    public static void cancelCallback() {
+        mShareListener = null;
+    }
+
     /**
      * 分享
+     *
      * @param content 分享内容实体
      */
-    public abstract void doShare(T content);
+    public abstract void doShare(ShareEntity content);
 
     protected abstract String getAppId();
 

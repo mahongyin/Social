@@ -30,9 +30,7 @@ public class WbAuth extends AuthApi {
     public WbAuth(Activity act, OnAuthListener l) {
         super(act, l);
         mAuthType = SocialType.WEIBO_Auth;
-        if (cpuX86()) {
-            return;
-        }
+
         AuthInfo authInfo =
                 new AuthInfo(act, getAppId(), WbSocial.getRedirectUrl(), WbSocial.getScope());
         mWBApi = WBAPIFactory.createWBAPI(act);
@@ -59,9 +57,7 @@ public class WbAuth extends AuthApi {
      * 执行登陆操作 客户端或web
      */
     public void doAuth() {
-        if (cpuX86()) {
-            return;
-        }
+
         // auth 客户端和web
         mWBApi.authorize(mActivity.get(),
                 new WbAuthListener() {

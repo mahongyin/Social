@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.mhy.socialcommon.PayApi;
+import com.mhy.socialcommon.PayContent;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WxPayContent;
@@ -16,7 +17,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 /**
  * 微信支付
  */
-public class WxPay extends PayApi<WxPayContent> {
+public class WxPay extends PayApi {
 
     private IWXAPI msgApi;
 
@@ -29,6 +30,7 @@ public class WxPay extends PayApi<WxPayContent> {
     public WxPay(Activity act, OnPayListener l) {
         super(act, l);
         mPayType = SocialType.WEIXIN_Pay;
+        msgApi = WxSocial.getInstance().getWXApi();
     }
 
     /**
@@ -39,7 +41,7 @@ public class WxPay extends PayApi<WxPayContent> {
      */
 
     @Override
-    public void doPay(WxPayContent payInfo) {
+    public void doPay(PayContent payInfo) {
         if (payInfo == null) {
             callbackPayFail("payInfo为空");
             return;
@@ -58,7 +60,7 @@ public class WxPay extends PayApi<WxPayContent> {
         }
 
 //       appid partnerid商户号 prepayid密钥
-        msgApi = WXAPIFactory.createWXAPI(mActivity.get(), TextUtils.isEmpty(content.getAppid()) ? getAppId() : content.getAppid());
+        //msgApi = WXAPIFactory.createWXAPI(mActivity.get(), TextUtils.isEmpty(content.getAppid()) ? getAppId() : content.getAppid());
 
         if (!msgApi.isWXAppInstalled()) {
             callbackPayFail("微信未安装");
@@ -82,7 +84,7 @@ public class WxPay extends PayApi<WxPayContent> {
                 req.timeStamp = result.getTimestamp();
                 req.sign = result.getSign();
 //        msgApi.registerApp(getAppId());
-                msgApi.registerApp(TextUtils.isEmpty(result.getAppid()) ? getAppId() : result.getAppid());
+                //msgApi.registerApp(TextUtils.isEmpty(result.getAppid()) ? getAppId() : result.getAppid());
                 if (TextUtils.isEmpty(getAppId())) {
                     callbackPayFail("appid为空");
                     return;
@@ -93,7 +95,7 @@ public class WxPay extends PayApi<WxPayContent> {
     }
 
     private String getAppId() {
-        return WxSocial.getWeixinId();
+        return WxSocial.getInstance().getWxAppId();
     }
 
     /**

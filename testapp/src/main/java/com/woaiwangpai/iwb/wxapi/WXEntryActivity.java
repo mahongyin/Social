@@ -1,5 +1,7 @@
 package com.woaiwangpai.iwb.wxapi;
 
+import android.util.Log;
+
 import com.mhy.wxlibrary.wxapi.BaseWXActivity;
 
 /**
@@ -7,4 +9,8 @@ import com.mhy.wxlibrary.wxapi.BaseWXActivity;
  */
 public class WXEntryActivity extends BaseWXActivity {
 
+    @Override
+    protected void onWXIntent(String extInfo) {
+        Log.e("WXEntryActivity", "onWXIntent: " + extInfo);
+    }
 }

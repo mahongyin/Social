@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +89,7 @@ public class ShareUtil {
 //        qqIntent.putExtra(Intent.EXTRA_SUBJECT, "选则要分享的应用");
         qqIntent.putExtra(Intent.EXTRA_TEXT, msg);
         qqIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-        mActivity.startActivity(qqIntent);
+        //mActivity.startActivity(qqIntent);
         mActivity.startActivity(Intent.createChooser(qqIntent, "分享"));
     }
 
@@ -658,6 +660,10 @@ public class ShareUtil {
         }
     }
 
+    public boolean hasIntent(Intent intent) {
+        return intent.resolveActivity(mActivity.getPackageManager()) != null;
+    }
+
     /**
      * intent是否可达
      *
@@ -751,5 +757,37 @@ public class ShareUtil {
     @StringDef(value = {package_ali, package_qq, package_wb, package_wx})
     @Retention(RetentionPolicy.SOURCE)
     @interface PackageName {
+    }
+
+
+    public static String getSHA(String info) {
+        byte[] digesta = null;
+        try {
+// 得到一个SHA-1的消息摘要
+            MessageDigest alga = MessageDigest.getInstance("SHA-1");
+// 添加要进行计算摘要的信息
+            alga.update(info.getBytes());
+// 得到该摘要
+            digesta = alga.digest();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+// 将摘要转为字符串
+        String rs = byte2hex(digesta);
+        return rs;
+    }
+
+    private static String byte2hex(byte[] b) {
+        String hs = "";
+        String stmp = "";
+        for (byte aB : b) {
+            stmp = (Integer.toHexString(aB & 0XFF));
+            if (stmp.length() == 1) {
+                hs = hs + "0" + stmp;
+            } else {
+                hs = hs + stmp;
+            }
+        }
+        return hs;
     }
 }

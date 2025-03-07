@@ -41,7 +41,7 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     }
 
     protected String getAppId() {
-        return WxSocial.getWeixinId();
+        return WxSocial.getInstance().getWxAppId();
     }
 
     @Override
@@ -62,5 +62,11 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
             }
         }
         finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        WxPay.cancelCallback();
     }
 }
