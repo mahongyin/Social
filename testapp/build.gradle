@@ -58,18 +58,20 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-//    implementation 'com.mhy.social:common:1.3.1'
-//    implementation 'com.mhy.social:qq:1.3.1'
-//    implementation 'com.mhy.social:ali:1.3.1'
-//    implementation 'com.mhy.social:wx:1.3.1'
-//    implementation 'com.mhy.social:wb:1.3.1'
-    implementation project(path: ':socialcommon')
-    implementation project(path: ':wxlibrary')
-    implementation project(path: ':wblibrary')
-    implementation project(path: ':qqlibrary')
-    implementation project(path: ':alilibrary')
+    // repo 或 ali
+    implementation 'com.mhy.social:common:1.3.3'
+    implementation 'com.mhy.social:qq:1.3.3'
+    implementation 'com.mhy.social:ali:1.3.3'
+    implementation 'com.mhy.social:wx:1.3.3'
+    implementation 'com.mhy.social:wb:1.3.3'
+//    implementation project(path: ':socialcommon')
+//    implementation project(path: ':wxlibrary')
+//    implementation project(path: ':wblibrary')
+//    implementation project(path: ':qqlibrary')
+//    implementation project(path: ':alilibrary')
 
 //    implementation 'com.tencent.mm.opensdk:wechat-sdk-android:+'
 //    implementation 'com.alipay.sdk:alipaysdk-android:+@aar'
 //    implementation 'io.github.sinaweibosdk:core:13.10.1@aar'
+    implementation("com.squareup.leakcanary:leakcanary-android:2.14")
 }

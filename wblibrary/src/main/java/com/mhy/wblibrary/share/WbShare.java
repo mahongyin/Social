@@ -626,8 +626,8 @@ public class WbShare extends ShareApi {
     private Bitmap resImgToBitmap(Context context, int resId) {
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inPreferredConfig = Bitmap.Config.RGB_565; // Bitmap.Config.ARGB_8888
-        opt.inPurgeable = true; // 允许可清除
-        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
+//        opt.inPurgeable = true; // 允许可清除
+//        opt.inInputShareable = true; // 以上options的两个属性必须联合使用才会有效果
         // 获取资源图片
         InputStream is = context.getResources().openRawResource(resId);
         return BitmapFactory.decodeStream(is, null, opt);

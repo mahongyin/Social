@@ -30,9 +30,6 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     private static final String TAG = "WXBaseActivity";
     private IWXAPI api;
 
-    protected String getAppId() {
-        return WxSocial.getInstance().getWxAppId();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

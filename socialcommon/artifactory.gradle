@@ -20,10 +20,10 @@ afterEvaluate {
         repositories {
             maven {
                 allowInsecureProtocol true
-                url = MAVEN_URL
+                url = ALI_MAVEN_URL
                 credentials {
-                    it.username = MAVEN_USER
-                    it.password = MAVEN_PASSWORD
+                    it.username = ALI_USERNAME
+                    it.password = ALI_PASSWORD
                 }
             }
         }

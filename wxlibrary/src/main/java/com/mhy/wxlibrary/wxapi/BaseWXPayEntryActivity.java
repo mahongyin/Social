@@ -28,8 +28,9 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        api = WXAPIFactory.createWXAPI(this, getAppId());
+        //api = WXAPIFactory.createWXAPI(this, getAppId());
 //		api.registerApp(Social.getWeixinId());//add
+        api = WxSocial.getInstance().getWXApi();
         api.handleIntent(getIntent(), this);
     }
 
@@ -40,17 +41,17 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
         api.handleIntent(intent, this);
     }
 
-    protected String getAppId() {
-        return WxSocial.getInstance().getWxAppId();
-    }
-
     @Override
     public void onReq(BaseReq req) {
+        // 微信主动发的意图
+        if (req!= null) {
+            Log.d("BaseWXPayEntryActivity", "来自微信消息"+req.getType());
+        }
+        finish();
     }
 
     @Override
     public void onResp(BaseResp resp) {
-
         if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
             //微信支付
             //支付成功 通知Wxpay回调
@@ -58,7 +59,7 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
                 WxPay.callbackPayOk();
             } else {
                 WxPay.callbackPayFail(resp.errStr);
-                Log.i("payfailcode:", String.valueOf(resp.errCode));
+                Log.i("payFailCode:", String.valueOf(resp.errCode)+"  "+resp.errStr);
             }
         }
         finish();

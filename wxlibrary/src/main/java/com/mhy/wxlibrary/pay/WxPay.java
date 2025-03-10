@@ -75,6 +75,10 @@ public class WxPay extends PayApi {
 
             @Override
             protected void onPostExecute(WxPayContent result) {
+                if (TextUtils.isEmpty(getAppId())) {
+                    callbackPayFail("appid为空");
+                    return;
+                }
                 PayReq req = new PayReq();
                 req.appId = result.getAppid();
                 req.partnerId = result.getPartnerid();
@@ -83,12 +87,6 @@ public class WxPay extends PayApi {
                 req.nonceStr = result.getNoncestr();
                 req.timeStamp = result.getTimestamp();
                 req.sign = result.getSign();
-//        msgApi.registerApp(getAppId());
-                //msgApi.registerApp(TextUtils.isEmpty(result.getAppid()) ? getAppId() : result.getAppid());
-                if (TextUtils.isEmpty(getAppId())) {
-                    callbackPayFail("appid为空");
-                    return;
-                }
                 msgApi.sendReq(req);
             }
         }.execute();
@@ -101,7 +99,7 @@ public class WxPay extends PayApi {
     /**
      * 离线支付
      */
-    public void offPay() {
+    public void offLinePay() {
         int wxSdkVersion = msgApi.getWXAppSupportAPI();
         if (wxSdkVersion >= Build.OFFLINE_PAY_SDK_INT) {
             msgApi.sendReq(new JumpToOfflinePay.Req());

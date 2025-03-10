@@ -28,23 +28,26 @@ public class AliPay extends PayApi {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == SDK_PAY_FLAG) {
-                PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-                /*
-                 * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                 */
-                String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                String resultStatus = payResult.getResultStatus();
-                // 判断resultStatus 为9000则代表支付成功
-                if (TextUtils.equals(resultStatus, "9000")) {
-                    // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                Object pay = msg.obj;
+                if(pay instanceof PayResult) {
+                    PayResult payResult = (PayResult) pay;
+                    /*
+                     * 对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_success) + payResult);
-                    callbackPayOk();
-                    Log.e("resultInfo", resultInfo);
-                } else {
-                    // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        callbackPayOk();
+                        Log.e("resultInfo", resultInfo);
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
 //                        showAlert(PayDemoActivity.this, getString(R.string.pay_failed) + payResult);
-                    callbackPayFail(resultInfo);
-                    Log.e("resultInfo", resultStatus);
+                        callbackPayFail(resultInfo);
+                        Log.e("resultInfo", resultStatus);
+                    }
                 }
             }
         }
@@ -90,10 +93,10 @@ public class AliPay extends PayApi {
                 PayTask alipay = new PayTask(mActivity.get());
                 Map<String, String> result = alipay.payV2(orderInfo, true);
                 Log.i("msp", result.toString());
-
+                PayResult payResult = new PayResult(result);
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
+                msg.obj = payResult;
                 mHandler.sendMessage(msg);
             }
         };

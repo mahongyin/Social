@@ -45,10 +45,10 @@ afterEvaluate {
             maven {
                 allowInsecureProtocol(true)
                 name("artifactory")
-                url = MAVEN_URL
+                url = ALI_MAVEN_URL
                 credentials {
-                    username = MAVEN_USER
-                    password = MAVEN_PASSWORD
+                    it.username = ALI_USERNAME
+                    it.password = ALI_PASSWORD
                 }
             }
         }

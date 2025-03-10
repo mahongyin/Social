@@ -8,7 +8,7 @@ afterEvaluate {
     publishing {
         publications {
             maven(MavenPublication) {
-                from components.release
+                from components.release //.java
 //                artifact androidSourcesJar //打包源码，去除这行打的包将看不到源码
                 groupId = GROUP_ID
                 artifactId = ARTIFACT_ID
@@ -20,10 +20,10 @@ afterEvaluate {
         repositories {
             maven {
                 allowInsecureProtocol true
-                url = MAVEN_URL
+                url = ALI_MAVEN_URL
                 credentials {
-                    it.username = MAVEN_USER
-                    it.password = MAVEN_PASSWORD
+                    it.username = ALI_USERNAME
+                    it.password = ALI_PASSWORD
                 }
             }
         }

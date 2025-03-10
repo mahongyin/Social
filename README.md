@@ -6,17 +6,17 @@
 
 ![img](social.png)
 
-本Library各包均单独使用其中common库必须依赖，截止2024-01-20，
+本Library各包均单独使用其中common库必须依赖，截止2025-03-10，
 
 微博使用最新。 支付宝最新。 QQ最新。 微信是最新
 
 <B>主要提供服务：</B><br>
 支付：
-微信支付，支付宝支付，银联/qq暂未接入<br>
+微信支付，支付宝支付，<br>
 登录：
-支付宝授权，微信授权，qq授权，微博授权<br>
+支付宝授权，微信授权,微信扫码，qq授权，微博授权<br>
 分享：
-qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信朋友圈分享 系统原生分享
+系统原生分享，qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信朋友圈分享 
 <br><br><br>
 
 <B>集成方法：</B>![](https://img.shields.io/badge/版本-1.3.1-brightgreen.svg)
@@ -25,7 +25,16 @@ qq分享，qq空间分享，微博分享，微信分享，微信收藏，微信�
 //添加如下仓库二选一
 allprojects {
     //国内
+    maven { 
+            url 'https://packages.aliyun.com/67ce9393e77e9167fa2fc6ea/maven/cctv'
+            credentials {
+                username '67cea3a9ddf7780be055619c'
+                password '39kmT)=DU[w)'
+            }     
+    }
+    //或者
     maven{ url 'https://gitee.com/mahongyin/Social/raw/master/repo'}
+    
     //国外
     maven{ url 'https://github.com/mahongyin/Social/raw/master/repo'}
 }
@@ -34,18 +43,16 @@ allprojects {
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-   implementation 'com.mhy.social:common:1.3.1'
-```
+   implementation 'com.mhy.social:common:1.3.3' //必须
 //以下按需依赖
-```
 //支付宝  
-   implementation 'com.mhy.social:ali:1.3.1'
+   implementation 'com.mhy.social:ali:1.3.3'
 //QQ
-   implementation 'com.mhy.social:qq:1.3.1'
+   implementation 'com.mhy.social:qq:1.3.3'
 //微信
-   implementation 'com.mhy.social:wx:1.3.1'
+   implementation 'com.mhy.social:wx:1.3.3'
 //微博   不支持x86
-   implementation 'com.mhy.social:wb:1.3.1'
+   implementation 'com.mhy.social:wb:1.3.3'
 ```
 
 //////////////////////////////////////////////////////////////////////////////////////

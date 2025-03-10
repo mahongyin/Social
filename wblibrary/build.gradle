@@ -42,7 +42,14 @@ android {
         ignoreWarnings true       // false by default
         quiet true                // false by default
     }
-
+//artifactory加了这个就传上去了
+    publishing {
+        singleVariant("release") {
+            //使用apg插件里的？会包含源码和文档
+//            withSourcesJar()
+//            withJavadocJar()
+        }
+    }
 }
 
 //repoName = 'maven'//maven仓库名
