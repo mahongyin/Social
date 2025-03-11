@@ -3,7 +3,7 @@ ext {
     publish = [
             version  : "1.3.4",
             user     : "mahongyin",
-            isJitpack: true,
+            isJitpack: false,
     ]
     compile = [
             compileSdkVersion: 31,

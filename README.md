@@ -43,16 +43,16 @@ allprojects {
 ```
 //无论使用本库任一library都必须依赖此library
 //此库未依赖任何第三方，仅支持系统分享、支付宝个人首款码支付，跳转微信扫一扫页面 
-   implementation 'com.mhy.social:common:1.3.3' //必须
+   implementation 'com.mhy.social:common:1.3.4' //必须
 //以下按需依赖
 //支付宝  
-   implementation 'com.mhy.social:ali:1.3.3'
+   implementation 'com.mhy.social:ali:1.3.4'
 //QQ
-   implementation 'com.mhy.social:qq:1.3.3'
+   implementation 'com.mhy.social:qq:1.3.4'
 //微信
-   implementation 'com.mhy.social:wx:1.3.3'
+   implementation 'com.mhy.social:wx:1.3.4'
 //微博   不支持x86
-   implementation 'com.mhy.social:wb:1.3.3'
+   implementation 'com.mhy.social:wb:1.3.4'
 ```
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -82,9 +82,6 @@ allprojects {
      </intent-filter>
  </activity> 
 ```
-
-**Application配置**
-
 ```
 //集成微信
 在你包名下 新建wxapi包里面新建类 分享登陆WXEntryActivity  支付WXPayEntryActivity
@@ -92,16 +89,16 @@ allprojects {
 public class WXEntryActivity extends BaseWXActivity {}
 public class WXPayEntryActivity extends BaseWXPayEntryActivity {} 
 ```
-
+**Application配置**
 ```
 在你的Application里 onCreate()里  【记得别忘AndroidManifest.xml里添加】
-WxSocial.setWeixinId("你的微信appid");
-QqSocial.setAppId("你的QQ appid");
-WbSocial.setWbApp("2045436852",//你的微博Key
-                "http://www.sina.com",//你对应的授权回调
+WxSocial.getInstance().init("你的微信appid");
+QqSocial.getInstance().init("你的QQ appid");
+WbSocial.getInstance().init("2045436852",//你的微博Key
+                "https://api.weibo.com/oauth2/default.html",//对应的授权回调
                 "email,direct_messages_read,direct_messages_write,"+ "friendships_groups_read,friendships_groups_write,statuses_to_me_read,"
                 + "follow_app_official_microblog," + "invitation_write");
-                //第三个参数是在微博开放平台为应用申请的高级权限
+                //第三个参数是在微博开放平台为应用申请的高级权限  /all
                 
 支付宝从后端返回拼接字符串》调用的时候传入
 ```

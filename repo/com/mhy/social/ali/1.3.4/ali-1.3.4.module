@@ -1,0 +1,102 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.mhy.social",
+    "module": "ali",
+    "version": "1.3.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "com.alipay.sdk",
+          "module": "alipaysdk-android",
+          "version": {
+            "requires": "+"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ],
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "alipaysdk-android",
+              "type": "aar",
+              "extension": "aar"
+            }
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ali-1.3.4.aar",
+          "url": "ali-1.3.4.aar",
+          "size": 28584,
+          "sha512": "523bf9229138fa52c58f536ccf0dbd7041050f113a1f0c5c45b1e7406eb27b5df118f2595ff8c2d14d1f597b74b8c9bdb015a977728c73c946c9ef9652836402",
+          "sha256": "b42157a8ce9cd1c40b194de31b6b055862a35d92c85478bf8d827d5ed7e69972",
+          "sha1": "8e58956ffadd60d4a66cd6cd61e29fea0910440a",
+          "md5": "e6c361ca2d86c1f15112998d3e3cd58a"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.alipay.sdk",
+          "module": "alipaysdk-android",
+          "version": {
+            "requires": "+"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ],
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "alipaysdk-android",
+              "type": "aar",
+              "extension": "aar"
+            }
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "ali-1.3.4.aar",
+          "url": "ali-1.3.4.aar",
+          "size": 28584,
+          "sha512": "523bf9229138fa52c58f536ccf0dbd7041050f113a1f0c5c45b1e7406eb27b5df118f2595ff8c2d14d1f597b74b8c9bdb015a977728c73c946c9ef9652836402",
+          "sha256": "b42157a8ce9cd1c40b194de31b6b055862a35d92c85478bf8d827d5ed7e69972",
+          "sha1": "8e58956ffadd60d4a66cd6cd61e29fea0910440a",
+          "md5": "e6c361ca2d86c1f15112998d3e3cd58a"
+        }
+      ]
+    }
+  ]
+}

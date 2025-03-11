@@ -1,0 +1,102 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.mhy.social",
+    "module": "wb",
+    "version": "1.3.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "7.5"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.sinaweibosdk",
+          "module": "core",
+          "version": {
+            "requires": "+"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ],
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "core",
+              "type": "aar",
+              "extension": "aar"
+            }
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "wb-1.3.4.aar",
+          "url": "wb-1.3.4.aar",
+          "size": 27959,
+          "sha512": "36261a44298e7bf3121a93850bbc5c59d8e954d10db7af989f946d594217bbd2260bc238b7be81ee1c0be3a9213c553e7774a77543d6c3521449e6422a2f3dd1",
+          "sha256": "bfac03c0729ddfb794e2bf8f8e206882091ec42b6b90186c09f26e31267c36b0",
+          "sha1": "b8a32da97384f3d5b1c99998bdd35d02fea630de",
+          "md5": "d1ef345d9dc0db8d5233cc73d71b919c"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "io.github.sinaweibosdk",
+          "module": "core",
+          "version": {
+            "requires": "+"
+          },
+          "excludes": [
+            {
+              "group": "*",
+              "module": "*"
+            }
+          ],
+          "thirdPartyCompatibility": {
+            "artifactSelector": {
+              "name": "core",
+              "type": "aar",
+              "extension": "aar"
+            }
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "wb-1.3.4.aar",
+          "url": "wb-1.3.4.aar",
+          "size": 27959,
+          "sha512": "36261a44298e7bf3121a93850bbc5c59d8e954d10db7af989f946d594217bbd2260bc238b7be81ee1c0be3a9213c553e7774a77543d6c3521449e6422a2f3dd1",
+          "sha256": "bfac03c0729ddfb794e2bf8f8e206882091ec42b6b90186c09f26e31267c36b0",
+          "sha1": "b8a32da97384f3d5b1c99998bdd35d02fea630de",
+          "md5": "d1ef345d9dc0db8d5233cc73d71b919c"
+        }
+      ]
+    }
+  ]
+}
