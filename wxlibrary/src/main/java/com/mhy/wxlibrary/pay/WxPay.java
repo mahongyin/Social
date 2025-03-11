@@ -8,6 +8,7 @@ import com.mhy.socialcommon.PayContent;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WxPayContent;
+import com.mhy.wxlibrary.wxapi.BaseWXPayEntryActivity;
 import com.tencent.mm.opensdk.constants.Build;
 import com.tencent.mm.opensdk.modelpay.JumpToOfflinePay;
 import com.tencent.mm.opensdk.modelpay.PayReq;
@@ -31,6 +32,7 @@ public class WxPay extends PayApi {
         super(act, l);
         mPayType = SocialType.WEIXIN_Pay;
         msgApi = WxSocial.getInstance().getWXApi();
+        BaseWXPayEntryActivity.wxPay = this;
     }
 
     /**

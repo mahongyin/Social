@@ -29,8 +29,8 @@ public class QqAuth extends AuthApi {
     private Tencent mTencent;
 
 
-    public QqAuth(Activity act, OnAuthListener l) {
-        super(act, l);
+    public QqAuth(Activity act, OnAuthListener listener) {
+        super(act, listener);
         Tencent.setIsPermissionGranted(true);
         mAuthType = SocialType.QQ_Auth;
         if (mTencent == null) {
@@ -168,7 +168,7 @@ public class QqAuth extends AuthApi {
      *
      * @param qq 目标QQ号
      */
-    private void doIm(int mChosenIMType, String qq) {
+    private void doChat(int mChosenIMType, String qq) {
         // 调试的时候，使用mTencent.isSessionValid()，因为是当次的
         // 实际使用的时候，使用更加准确的mTencent.checkLogin()
         if (mTencent != null && mTencent.isSessionValid()) {

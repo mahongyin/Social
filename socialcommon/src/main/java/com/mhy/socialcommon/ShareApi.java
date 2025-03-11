@@ -13,19 +13,19 @@ public abstract class ShareApi {
     /**
      * 分享类型
      */
-    protected static SocialType mShareType;
-    private static OnShareListener mShareListener;
+    protected SocialType mShareType;
+    private OnShareListener mShareListener;
     protected WeakReference<Activity> mActivity;
 
-    public ShareApi(Activity act, OnShareListener l) {
+    public ShareApi(Activity act, OnShareListener listener) {
         mActivity = new WeakReference<>(act);
-        setOnShareListener(l);
+        mShareListener = listener;
     }
 
     /**
      * 返回分享成功
      */
-    public static void callbackShareOk() {
+    public void callbackShareOk() {
         if (mShareListener != null) {
             mShareListener.onShareOk(mShareType);
         }
@@ -36,19 +36,19 @@ public abstract class ShareApi {
      *
      * @param msg 错误详情
      */
-    public static void callbackShareFail(String msg) {
+    public void callbackShareFail(String msg) {
         if (mShareListener != null) {
             mShareListener.onShareFail(mShareType, msg);
         }
     }
 
-    public static void callbackCancel() {
+    public void callbackCancel() {
         if (mShareListener != null) {
             mShareListener.onCancel(mShareType);
         }
     }
 
-    public static void cancelCallback() {
+    public void cancelCallback() {
         mShareListener = null;
     }
 
@@ -69,15 +69,6 @@ public abstract class ShareApi {
      * @param data        data
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    }
-
-    /**
-     * 设置分享回调
-     *
-     * @param l l
-     */
-    private void setOnShareListener(OnShareListener l) {
-        mShareListener = l;
     }
 
     /**

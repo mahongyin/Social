@@ -11,14 +11,14 @@ import java.lang.ref.WeakReference;
 public abstract class PayApi {
 
     //只允许一个实例化回调
-    protected static OnPayListener mPayResultListener;
-    protected static SocialType mPayType;
+    protected OnPayListener mPayResultListener;
+    protected SocialType mPayType;
     protected WeakReference<Activity> mActivity;
 
 
-    public PayApi(Activity act, OnPayListener l) {
+    public PayApi(Activity act, OnPayListener listener) {
         mActivity = new WeakReference<>(act);
-        setOnPayListener(l);
+        mPayResultListener = listener;
     }
 //    public PayApi(Activity act){
 //        mAct = act;
@@ -28,7 +28,7 @@ public abstract class PayApi {
     /**
      * 返回支付成功
      */
-    public static void callbackPayOk() {
+    public void callbackPayOk() {
         if (mPayResultListener != null) {
             mPayResultListener.onPayOk(mPayType);
         }
@@ -37,13 +37,13 @@ public abstract class PayApi {
     /**
      * 返回支付失败
      */
-    public static void callbackPayFail(String msg) {
+    public void callbackPayFail(String msg) {
         if (mPayResultListener != null) {
             mPayResultListener.onPayFail(mPayType, msg);
         }
     }
 
-    public static void cancelCallback() {
+    public void cancelCallback() {
         mPayResultListener = null;
     }
 
@@ -53,15 +53,6 @@ public abstract class PayApi {
      * @param payInfo 支付sdk
      */
     public abstract void doPay(PayContent payInfo);
-
-    /**
-     * 设置支付回调
-     *
-     * @param l
-     */
-    private void setOnPayListener(OnPayListener l) {
-        mPayResultListener = l;
-    }
 
     /**
      * 支付回调

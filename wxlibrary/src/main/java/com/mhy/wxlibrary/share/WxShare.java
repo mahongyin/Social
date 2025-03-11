@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+import androidx.annotation.IntDef;
 import androidx.core.content.FileProvider;
 
 import com.mhy.socialcommon.ShareApi;
@@ -16,7 +17,11 @@ import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WxShareEntity;
+import com.mhy.wxlibrary.wxapi.BaseWXActivity;
 import com.tencent.mm.opensdk.constants.Build;
+import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
+import com.tencent.mm.opensdk.modelbiz.SubscribeMiniProgramMsg;
+import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
@@ -30,6 +35,8 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 
 /**
@@ -42,15 +49,16 @@ public class WxShare extends ShareApi {
      * 执行登陆操作
      *
      * @param act activity
-     * @param l   回调监听
+     * @param listener   回调监听
      */
-    public WxShare(Activity act, OnShareListener l) {
-        super(act, l);
+    public WxShare(Activity act, OnShareListener listener) {
+        super(act, listener);
         if (mWXApi == null) {
 //            mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
 //            mWXApi.registerApp(getAppId());
             mWXApi = WxSocial.getInstance().getWXApi();
         }
+        BaseWXActivity.wxShare = this;
     }
 
     @Override
@@ -218,12 +226,12 @@ public class WxShare extends ShareApi {
      * @return
      */
     private boolean addMiniApp(SendMessageToWX.Req req, WXMediaMessage message, Bundle params) {
-        //    第二种：App 主动分享小程序卡片：⚠️ 小程序测试版不能分享
+        // 第二种：App 主动分享小程序卡片：⚠️ 小程序测试版不能分享
         WXMiniProgramObject wxminiObiect = new WXMiniProgramObject();
         wxminiObiect.webpageUrl = params.getString(WxShareEntity.KEY_WX_WEB_URL); //兼容低版本的网络链接
         wxminiObiect.userName = params.getString(WxShareEntity.KEY_WX_MINI_APPID);//小程序的原始ID
         wxminiObiect.path = params.getString(WxShareEntity.KEY_WX_MINI_PATH);// 指定打开小程序的某一个页面的URL路径
-        //    wxminiObiect.hdImageData =  hdImageData; //小程序节点高清大图，小于128K
+        // wxminiObiect.hdImageData =  hdImageData; //小程序节点高清大图，小于128K
         message.title = params.getString(WxShareEntity.KEY_WX_TITLE);
         message.description = params.getString(WxShareEntity.KEY_WX_SUMMARY);
 
@@ -377,5 +385,4 @@ public class WxShare extends ShareApi {
             return "";
         }
     }
-
 }

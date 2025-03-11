@@ -90,8 +90,4 @@ public class AliShare extends ShareApi {
         }
         ShareUtil.getInstance(mActivity.get()).shareImg(path, ShareUtil.package_ali);
     }
-
-    private String buildTransaction(final String type) {
-        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
-    }
 }

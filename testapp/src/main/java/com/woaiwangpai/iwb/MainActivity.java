@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        checkPermission();
-         copy();//准备资源
+        copy();//准备资源
         shake = AnimationUtils.loadAnimation(this, R.anim.shake);
         //原生分享
         findViewById(R.id.btn_share_local).setOnClickListener(new View.OnClickListener() {

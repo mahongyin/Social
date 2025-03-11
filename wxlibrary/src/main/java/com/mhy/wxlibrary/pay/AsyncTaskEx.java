@@ -3,6 +3,7 @@ package com.mhy.wxlibrary.pay;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
+import android.util.Log;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -105,7 +106,7 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
                 try {
                     result = get();
                 } catch (InterruptedException e) {
-                    android.util.Log.w(LOG_TAG, e);
+                    Log.w(LOG_TAG, e);
                 } catch (ExecutionException e) {
                     throw new RuntimeException("An error occured while executing doInBackground()",
                             e.getCause());
@@ -215,7 +216,6 @@ abstract class AsyncTaskEx<Params, Progress, Result> {
     }
 
     public enum Status {
-
         PENDING,
         RUNNING,
         FINISHED,

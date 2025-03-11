@@ -13,9 +13,8 @@ import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WeiXin;
+import com.mhy.wxlibrary.wxapi.BaseWXActivity;
 import com.tencent.mm.opensdk.constants.Build;
-import com.tencent.mm.opensdk.diffdev.DiffDevOAuthFactory;
-import com.tencent.mm.opensdk.diffdev.IDiffDevOAuth;
 import com.tencent.mm.opensdk.diffdev.OAuthErrCode;
 import com.tencent.mm.opensdk.diffdev.OAuthListener;
 import com.tencent.mm.opensdk.modelbiz.SubscribeMessage;
@@ -34,6 +33,7 @@ import java.util.Random;
  * 微信登陆
  *
  * @author mahongyin
+ * OAuthListener 扫码登录的回调
  */
 public class WxAuth extends AuthApi implements OAuthListener {
     private IWXAPI mWXApi;
@@ -46,9 +46,10 @@ public class WxAuth extends AuthApi implements OAuthListener {
     public WxAuth(Activity act, OnAuthListener l) {
         super(act, l);
         mAuthType = SocialType.WEIXIN_Auth;
-//        mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
+        //mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
 //        mWXApi.registerApp(getAppId());
         mWXApi = WxSocial.getInstance().getWXApi();
+        BaseWXActivity.wxAuth = this;
     }
 
     @Override
@@ -121,7 +122,7 @@ public class WxAuth extends AuthApi implements OAuthListener {
         String sha = ShareUtil.getSHA(string1);
         String scope = "snsapi_userinfo";
         mAuthType = SocialType.WEIXIN_Qr_Auth;
-        WxSocial.getInstance().getWxOAuth()
+        WxSocial.getInstance().getDiffDevOAuth()
                 .auth(getAppId(), scope, noncestr, timeStamp, sha, this);
     }
 
@@ -136,6 +137,7 @@ public class WxAuth extends AuthApi implements OAuthListener {
     @Override
     public void onQrcodeScanned() {
         //扫码了
+        Log.d("onQrcodeScanned", "微信授权扫码");
     }
 
     @Override
@@ -147,8 +149,9 @@ public class WxAuth extends AuthApi implements OAuthListener {
             setCompleteCallBack(new WeiXin(mAuthType, errCode.getCode(), authCode));
         } else {
             //失败
+            setErrorCallBack(errCode.toString());
         }
-        WxSocial.getInstance().getWxOAuth().stopAuth();
+        WxSocial.getInstance().getDiffDevOAuth().stopAuth();
     }
 
     /**
@@ -220,27 +223,6 @@ public class WxAuth extends AuthApi implements OAuthListener {
     }
 
     /**
-     * 启动微信
-     */
-    private boolean launch() {
-        return mWXApi.openWXApp();
-    }
-
-    /**
-     * 注册
-     */
-    private void register() {
-        mWXApi.registerApp(getAppId());
-    }
-
-    /**
-     * 反注册
-     */
-    private void unRegister() {
-        mWXApi.unregisterApp();
-    }
-
-    /**
      * 限定值 小程序发布类型 开发版,体验版,正式版
      */
     @IntDef(value = {WXLaunchMiniProgram.Req.MINIPTOGRAM_TYPE_RELEASE,
@@ -249,5 +231,4 @@ public class WxAuth extends AuthApi implements OAuthListener {
     @Retention(RetentionPolicy.SOURCE)
     private @interface MiniProgramType {
     }
-
 }

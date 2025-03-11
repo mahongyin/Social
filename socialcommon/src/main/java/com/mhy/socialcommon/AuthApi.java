@@ -10,20 +10,20 @@ import java.lang.ref.WeakReference;
  * @author mahongyin
  */
 public abstract class AuthApi {
-    protected static SocialType mAuthType;
-    private static OnAuthListener mOnAuthListener;
+    protected SocialType mAuthType;
+    private OnAuthListener mOnAuthListener;
     /** 防止在支付宝 等App 被强行退出等情况下，OpenAuthTask.Callback 一定时间内无法释放导致Activity 泄漏。*/
     protected WeakReference<Activity> mActivity;
 
-    public AuthApi(Activity act, OnAuthListener l) {
+    public AuthApi(Activity act, OnAuthListener listener) {
         mActivity = new WeakReference<>(act);
-        setAuthListener(l);
+        mOnAuthListener = listener;
     }
 
     /**
      * 登陆成功回调
      */
-    public static void setCompleteCallBack(Object user) {
+    public void setCompleteCallBack(Object user) {
         if (mOnAuthListener != null) {
             mOnAuthListener.onComplete(mAuthType, user);
         }
@@ -32,18 +32,18 @@ public abstract class AuthApi {
     /**
      * 登陆错误回调
      */
-    public static void setErrorCallBack(String error) {
+    public void setErrorCallBack(String error) {
         if (mOnAuthListener != null) {
             mOnAuthListener.onError(mAuthType, error);
         }
     }
-    public static void cancelCallback() {
+    public void cancelCallback() {
         mOnAuthListener = null;
     }
     /**
      * 登陆取消回调
      */
-    public static void setCancelCallBack() {
+    public void setCancelCallBack() {
         if (mOnAuthListener != null) {
             mOnAuthListener.onCancel(mAuthType);
         }
@@ -55,10 +55,6 @@ public abstract class AuthApi {
      * qq/微博 需要
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {}
-
-    private void setAuthListener(OnAuthListener l) {
-        mOnAuthListener = l;
-    }
 
     public interface OnAuthListener {
 

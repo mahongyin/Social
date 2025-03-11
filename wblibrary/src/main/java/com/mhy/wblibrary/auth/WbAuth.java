@@ -25,10 +25,10 @@ public class WbAuth extends AuthApi {
 
     /**
      * @param act activity
-     * @param l   回调监听
+     * @param listener   回调监听
      */
-    public WbAuth(Activity act, OnAuthListener l) {
-        super(act, l);
+    public WbAuth(Activity act, OnAuthListener listener) {
+        super(act, listener);
         mAuthType = SocialType.WEIBO_Auth;
 
         AuthInfo authInfo =

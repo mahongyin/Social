@@ -9,15 +9,15 @@ import androidx.annotation.IntDef;
 @IntDef(value = {WxType.TYPE_SESSION, WxType.TYPE_TIME_LINE, WxType.TYPE_FAVORITE})
 public @interface WxType {
     /**
-     * 分析好友
+     * 分享好友会话
      */
     int TYPE_SESSION = 1;
     /**
-     * 分析朋友圈
+     * 发送微信朋友圈
      */
     int TYPE_TIME_LINE = 2;
     /**
-     * 分析收藏
+     * 发送微信收藏
      */
     int TYPE_FAVORITE = 3;
 }

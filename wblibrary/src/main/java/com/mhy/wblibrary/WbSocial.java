@@ -1,6 +1,13 @@
 package com.mhy.wblibrary;
 
 
+import android.app.Activity;
+
+import com.mhy.socialcommon.AuthApi;
+import com.mhy.socialcommon.ShareApi;
+import com.mhy.wblibrary.auth.WbAuth;
+import com.mhy.wblibrary.share.WbShare;
+
 /**
  * @author mahongyin 2020-05-29 13:28
  */
@@ -69,5 +76,13 @@ public class WbSocial {
         APP_KY = appKey;
         REDIRECT_URL = redirectUrl;
         SCOPE = scope;
+    }
+
+    public WbAuth getAuth(Activity activity, AuthApi.OnAuthListener listener) {
+        return new WbAuth(activity, listener);
+    }
+
+    public WbShare getShare(Activity activity, ShareApi.OnShareListener listener) {
+        return new WbShare(activity, listener);
     }
 }

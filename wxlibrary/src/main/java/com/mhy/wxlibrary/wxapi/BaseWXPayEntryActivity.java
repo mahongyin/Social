@@ -13,7 +13,6 @@ import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 /**
  * 微信支付  继承此类  并类名为WXPayEntryActivity
@@ -21,7 +20,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     private static final String TAG = "WXPayBaseEntryActivity";
-
+    public static WxPay wxPay;
     private IWXAPI api;
 
     @Override
@@ -44,8 +43,8 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     @Override
     public void onReq(BaseReq req) {
         // 微信主动发的意图
-        if (req!= null) {
-            Log.d("BaseWXPayEntryActivity", "来自微信消息"+req.getType());
+        if (req != null) {
+            Log.d("BaseWXPayEntryActivity", "来自微信消息" + req.getType());
         }
         finish();
     }
@@ -56,10 +55,14 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
             //微信支付
             //支付成功 通知Wxpay回调
             if (resp.errCode == BaseResp.ErrCode.ERR_OK) {
-                WxPay.callbackPayOk();
+                if (wxPay != null) {
+                    wxPay.callbackPayOk();
+                }
             } else {
-                WxPay.callbackPayFail(resp.errStr);
-                Log.i("payFailCode:", String.valueOf(resp.errCode)+"  "+resp.errStr);
+                if (wxPay != null) {
+                    wxPay.callbackPayFail(resp.errStr);
+                }
+                Log.i("payFailCode:", String.valueOf(resp.errCode) + "  " + resp.errStr);
             }
         }
         finish();
@@ -68,6 +71,9 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     @Override
     public void finish() {
         super.finish();
-        WxPay.cancelCallback();
+        if (wxPay != null) {
+            wxPay.cancelCallback();
+            wxPay = null;
+        }
     }
 }

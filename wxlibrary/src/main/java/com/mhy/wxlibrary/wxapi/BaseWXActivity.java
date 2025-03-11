@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.mhy.socialcommon.AuthApi;
+import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.auth.WxAuth;
@@ -30,6 +32,8 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     private static final String TAG = "WXBaseActivity";
     private IWXAPI api;
 
+    public static ShareApi wxShare;
+    public static AuthApi wxAuth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,16 +85,24 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                 Log.i(TAG, "微信分享操作.....");
                 switch (resp.errCode) {
                     case BaseResp.ErrCode.ERR_OK:
-                        WxShare.callbackShareOk();
+                        if (wxShare != null) {
+                            wxShare.callbackShareOk();
+                        }
                         break;
                     case BaseResp.ErrCode.ERR_USER_CANCEL:
-                        WxShare.callbackCancel();
+                        if (wxShare != null) {
+                            wxShare.callbackCancel();
+                        }
                         break;
                     case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                        WxShare.callbackShareFail(resp.errStr);
+                        if (wxShare != null) {
+                            wxShare.callbackShareFail("用户拒绝" + resp.errStr);
+                        }
                         break;
                     default:
-                        WxShare.callbackShareFail(resp.errStr);
+                        if (wxShare != null) {
+                            wxShare.callbackShareFail("未知错误" + resp.errStr);
+                        }
                         break;
                 }
 //            WeiXin weiXin = new WeiXin(2, resp.errCode, "");
@@ -112,28 +124,40 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
                         //获取用户信息
                         //https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN
                         //同一用户（openid）在一分钟内不能调用以上接口合计180次，超过会被当成恶意攻击返回 45011
-                        WxAuth.setCompleteCallBack(new WeiXin(SocialType.WEIXIN_Auth, resp.errCode, code));
+                        if (wxAuth != null) {
+                            wxAuth.setCompleteCallBack(new WeiXin(SocialType.WEIXIN_Auth, resp.errCode, code));
+                        }
                         break;
                     case BaseResp.ErrCode.ERR_USER_CANCEL:
-                        WxAuth.setCancelCallBack();
+                        if (wxAuth != null) {
+                            wxAuth.setCancelCallBack();
+                        }
                         break;
                     case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                        WxAuth.setErrorCallBack("用户拒绝"+resp.errStr);
+                        if (wxAuth != null) {
+                            wxAuth.setErrorCallBack("用户拒绝" + resp.errStr);
+                        }
                         break;
                     default:
-                        WxAuth.setErrorCallBack("未知错误"+resp.errStr);
+                        if (wxAuth != null) {
+                            wxAuth.setErrorCallBack("未知错误" + resp.errStr);
+                        }
                         break;
                 }
             } else if (resp.getType() == ConstantsAPI.COMMAND_LAUNCH_WX_MINIPROGRAM) {
                 //微信小程序
                 WXLaunchMiniProgram.Resp launchMiniProResp = (WXLaunchMiniProgram.Resp) resp;
-//              https://www.jianshu.com/p/c08b54299e8a
-                // 对应JsApi navigateBackApplication中的extraData字段数据
-//    <view class='suspension'>
-//      <button class="server_button" open-type="launchApp" app-parameter="wechat" binderror="launchAppError">打开APP</button>
-//    </view>//小程序给APP传值
+// https://www.jianshu.com/p/c08b54299e8a
+// 对应JsApi navigateBackApplication中的extraData字段数据
+// <view class='suspension'>
+//   <button class="server_button" open-type="launchApp" app-parameter="wechat" binderror="launchAppError">打开APP</button>
+// </view>
+                // 小程序给APP传值
                 String extraData = launchMiniProResp.extMsg;
-                WxAuth.setCompleteCallBack(extraData); //TODO 回调区分
+                if (wxAuth!= null){
+                    wxAuth.setCompleteCallBack(extraData); //TODO 回调区分
+                }
+
             }
         }
         finish();
@@ -165,7 +189,13 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     @Override
     public void finish() {
         super.finish();
-        WxShare.cancelCallback();
-        WxAuth.cancelCallback();
+        if (wxAuth!= null){
+            wxAuth.cancelCallback();
+            wxAuth = null;
+        }
+        if (wxShare!= null){
+            wxShare.cancelCallback();
+            wxShare = null;
+        }
     }
 }
