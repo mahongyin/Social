@@ -38,17 +38,12 @@ public class WbSocial {
         return SCOPE;
     }
 
-    private static WbSocial singleton;
+    private static final class SingletonHolder {
+        static final WbSocial singleton = new WbSocial();
+    }
 
     public static WbSocial getInstance() {
-        if (singleton == null) {
-            synchronized (WbSocial.class) {
-                if (singleton == null) {
-                    singleton = new WbSocial();
-                }
-            }
-        }
-        return singleton;
+        return SingletonHolder.singleton;
     }
 
     // 微博AuthInfo(yspcar, "1446396360", "https://api.weibo.com/oauth2/default.html", "all")

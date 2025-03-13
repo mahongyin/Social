@@ -19,7 +19,6 @@ import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
  */
 public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
-    private static final String TAG = "WXPayBaseEntryActivity";
     public static WxPay wxPay;
     private IWXAPI api;
 
@@ -62,7 +61,7 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
                 if (wxPay != null) {
                     wxPay.callbackPayFail(resp.errStr);
                 }
-                Log.i("payFailCode:", String.valueOf(resp.errCode) + "  " + resp.errStr);
+                Log.i("payFailCode:", resp.errCode + "  " + resp.errStr);
             }
         }
         finish();

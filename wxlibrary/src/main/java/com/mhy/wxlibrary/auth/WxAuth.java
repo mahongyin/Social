@@ -37,6 +37,7 @@ import java.util.Random;
  */
 public class WxAuth extends AuthApi implements OAuthListener {
     private IWXAPI mWXApi;
+
     /**
      * 执行登陆操作
      *
@@ -46,9 +47,11 @@ public class WxAuth extends AuthApi implements OAuthListener {
     public WxAuth(Activity act, OnAuthListener l) {
         super(act, l);
         mAuthType = SocialType.WEIXIN_Auth;
-        //mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
+        if (mWXApi == null) {
+            //mWXApi = WXAPIFactory.createWXAPI(mActivity.get(), getAppId(), true);
 //        mWXApi.registerApp(getAppId());
-        mWXApi = WxSocial.getInstance().getWXApi();
+            mWXApi = WxSocial.getInstance().getWXApi();
+        }
         BaseWXActivity.wxAuth = this;
     }
 
@@ -92,6 +95,7 @@ public class WxAuth extends AuthApi implements OAuthListener {
     /**
      * 微信扫码授权登录
      * 先请求后台去获取微信扫码需要的ticket
+     *
      * @param ticket 后台返回的获取微信扫码需要的ticket
      */
     public void doAuthQRCode(String ticket) {
@@ -128,7 +132,7 @@ public class WxAuth extends AuthApi implements OAuthListener {
 
     @Override
     public void onAuthGotQrcode(String p0, byte[] qrCode) {
-        Log.d("onAuthGotQrcode", ""+p0);
+        Log.d("onAuthGotQrcode", "" + p0);
         Bitmap bmp = BitmapFactory.decodeByteArray(qrCode, 0, qrCode.length);
         //回调二维码给前台显示
         setCompleteCallBack(bmp);
