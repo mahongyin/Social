@@ -98,10 +98,6 @@ public class H5PayDemoActivity extends Activity {
         }
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

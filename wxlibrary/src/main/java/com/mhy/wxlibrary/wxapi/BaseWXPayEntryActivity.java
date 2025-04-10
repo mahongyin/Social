@@ -68,8 +68,8 @@ public abstract class BaseWXPayEntryActivity extends Activity implements IWXAPIE
     }
 
     @Override
-    public void finish() {
-        super.finish();
+    protected void onDestroy() {
+        super.onDestroy();
         if (wxPay != null) {
             wxPay.cancelCallback();
             wxPay = null;

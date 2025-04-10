@@ -10,9 +10,7 @@ import com.mhy.socialcommon.AuthApi;
 import com.mhy.socialcommon.ShareApi;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
-import com.mhy.wxlibrary.auth.WxAuth;
 import com.mhy.wxlibrary.bean.WeiXin;
-import com.mhy.wxlibrary.share.WxShare;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -154,7 +152,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
 // </view>
                 // 小程序给APP传值
                 String extraData = launchMiniProResp.extMsg;
-                if (wxAuth!= null){
+                if (wxAuth != null) {
                     wxAuth.setCompleteCallBack(extraData); //TODO 回调区分
                 }
 
@@ -187,13 +185,13 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     protected abstract void onWXIntent(String extInfo);
 
     @Override
-    public void finish() {
-        super.finish();
-        if (wxAuth!= null){
+    protected void onDestroy() {
+        super.onDestroy();
+        if (wxAuth != null) {
             wxAuth.cancelCallback();
             wxAuth = null;
         }
-        if (wxShare!= null){
+        if (wxShare != null) {
             wxShare.cancelCallback();
             wxShare = null;
         }
