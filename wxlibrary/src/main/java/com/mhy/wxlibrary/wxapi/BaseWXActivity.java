@@ -2,12 +2,12 @@ package com.mhy.wxlibrary.wxapi;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.mhy.socialcommon.AuthApi;
 import com.mhy.socialcommon.ShareApi;
+import com.mhy.socialcommon.ShareUtil;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.WxSocial;
 import com.mhy.wxlibrary.bean.WeiXin;
@@ -15,10 +15,13 @@ import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
+import com.tencent.mm.opensdk.modelmsg.GetMessageFromWX;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.ShowMessageFromWX;
 import com.tencent.mm.opensdk.modelmsg.WXAppExtendObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXMusicVideoObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 
@@ -36,38 +39,64 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //api = WXAPIFactory.createWXAPI(this, getAppId(), false);
-        //api.registerApp(getAppId());//add
-        api = WxSocial.getInstance().getWXApi();
-        api.handleIntent(getIntent(), this);
+        Intent intent = getIntent();
+        if (intent.getData() != null) {
+            Log.d(TAG,"intent启动"+ intent.getData().toString());
+        }
+        if (intent.getExtras()!=null){
+            Log.d(TAG,"intent启动"+  ShareUtil.bundleToJson(intent.getExtras()));
+        }
+        try {
+            //api = WXAPIFactory.createWXAPI(this, getAppId(), false);
+            //api.registerApp(getAppId());//add
+            api = WxSocial.getInstance().getWXApi();
+            api.handleIntent(intent, this);
+        } catch (Exception e) {
+            Log.e(TAG, "微信回调异常：", e);
+        }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (intent.getData() != null) {
+            Log.d(TAG,"intent启动"+ intent.getData().toString());
+        }
+        if (intent.getExtras()!=null){
+            Log.d(TAG,"intent启动"+  ShareUtil.bundleToJson(intent.getExtras()));
+        }
         setIntent(intent);
         api.handleIntent(intent, this);
     }
 
+    /**
+     * 处理从微信返回到第三方应用
+     */
     @Override
     public void onReq(BaseReq baseReq) {
         // 微信主动发的意图
         if (baseReq != null) {
             switch (baseReq.getType()) {
                 case ConstantsAPI.COMMAND_GETMESSAGE_FROM_WX:
-                    Log.i("BaseWXActivity", "来自微信消息");
+                    Log.i(TAG, "来自微信消息");
+                    if (baseReq instanceof GetMessageFromWX.Req) {
+                        getWxMsg((GetMessageFromWX.Req) baseReq);
+                    }
                     break;
                 case ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX:
-                    Log.i("BaseWXActivity", "发消息给微信");
+                    Log.i(TAG, "发消息给微信");
+                    if (baseReq instanceof SendMessageToWX.Req) {
+                        sendWxMsg((SendMessageToWX.Req) baseReq);
+                    }
                     break;
                 case ConstantsAPI.COMMAND_SHOWMESSAGE_FROM_WX:
+                    Log.i(TAG, "来自微信消息展示");
                     if (baseReq instanceof ShowMessageFromWX.Req) {
-                        Log.i("BaseWXActivity", "来自微信消息展示");
-                        getWxMsg((ShowMessageFromWX.Req) baseReq);
+                        showWxMsg((ShowMessageFromWX.Req) baseReq);
                     }
                     break;
                 default:
-                    Log.i("BaseWXActivity", "微信的意图 " + baseReq.getType());
+                    Log.i(TAG, "微信的意图 " + baseReq.getType());
                     break;
             }
         }
@@ -78,7 +107,7 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
     @Override
     public void onResp(BaseResp resp) {
         if (resp != null) {
-            Log.i("BaseWXActivity", String.format("微信返回：%s, %s", resp.getType(), resp.errCode == BaseResp.ErrCode.ERR_OK));
+            Log.i(TAG, String.format("微信返回：%s, %s", resp.getType(), resp.errCode == BaseResp.ErrCode.ERR_OK));
             if (resp.getType() == ConstantsAPI.COMMAND_SENDMESSAGE_TO_WX) {//分享
                 Log.i(TAG, "微信分享操作.....");
                 switch (resp.errCode) {
@@ -161,28 +190,83 @@ public abstract class BaseWXActivity extends Activity implements IWXAPIEventHand
         finish();
     }
 
+    private void getWxMsg(GetMessageFromWX.Req baseReq) {
+//        Intent intent = getIntent();
+//        //bundle为微信传递过来的intent所带的内容，通过getExtras方法获取
+//        Bundle bundle1 = intent.getExtras();
+//        final GetMessageFromWX.Req req = new GetMessageFromWX.Req(bundle1);//就是baseReq
+//        String transaction = req.transaction;
+
+        //String transaction1 = baseReq.transaction;
+
+        Bundle bundleReq = new Bundle();
+        baseReq.toBundle(bundleReq);
+        Log.i(TAG, "get微信消息：" + ShareUtil.bundleToJson(bundleReq));
+    }
+
+    private void sendWxMsg(SendMessageToWX.Req baseReq) {
+//        Intent intent = getIntent();
+//        //bundle为微信传递过来的intent所带的内容，通过getExtras方法获取
+//        Bundle bundle1 = intent.getExtras();//就是baseReq的Bundle
+
+        //String openId = baseReq.userOpenId;
+
+        Bundle bundleReq = new Bundle();
+        baseReq.toBundle(bundleReq);
+        Log.i(TAG, "send微信消息：" + ShareUtil.bundleToJson(bundleReq));
+
+//        WXMediaMessage wxMsg = baseReq.message;
+//        WXMediaMessage.IMediaObject mediaObject = wxMsg.mediaObject;
+//        if (mediaObject == null) {
+//            return;
+//        }
+//        Bundle bundleObj = new Bundle();
+//        mediaObject.serialize(bundleObj);
+    }
+
     /**
      * 处理微信意图
      */
-    private void getWxMsg(ShowMessageFromWX.Req showReq) {
-        if (showReq != null) {
-            WXMediaMessage wxMsg = showReq.message;
+    private void showWxMsg(ShowMessageFromWX.Req showReq) {
+//        Intent intent = getIntent();
+//        //bundle为微信传递过来的intent所带的内容，通过getExtras方法获取
+//        Bundle bundle1 = intent.getExtras();//就是showReq的Bundle
+
+        Bundle bundleReq = new Bundle();
+        showReq.toBundle(bundleReq);
+        Log.i(TAG, "show微信消息：" + ShareUtil.bundleToJson(bundleReq));
+
+        WXMediaMessage wxMsg = showReq.message;
+
+//        byte[] thumb = wxMsg.thumbData;
+//        String title = wxMsg.title;
+//        String description = wxMsg.description;
+        String messageExt = wxMsg.messageExt;//分享到微信时传的额外信息字段
+
+        if (wxMsg.mediaObject instanceof WXAppExtendObject) {
             WXAppExtendObject obj = (WXAppExtendObject) wxMsg.mediaObject;
-            String extInfo = obj.extInfo;
-            Uri titleLink = Uri.parse(extInfo);
-            Log.i("微信Uri", titleLink.toString());
-            //val linkUri = titleLink.getQueryParameter("link") ?: "";
-            //Intent/EventBus
-            onWXIntent(extInfo);
+//            String extInfo = obj.extInfo;
+//            String filePath = obj.filePath;
+//            byte[] fileData = obj.fileData;
+
+            Bundle bundleObj = new Bundle();
+            obj.serialize(bundleObj);
+            onWXIntent(obj.type(), ShareUtil.bundleToJson(bundleObj));
+        } else if (wxMsg.mediaObject instanceof WXMusicVideoObject) {
+            WXMusicVideoObject musicVideoObject = (WXMusicVideoObject) wxMsg.mediaObject;
+//            String identification = musicVideoObject.identification;    // 分享到微信时的音乐标识符字段
+            // 应用根据identification与messageExt自行处理
+
+            Bundle bundleObj = new Bundle();
+            musicVideoObject.serialize(bundleObj);
+            onWXIntent(musicVideoObject.type(), ShareUtil.bundleToJson(bundleObj));
         }
     }
 
     /**
      * 处理微信意图
-     *
-     * @param extInfo 例如a.href的url
      */
-    protected abstract void onWXIntent(String extInfo);
+    protected abstract void onWXIntent(int objType, String json);
 
     @Override
     protected void onDestroy() {

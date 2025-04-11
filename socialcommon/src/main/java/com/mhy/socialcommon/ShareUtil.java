@@ -790,4 +790,36 @@ public class ShareUtil {
         }
         return hs;
     }
+
+    public static String bundleToJson(Bundle bundle) {
+        StringBuilder json = new StringBuilder();
+        boolean first = true;
+        if (bundle != null) {
+            json.append("{");
+            for (String key : bundle.keySet()) {
+                if (first) {
+                    first = false;
+                } else {
+                    json.append(",");
+                }
+                json.append("\"").append(key).append("\"");
+                json.append(":");
+                Object value = bundle.get(key);
+                if (value instanceof String) {
+                    json.append("\"").append((String) value).append("\"");
+                } else if (value instanceof Integer) {
+                    json.append((Integer) value);
+                } else if (value instanceof Boolean) {
+                    json.append((Boolean) value);
+                } else if (value instanceof Bundle) {
+                    json.append(bundleToJson((Bundle) value));
+                } else {
+                    json.append("\"").append(value).append("\"");
+                }
+            }
+            json.append("}");
+        }
+        return json.toString();
+    }
+
 }

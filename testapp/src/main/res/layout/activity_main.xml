@@ -39,6 +39,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="微信" />
+            <Button
+                android:id="@+id/btn_share_wx_mini"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="微信小程序" />
 
             <Button
                 android:id="@+id/btn_share_wx_circle"
@@ -46,6 +52,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="微信朋友圈" />
+            <Button
+                android:id="@+id/btn_share_wx_favorite"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="微信收藏" />
 
         </LinearLayout>
 

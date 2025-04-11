@@ -3,10 +3,15 @@ package com.mhy.wxlibrary.bean;
 import android.os.Bundle;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IntDef;
 
 import com.mhy.socialcommon.ShareEntity;
 import com.mhy.socialcommon.SocialType;
 import com.mhy.wxlibrary.share.WxType;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 
 /**
@@ -22,8 +27,9 @@ public final class WxShareEntity extends ShareEntity {
     public static final int TYPE_IMG = 1;
     public static final int TYPE_MUSIC = 2;
     public static final int TYPE_VIDEO = 3;
-    public static final int TYPE_WEB = 4;
-    public static final int TYPE_MINIAPP = 5;//add
+    public static final int TYPE_MUSIC_VIDEO = 4;//add
+    public static final int TYPE_WEB = 5;
+    public static final int TYPE_MINI_APP = 6;//add
 
     public static final String KEY_WX_TITLE = "key_wx_title";
     public static final String KEY_WX_SUMMARY = "key_wx_summary";
@@ -31,12 +37,18 @@ public final class WxShareEntity extends ShareEntity {
     public static final String KEY_WX_IMG_LOCAL = "key_wx_local_img";
     public static final String KEY_WX_IMG_RES = "key_wx_img_res";
     public static final String KEY_WX_MUSIC_URL = "key_wx_music_url";
+    public static final String KEY_WX_MUSIC_LRC = "key_wx_music_lrc";
+    public static final String KEY_WX_DURATION = "key_wx_duration";
     public static final String KEY_WX_VIDEO_URL = "key_wx_video_url";
     public static final String KEY_WX_WEB_URL = "key_wx_web_url";
     //add
     public static final String KEY_WX_MINI_APPID = "key_wx_mini_appid";
     //add
     public static final String KEY_WX_MINI_PATH = "key_wx_mini_path";
+    // WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE
+    // WXMiniProgramObject.MINIPTOGRAM_TYPE_TEST
+    // WXMiniProgramObject.MINIPTOGRAM_TYPE_PREVIEW
+    public static final String KEY_WX_MINI_TYPE = "key_wx_mini_type";
 
     private WxShareEntity(SocialType type) {
         super(type);
@@ -247,6 +259,114 @@ public final class WxShareEntity extends ShareEntity {
     }
 
     /**
+     * 音乐视频
+     * @param type 好友,朋友圈,收藏
+     * @param musicWebUrl 音乐网页url
+     * @param musicUrl 音乐url，不支持本地音乐
+     * @param imgPath 本地图片地址，缩略图大小
+     * @param name 音乐标题
+     * @param singer 音乐演唱
+     * @param albumName 专辑
+     * @param musicLrc 歌词
+     * @param musicDuration 毫秒
+     */
+    public static ShareEntity createMusicVideo(@WxType int type, String musicWebUrl, String musicUrl,
+                                               String imgPath, String name, String singer,
+                                               String albumName, String musicLrc, int musicDuration) {
+        SocialType valw = SocialType.WEIXIN_Share;
+        if (type == WxType.TYPE_TIME_LINE) {
+            valw = SocialType.WEIXIN_TimeLine_Share;
+        } else if (type == WxType.TYPE_FAVORITE) {
+            valw = SocialType.WEIXIN_Favorite;
+        }
+        ShareEntity entity = new ShareEntity(valw);
+        addParams(entity.params, KEY_WX_TYPE, TYPE_MUSIC_VIDEO);
+        addParams(entity.params, KEY_WX_WEB_URL, musicWebUrl);
+        addParams(entity.params, KEY_WX_MUSIC_URL, musicUrl);
+        addParams(entity.params, KEY_WX_MUSIC_LRC, musicLrc);
+        addParams(entity.params, KEY_WX_TEXT, albumName);//专辑
+        addParams(entity.params, KEY_WX_DURATION, musicDuration);
+        addTitleSummaryAndThumb(entity.params, name, singer, imgPath);
+        return entity;
+    }
+
+    /**
+     * 音乐视频
+     * @param type 好友,朋友圈,收藏
+     * @param musicWebUrl 音乐网页url
+     * @param musicUrl 音乐url，不支持本地音乐
+     * @param imgRes 应用内图片资源，缩略图大小
+     * @param name 音乐标题
+     * @param singer 音乐演唱者
+     * @param albumName 专辑
+     * @param musicLrc 歌词
+     * @param musicDuration 毫秒
+     */
+    public static ShareEntity createMusicVideo(@WxType int type, String musicWebUrl, String musicUrl,
+                                               @DrawableRes int imgRes, String name, String singer,
+                                               String albumName, String musicLrc, int musicDuration) {
+        SocialType valw = SocialType.WEIXIN_Share;
+        if (type == WxType.TYPE_TIME_LINE) {
+            valw = SocialType.WEIXIN_TimeLine_Share;
+        } else if (type == WxType.TYPE_FAVORITE) {
+            valw = SocialType.WEIXIN_Favorite;
+        }
+        ShareEntity entity = new ShareEntity(valw);
+        addParams(entity.params, KEY_WX_TYPE, TYPE_MUSIC_VIDEO);
+        addParams(entity.params, KEY_WX_WEB_URL, musicWebUrl);
+        addParams(entity.params, KEY_WX_MUSIC_URL, musicUrl);
+        addParams(entity.params, KEY_WX_MUSIC_LRC, musicLrc);
+        addParams(entity.params, KEY_WX_TEXT, albumName);//专辑
+        addParams(entity.params, KEY_WX_DURATION, musicDuration);
+        addTitleSummaryAndThumb(entity.params, name, singer, imgRes);
+        return entity;
+    }
+    /**
+     * 以小程序形式分享
+     * @param miniAppid  小程序 原始gh_id
+     * @param miniPath   小程序路径 默认入口 ？&传参;
+     * @param webpageUrl web
+     * @param title      标题
+     * @param summary    详情
+     * @param imgRes     应用内图片资源
+     */
+    public static ShareEntity createMiniApp(String miniAppid, String miniPath, String webpageUrl, String title, String summary, @DrawableRes int imgRes, @MiniProgramType int type) {
+        SocialType valw = SocialType.WEIXIN_Share;//目前只支持分享给会话SocialType.WEIXIN_Share
+        ShareEntity entity = new ShareEntity(valw);
+        addParams(entity.params, KEY_WX_TYPE, TYPE_MINI_APP);
+        addParams(entity.params, KEY_WX_TITLE, title);
+        addParams(entity.params, KEY_WX_SUMMARY, summary);
+        addParams(entity.params, KEY_WX_MINI_APPID, miniAppid);
+        addParams(entity.params, KEY_WX_MINI_PATH, miniPath);
+        addParams(entity.params, KEY_WX_MINI_TYPE, type);
+        addParams(entity.params, KEY_WX_WEB_URL, webpageUrl);
+        addParams(entity.params, KEY_WX_IMG_RES, imgRes);
+        return entity;
+    }
+
+    /**
+     * @param miniAppid  小程序 原始gh_id
+     * @param miniPath   小程序路径 默认入口 ？&传参;
+     * @param webpageUrl web
+     * @param title      标题
+     * @param summary    详情
+     * @param imgUrl     图片
+     */
+    public static ShareEntity createMiniApp(String miniAppid, String miniPath, String webpageUrl, String title, String summary, String imgPath, @MiniProgramType int type) {
+        SocialType valw = SocialType.WEIXIN_Share;
+        ShareEntity entity = new ShareEntity(valw);
+        addParams(entity.params, KEY_WX_TYPE, TYPE_MINI_APP);
+        addParams(entity.params, KEY_WX_TITLE, title);
+        addParams(entity.params, KEY_WX_SUMMARY, summary);
+        addParams(entity.params, KEY_WX_MINI_APPID, miniAppid);
+        addParams(entity.params, KEY_WX_MINI_PATH, miniPath);
+        addParams(entity.params, KEY_WX_MINI_TYPE, type);
+        addParams(entity.params, KEY_WX_WEB_URL, webpageUrl);
+        addParams(entity.params, KEY_WX_IMG_LOCAL, imgPath);
+        return entity;
+    }
+
+    /**
      * @param title   标题
      * @param summary 摘要
      * @param imgUrl  本地图片地址
@@ -267,30 +387,13 @@ public final class WxShareEntity extends ShareEntity {
         addParams(params, KEY_WX_SUMMARY, summary);
         addParams(params, KEY_WX_IMG_RES, imgRes);
     }
-
-    public static void createMiniApp(Bundle params, String miniAppid, String miniPath, String webpageUrl, String title, String summary, @DrawableRes int imgRes) {
-        addParams(params, KEY_WX_TITLE, title);
-        addParams(params, KEY_WX_SUMMARY, summary);
-        addParams(params, KEY_WX_MINI_APPID, miniAppid);
-        addParams(params, KEY_WX_MINI_PATH, miniPath);
-        addParams(params, KEY_WX_WEB_URL, webpageUrl);
-        addParams(params, KEY_WX_IMG_RES, imgRes);
-    }
-
     /**
-     * @param miniAppid  小程序 原始gh_id
-     * @param miniPath   小程序路径 默认入口 ？&传参;
-     * @param webpageUrl web
-     * @param title      标题
-     * @param summary    详情
-     * @param imgUrl     图片
+     * 限定值 小程序发布类型 开发版,体验版,正式版
      */
-    public static void createMiniApp(Bundle params, String miniAppid, String miniPath, String webpageUrl, String title, String summary, String imgUrl) {
-        addParams(params, KEY_WX_TITLE, title);
-        addParams(params, KEY_WX_SUMMARY, summary);
-        addParams(params, KEY_WX_MINI_APPID, miniAppid);
-        addParams(params, KEY_WX_MINI_PATH, miniPath);
-        addParams(params, KEY_WX_WEB_URL, webpageUrl);
-        addParams(params, KEY_WX_IMG_LOCAL, imgUrl);
+    @IntDef(value = {WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE,
+            WXMiniProgramObject.MINIPROGRAM_TYPE_TEST,
+            WXMiniProgramObject.MINIPROGRAM_TYPE_PREVIEW})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface MiniProgramType {
     }
 }

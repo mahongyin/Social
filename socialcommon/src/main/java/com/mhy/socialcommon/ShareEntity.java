@@ -30,7 +30,7 @@ public class ShareEntity {
     }
 
     protected static void addParams(Bundle params, String key, ArrayList<String> value) {
-        if (params == null || TextUtils.isEmpty(key) || value == null || value.size() == 0) {
+        if (params == null || TextUtils.isEmpty(key) || value == null || value.isEmpty()) {
             return;
         }
         params.putStringArrayList(key, value);

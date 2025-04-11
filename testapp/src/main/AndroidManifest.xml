@@ -29,6 +29,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--share://demo?title=哈哈&link=app://VIDEO11111111 url最好base64 不要明文接收地解码-->
+                <data
+                    android:host="demo"
+                    android:scheme="share" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".H5PayDemoActivity" />

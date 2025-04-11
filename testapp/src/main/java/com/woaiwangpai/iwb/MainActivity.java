@@ -44,6 +44,7 @@ import com.mhy.wxlibrary.share.WxShare;
 import com.mhy.wxlibrary.share.WxType;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram;
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                         OutputStream outputStream = new FileOutputStream(file);
                         byte[] buffer = new byte[1444];
                         int readSize;
-                        while ((readSize = inputStream.read(buffer)) != 0) {
+                        while ((readSize = inputStream.read(buffer)) != -1) {
                             outputStream.write(buffer, 0, readSize);
                         }
                         inputStream.close();
@@ -188,6 +189,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        if (intent.getData() != null) {
+            Log.d("MainActivity", "intent启动" + intent.getData().toString());
+        }
+        if (intent.getExtras() != null) {
+            Log.d("MainActivity", "intent启动" + ShareUtil.bundleToJson(intent.getExtras()));
+        }
         setContentView(R.layout.activity_main);
 //        checkPermission();
         copy();//准备资源
@@ -387,7 +395,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mShareApi = new WxShare(MainActivity.this, onShareListener);
-                mShareApi.doShare(createWXShareEntity(false));
+                mShareApi.doShare(createWXShareEntity(1));
+                v.startAnimation(shake);
+            }
+        });
+        findViewById(R.id.btn_share_wx_mini).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShareApi = new WxShare(MainActivity.this, onShareListener);
+                mShareApi.doShare(createWXShareEntity(4));
                 v.startAnimation(shake);
             }
         });
@@ -396,7 +412,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mShareApi = new WxShare(MainActivity.this, onShareListener);
-                mShareApi.doShare(createWXShareEntity(true));
+                mShareApi.doShare(createWXShareEntity(2));
+                v.startAnimation(shake);
+            }
+        });
+        findViewById(R.id.btn_share_wx_favorite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mShareApi = new WxShare(MainActivity.this, onShareListener);
+                mShareApi.doShare(createWXShareEntity(3));
                 v.startAnimation(shake);
             }
         });
@@ -409,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
                 v.startAnimation(shake);
             }
         });
+        //微信二维码扫码登录
         findViewById(R.id.btn_login_wxqr).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -430,7 +455,7 @@ public class MainActivity extends AppCompatActivity {
                             jsonObject.getString("appid"),
                             jsonObject.getString("partnerid"),
                             jsonObject.getString("prepayid"),
-                            jsonObject.getString("packagestr"),
+                            jsonObject.getString("packagestr"),//package
                             jsonObject.getString("noncestr"),
                             jsonObject.getString("timestamp"),
                             jsonObject.getString("sign"));
@@ -443,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //小程序分享
+        //打开小程序
         findViewById(R.id.btn_mini_wx).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -457,19 +482,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private ShareEntity createWXShareEntity(boolean pyq) {
+    /**
+     * @param type 1 会话, 2 朋友圈, 3 收藏, 4 小程序
+     *             创建分享实体
+     */
+    private ShareEntity createWXShareEntity(int type) {
         ShareEntity shareEntity = null;
+        if (type == 1) {
+            type = WxType.TYPE_SESSION;
+        } else if (type == 2) {
+            type = WxType.TYPE_TIME_LINE;
+        } else if (type == 3) {
+            type = WxType.TYPE_FAVORITE;
+        }
 
-//        shareEntity = WxShareEntity.createImage(pyq, getExternalFilesDir(null) + "/fff.jpg");
-//        shareEntity = WxShareEntity.createImage(pyq, R.mipmap.ic_launcher);
-
-        //微信图文是分开的，但是在分享到朋友圈的web中是可以有混合的
-//        shareEntity = WxShareEntity.createText(pyq, "你哈");
         String title = "百度一下";
         String summary = "百度一下，你就知道";
+        //String url = "http://www.baidu.com";
+        String url = "http://10.4.0.186/jump.html";
+        if (type == 4) {
+            shareEntity = WxShareEntity.createMiniApp("gh_d43f693ca31f", "", "http://www.baidu.com", title, summary, R.mipmap.ic_launcher, WXMiniProgramObject.MINIPTOGRAM_TYPE_RELEASE);
+        } else {
+            //微信图文是分开的，但是在分享到朋友圈的web中是可以有混合的
+//        shareEntity = WxShareEntity.createText(pyq, "你哈");
+//        shareEntity = WxShareEntity.createImage(pyq, getExternalFilesDir(null) + "/fff.jpg");
+//        shareEntity = WxShareEntity.createImage(pyq, R.mipmap.ic_launcher);
 //        shareEntity = WxShareEntity.createWebPage(pyq, "http://www.baidu.com", R.mipmap.ic_launcher, title, summary);
-        shareEntity = WxShareEntity.createWebPage(pyq ? WxType.TYPE_TIME_LINE : WxType.TYPE_SESSION, "http://www.baidu.com", getExternalFilesDir(null) + "/fff.jpg", title, summary);
-
+            shareEntity = WxShareEntity.createWebPage(type, url, getExternalFilesDir(null) + "/fff.jpg", title, summary);
+        }
         return shareEntity;
     }
 
