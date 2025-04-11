@@ -14,6 +14,12 @@ import com.tencent.mm.opensdk.modelpay.JumpToOfflinePay;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 /**
  * 微信支付
  */
@@ -69,30 +75,34 @@ public class WxPay extends PayApi {
             callbackPayFail("微信未安装");
             return;
         }
-        new AsyncTaskEx<Void, Void, WxPayContent>() {
 
-            @Override
-            protected WxPayContent doInBackground(Void... params) {
-                return content;
-            }
+        if (TextUtils.isEmpty(getAppId())) {
+            callbackPayFail("appid为空");
+            return;
+        }
 
-            @Override
-            protected void onPostExecute(WxPayContent result) {
-                if (TextUtils.isEmpty(getAppId())) {
-                    callbackPayFail("appid为空");
-                    return;
-                }
-                PayReq req = new PayReq();
-                req.appId = result.getAppid();
-                req.partnerId = result.getPartnerid();
-                req.prepayId = result.getPrepayid();
-                req.packageValue = result.getPackageValue();
-                req.nonceStr = result.getNoncestr();
-                req.timeStamp = result.getTimestamp();
-                req.sign = result.getSign();
-                msgApi.sendReq(req);
-            }
-        }.execute();
+        PayReq req = new PayReq();
+        req.appId = content.getAppid();
+        req.partnerId = content.getPartnerid();
+        req.prepayId = content.getPrepayid();
+        req.packageValue = content.getPackageValue();
+        req.nonceStr = content.getNoncestr();
+        req.timeStamp = content.getTimestamp();
+        req.sign = content.getSign();
+        msgApi.sendReq(req);
+
+//        FutureTask<WxPayContent> futureTask = new FutureTask<WxPayContent>(new Callable<WxPayContent>() {
+//            @Override
+//            public WxPayContent call() {
+//                return content;
+//            }
+//        });
+//        Executors.newSingleThreadExecutor().submit(futureTask);
+//        try {
+//            content = futureTask.get();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     private String getAppId() {
